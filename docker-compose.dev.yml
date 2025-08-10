@@ -1,0 +1,54 @@
+﻿services:
+  db:
+    image: postgres:16-alpine
+    env_file: [.env.dev]
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: CMD-SHELL pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB" -h 127.0.0.1
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./src/api
+      dockerfile: Dockerfile.dev
+    env_file: [.env.dev]
+    working_dir: /src
+    volumes:
+      - ./src/api:/src
+      - dotnet-nuget:/root/.nuget/packages
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["dotnet","watch","run","--non-interactive"]
+    ports:
+      - "5000:8080"
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./src/web
+      dockerfile: Dockerfile.dev
+    env_file: [.env.dev]
+    working_dir: /app
+    volumes:
+      - ./src/web:/app
+      - web-node-modules:/app/node_modules
+    depends_on:
+      - api
+    command: ["npm","run","dev","--","-p","3000","-H","0.0.0.0"]
+    ports:
+      - "3000:3000"
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+
+volumes:
+  db-data:
+  dotnet-nuget:
+  web-node-modules:
