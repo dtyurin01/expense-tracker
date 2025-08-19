@@ -1,4 +1,5 @@
 ﻿using Api.Contracts;
+using Api.Infrastucture.Security;
 using Api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;

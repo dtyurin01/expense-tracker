@@ -1,6 +1,7 @@
 using Api.Extensions; 
 using Api.Features.Auth;
 using Api.Features.Categories;
+using Api.Features.Expenses;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +32,11 @@ app.UseSwaggerMinimal();
 
 // endpoints
 app.MapAuthEndpoints();
-app.MapCategoryEndpoints();
+
+
+var api = app.MapGroup("/api");
+api.MapCategoryEndpoints();
+api.MapExpenseEndpoints();
 
 
 app.Run();

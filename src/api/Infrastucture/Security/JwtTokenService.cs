@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Api.Models;
 
-namespace Api.Features.Auth;
+namespace Api.Infrastucture.Security;
 
 public sealed class JwtTokenService
 {
@@ -23,7 +23,7 @@ public sealed class JwtTokenService
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new(ClaimTypes.Name, (user.UserName ?? user.Email ?? user.Id.ToString())),
+            new(ClaimTypes.Name, user.UserName ?? user.Email ?? user.Id.ToString()),
             new("ss", securityStamp)
         };
 

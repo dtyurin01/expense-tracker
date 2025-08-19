@@ -1,6 +1,6 @@
-﻿using Api.Models;
+﻿using Api.Infrastucture.Security;
+using Api.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
 
 namespace Api.Features.Auth;
 

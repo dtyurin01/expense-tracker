@@ -1,10 +1,11 @@
 ﻿using Api.Data;
+using Api.Features.Auth;
 using Api.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Api.Features.Auth
+namespace Api.Infrastucture.Security
 {
     public sealed class RefreshTokenService(AppDbContext db, IConfiguration cfg) : IRefreshTokenService
     {
