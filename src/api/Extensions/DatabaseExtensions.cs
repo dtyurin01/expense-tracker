@@ -12,8 +12,10 @@ public static class DatabaseExtensions
 {
     public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration cfg)
     {
-        var cs = cfg.GetConnectionString("Default")
-                 ?? "Host=localhost;Port=5432;Database=expenses;Username=postgres;Password=postgres";
+        var cs = cfg.GetConnectionString("Default");
+        if (string.IsNullOrEmpty(cs))
+            throw new InvalidOperationException("Database connection string is not configured");
+
         services.AddDbContext<AppDbContext>(o => o.UseNpgsql(cs));
         return services;
     }
