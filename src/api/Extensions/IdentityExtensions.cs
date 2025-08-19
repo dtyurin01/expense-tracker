@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Api.Infrastucture.Security;
 
 namespace Api.Extensions;
 
@@ -116,9 +117,9 @@ public static class IdentityExtensions
 
         services.AddAuthorization();
 
-        services.AddScoped<Features.Auth.JwtTokenService>();
+        services.AddScoped<JwtTokenService>();
 
-        services.AddScoped<Features.Auth.IRefreshTokenService, Features.Auth.RefreshTokenService>();
+        services.AddScoped<Features.Auth.IRefreshTokenService, RefreshTokenService>();
 
         services.ConfigureApplicationCookie(opt =>
         {
