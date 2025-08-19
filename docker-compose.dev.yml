@@ -5,9 +5,9 @@
     volumes:
       - db-data:/var/lib/postgresql/data
     ports:
-      - "5433:5432"
+      - "5433:5432" 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -p 5432 -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -p 5432 -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\" -q"]
       interval: 5s
       timeout: 3s
       retries: 10
@@ -18,14 +18,19 @@
       context: ./src/api
       dockerfile: Dockerfile.dev
     env_file: [.env.dev]
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Default: ${ConnectionStrings__Default}
     working_dir: /src
     volumes:
       - ./src/api:/src
       - dotnet-nuget:/root/.nuget/packages
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     command: ["dotnet","watch","run","--non-interactive","--no-launch-profile","--urls","http://0.0.0.0:8080"]
-    ports: ["5000:8080"]  
+    ports:
+      - "5000:8080"
     tty: true
     stdin_open: true
     restart: unless-stopped
@@ -33,7 +38,7 @@
   web:
     build:
       context: ./src/web
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.dev   
     env_file: [.env.dev]
     working_dir: /app
     volumes:

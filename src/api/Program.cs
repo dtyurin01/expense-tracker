@@ -7,15 +7,22 @@ var builder = WebApplication.CreateBuilder(args);
 // Services
 builder.Services
     .AddDatabase(builder.Configuration)
-    .AddIdentityAndCookies()
+    .AddIdentityAndJwt(builder.Configuration)
     .AddAppCors(builder.Configuration)
-    .AddSwaggerMinimal(); 
+    .AddSwaggerMinimal();
+
+builder.Services
+    .AddOptions<JwtOptions>()
+    .Bind(builder.Configuration.GetSection("Jwt"))
+    .Validate(o => o.ExpireMinutes > 0 && o.RefreshExpireDays > 0,
+        "Durations must be positive")
+    .ValidateOnStart();
 
 var app = builder.Build();
 
 await app.InitializeDatabaseAsync();
 
-// Pipeline
+// Middleware - Pipeline
 app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
@@ -25,5 +32,6 @@ app.UseSwaggerMinimal();
 // endpoints
 app.MapAuthEndpoints();
 app.MapCategoryEndpoints();
+
 
 app.Run();

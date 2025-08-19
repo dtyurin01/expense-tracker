@@ -12,7 +12,7 @@ public static class CategoriesEndpoints
 	public static IEndpointRouteBuilder MapCategoryEndpoints(this IEndpointRouteBuilder app)
     {
         var g = app.MapGroup("/categories").RequireAuthorization();
-
+            
         g.MapGet("/", async (AppDbContext db, UserManager<ApplicationUser> users, HttpContext http) =>
         {
             var me = await users.GetUserAsync(http.User);
