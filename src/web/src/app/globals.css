@@ -1,26 +1,53 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* light theme */
+  --background: 60 20% 98%;
+  --foreground: 165 70% 6%;
+
+  --surface: 0 0% 100%;
+  --border: 165 10% 80%;
+
+  --brand: 79 55% 45%; /* #8BB334 */
+  --brand-300: 83 51% 55%; /* #9EC64C */
+  --brand-600: 79 62% 32%; /* #759A2C */
+  --brand-700: 83 52% 30%; /* #577625 */
+  --brand-foreground: 0 0% 4%; /* #0A0A0A */
+
+  --muted-foreground: 92 12% 35%;
+
+  --success: 142 71% 45%;
+  --warning: 38 92% 50%;
+  --error: 0 84% 60%;
+  --info: 217 91% 60%;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* black theme */
+.dark {
+  --background: 169 100% 8%; /* #002A22 */
+  --foreground: 60 43% 87%; /* #ECECCF */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --surface: 168 61% 14%; /* #0E3A31 */
+  --border: 165 43% 29%; /* #2B6B5B */
+
+  --brand: 79 55% 45%; /* #8BB334 */
+  --brand-300: 83 51% 55%; /* #9EC64C */
+  --brand-600: 79 62% 32%; /* #759A2C */
+  --brand-700: 83 52% 30%; /* #577625 */
+  --brand-foreground: 0 0% 4%; /* #0A0A0A */
+
+  --muted-foreground: 92 12% 75%; /* #BFC7B8 */
+
+  --success: 142 71% 45%;
+  --warning: 38 92% 50%;
+  --error: 0 84% 60%;
+  --info: 217 91% 60%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
 }
