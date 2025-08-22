@@ -5,19 +5,16 @@
 
 :root {
   /* light theme */
-  --background: 60 20% 98%;
-  --foreground: 165 70% 6%;
+  --background: 0 0% 96%; /* #F4F4F4 */
+  --foreground: 220 21% 12%;
 
   --surface: 0 0% 100%;
-  --border: 165 10% 80%;
+  --border: 220 3% 63%; /* #9EA0A5 */
 
-  --brand: 79 55% 45%; /* #8BB334 */
-  --brand-300: 83 51% 55%; /* #9EC64C */
-  --brand-600: 79 62% 32%; /* #759A2C */
-  --brand-700: 83 52% 30%; /* #577625 */
-  --brand-foreground: 0 0% 4%; /* #0A0A0A */
+  --brand: 198 81% 67%; /* #64C2F0 */
+  --brand-foreground: 220 21% 12%;
 
-  --muted-foreground: 92 12% 35%;
+  --muted-foreground: 220 9% 26%; /* #3D414B */
 
   --success: 142 71% 45%;
   --warning: 38 92% 50%;
@@ -27,19 +24,16 @@
 
 /* black theme */
 .dark {
-  --background: 169 100% 8%; /* #002A22 */
-  --foreground: 60 43% 87%; /* #ECECCF */
+  --background: 220 36% 8%; /* #0D121E */
+  --foreground: 0 0% 96%; /* #F4F4F4 */
 
-  --surface: 168 61% 14%; /* #0E3A31 */
-  --border: 165 43% 29%; /* #2B6B5B */
+  --surface: 220 21% 12%; /* #181A25 */
+  --border: 220 17% 18%; /* #252A35 */
 
-  --brand: 79 55% 45%; /* #8BB334 */
-  --brand-300: 83 51% 55%; /* #9EC64C */
-  --brand-600: 79 62% 32%; /* #759A2C */
-  --brand-700: 83 52% 30%; /* #577625 */
-  --brand-foreground: 0 0% 4%; /* #0A0A0A */
+  --brand: 198 81% 67%; /* #64C2F0 */
+  --brand-foreground: 220 36% 8%;
 
-  --muted-foreground: 92 12% 75%; /* #BFC7B8 */
+  --muted-foreground: 220 5% 37%; /* #565962 */
 
   --success: 142 71% 45%;
   --warning: 38 92% 50%;
