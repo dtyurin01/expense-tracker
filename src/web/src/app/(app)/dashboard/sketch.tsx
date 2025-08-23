@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui";
-
 export default function DashboardPage() {
   return (
     <div className="min-h-dvh bg-background text-foreground">
@@ -63,42 +61,41 @@ export default function DashboardPage() {
 
 function Sidebar() {
   const items = [
-    { label: "Dashboard", active: true, icon: "▦" },
-    { label: "Accounts", icon: "💳" },
-    { label: "Receipts", icon: "🧾" },
-    { label: "Statistics", icon: "📊" },
+    { label: 'Dashboard', active: true, icon: '▦' },
+    { label: 'Accounts', icon: '💳' },
+    { label: 'Receipts', icon: '🧾' },
+    { label: 'Statistics', icon: '📊' },
   ];
 
   return (
-    <aside className="shrink-0 sticky top-4 h-[calc(100dvh-3rem)]">
-      {/* Внутренняя «карточка» сайдбара */}
-      <div className="h-full rounded-2xl border border-border bg-surface p-4 flex flex-col">
+    // 1) фикс-ширина + высота на весь видпорт
+    <aside className="w-[280px] shrink-0 sticky top-6 h-dvh">
+      {/* 2) ВНУТРЕННЯЯ КАРТОЧКА ДОЛЖНА БЫТЬ flex и h-full */}
+      <div className="h-full flex flex-col rounded-2xl border border-border bg-surface p-4">
         {/* Лого */}
         <div className="mb-4 flex items-center gap-2">
           <div className="size-8 rounded-xl bg-brand" />
           <span className="text-h5 font-semibold">PocketPulse</span>
         </div>
 
-        {/* Навигация: займёт всё доступное место */}
-        <nav className="space-y-1 overflow-y-auto pr-1">
-          {items.map((i) => (
+        {/* 3) Навигация растягивается и выталкивает низ */}
+        <nav className="flex-1 overflow-y-auto pr-1 space-y-1">
+          {items.map(i => (
             <a
               key={i.label}
               href="#"
-              aria-current={i.active ? "page" : undefined}
+              aria-current={i.active ? 'page' : undefined}
               className={`flex items-center gap-3 rounded-2xl px-3 py-2 text-sm
-                ${i.active ? "bg-surface-2" : "hover:bg-surface-2"}`}
+                ${i.active ? 'bg-surface-2' : 'hover:bg-surface-2'}`}
             >
-              <span className="inline-flex size-5 items-center justify-center">
-                {i.icon}
-              </span>
+              <span className="inline-flex size-5 items-center justify-center">{i.icon}</span>
               {i.label}
             </a>
           ))}
         </nav>
 
-        {/* НИЖНИЙ БЛОК: прижат вниз */}
-        <div className="mt-auto space-y-6 pt-6">
+        {/* 4) НИЖНИЙ БЛОК — ПРИЖАТ ВНИЗ */}
+        <div className="mt-6 space-y-6">
           <div className="rounded-2xl border border-border p-4">
             <div className="text-sm font-medium">Explore plans</div>
             <p className="mt-1 text-xs text-muted-foreground">
@@ -121,6 +118,8 @@ function Sidebar() {
     </aside>
   );
 }
+
+
 
 function Card({
   title,
