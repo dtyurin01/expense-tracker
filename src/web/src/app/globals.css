@@ -1,7 +1,5 @@
-/* Tailwind v4 */
 @import "tailwindcss";
 
-/* Дизайн-токены. Имена ДОЛЖНЫ быть вида --color-… */
 @theme {
   /* base */
   --color-background: hsl(0 0% 96%);    /* #F4F4F4 */
@@ -9,14 +7,14 @@
   --color-surface:     hsl(0 0% 100%);
   --color-border:      hsl(220 3% 63%); /* #9EA0A5 */
 
-  /* brand + оттенки */
+  /* brand */
   --color-brand:            hsl(198 81% 67%); /* #64C2F0 */
   --color-brand-300:        hsl(198 86% 80%);
   --color-brand-600:        hsl(198 74% 56%);
   --color-brand-700:        hsl(198 70% 48%);
   --color-brand-foreground: hsl(220 21% 12%);
 
-  /* прочие */
+  /* other */
   --color-success: hsl(142 71% 45%);
   --color-warning: hsl(38 92% 50%);
   --color-error:   hsl(0 84% 60%);
@@ -24,7 +22,7 @@
   --color-muted-foreground: hsl(220 9% 26%);
 }
 
-/* Тёмная тема — переопределяем токены */
+/* dark theme */
 .dark {
   color-scheme: dark;
 
@@ -46,6 +44,5 @@
   --color-info:    hsl(217 91% 60%);
 }
 
-/* Фон/текст страницы */
 :root { color-scheme: light; }
 body  { background: var(--color-background); color: var(--color-foreground); }
