@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Button } from "./Button";
-import { FiChevronRight, FiSettings } from "react-icons/fi"; 
+import {
+  FiChevronRight,
+  FiSettings,
+  FiSearch,
+  FiTrash2,
+  FiAlertTriangle,
+} from "react-icons/fi";
 const meta = {
   title: "UI/Button",
   component: Button,
@@ -25,6 +31,8 @@ const meta = {
         "success",
         "warning",
         "info",
+        "iconDark",
+        "iconTransparent",
       ],
     },
     size: {
@@ -52,15 +60,26 @@ export const WithIcon: Story = {
   },
 };
 
-export const IconOnly: Story = {
-  render: (args) => (
-    <Button
-      {...args}
-      size="icon"
-      aria-label="Settings"
-      leftIcon={<FiSettings className="w-full h-full" />}
-    />
-  ),
+export const IconOnlyDark: Story = {
+  args: {
+    variant: "iconDark",
+    size: "icon",
+    radius: "full",
+    "aria-label": "Search",
+    leftIcon: <FiSearch className="w-full h-full" />,
+    children: undefined,
+  },
+};
+
+export const IconOnlyTransparent: Story = {
+  args: {
+    variant: "iconTransparent",
+    size: "icon",
+    radius: "full",
+    "aria-label": "Delete",
+    leftIcon: <FiTrash2 className="w-full h-full" />,
+    children: undefined,
+  },
 };
 
 export const Outline: Story = { args: { variant: "outline" } };
@@ -110,6 +129,26 @@ export const Sizes: Story = {
       >
         XL
       </Button>
+
+      <Button
+        {...args}
+        variant="iconDark"
+        size="icon"
+        radius="full"
+        aria-label="Alert"
+      >
+        <FiAlertTriangle className="w-full h-full" />
+      </Button>
+      <Button
+        {...args}
+        variant="iconTransparent"
+        size="icon"
+        radius="full"
+        aria-label="Settings"
+      >
+        <FiSettings className="w-full h-full" />
+      </Button>
+
       <Button
         {...args}
         size="icon"
@@ -117,7 +156,9 @@ export const Sizes: Story = {
         leftIcon={<FiSettings className="w-full h-full" />}
       />
       <div style={{ ["--brand" as any]: "198 81% 67%" }}>
-        <Button>Test brand</Button>
+        <Button>
+          <FiSettings className="w-full h-full" />
+        </Button>
       </div>
     </div>
   ),

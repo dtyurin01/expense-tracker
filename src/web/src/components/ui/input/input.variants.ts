@@ -25,7 +25,7 @@ export const inputWrapper = cva(
 
 export const inputField = cva(
   // base
-  "peer bg-surface text-foreground placeholder:text-muted-foreground/70 " +
+  "bg-surface text-foreground placeholder:text-muted-foreground/70 " +
     "border border-border focus:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 " +
     "transition-colors [&::-ms-reveal]:hidden " + // hide eye on Edge password
     "disabled:bg-surface disabled:opacity-70",
@@ -91,7 +91,7 @@ export const adornment = cva(
 );
 
 export const splitContainer = cva(
-  "relative flex items-stretch overflow-hidden bg-surface " +
+  "flex items-stretch overflow-hidden bg-surface " +
     "border border-border transition-colors " +
     "focus-within:ring-2 focus-within:ring-brand/50 focus-within:ring-inset",
   {
@@ -126,7 +126,7 @@ export const splitContainer = cva(
 );
 
 export const splitInput = cva(
-  "flex-1 bg-transparent px-3 outline-none overflow-hidden placeholder:text-muted-foreground/70",
+  "flex-1 bg-transparent px-3 overflow-hidden placeholder:text-muted-foreground/70",
   {
     variants: {
       size: {
@@ -141,7 +141,7 @@ export const splitInput = cva(
 );
 
 export const splitRight = cva(
-  "shrink-0 h-full bg-surface border-l border-border px-3 " +
+  "border-l border-border px-3 " +
     "flex items-center justify-center text-foreground/80"
 );
 
