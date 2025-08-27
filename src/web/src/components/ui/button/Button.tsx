@@ -40,6 +40,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     const iconSize = iconSizeByButton[size ?? "md"];
     const isDisabled = disabled || isLoading;
+    const hasText =
+      children !== undefined && children !== null && children !== "";
 
     function handleClick(e: React.MouseEvent) {
       if (isDisabled) {
@@ -55,6 +57,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={cn(
           buttonVariants({ variant, size, radius, block }),
+          !hasText && "gap-0",
           className,
           isDisabled && "pointer-events-none opacity-50"
         )}

@@ -8,22 +8,30 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary:     "bg-brand text-brand-foreground hover:bg-brand-600",
-        secondary:   "bg-surface text-foreground border border-border hover:bg-surface/80",
-        outline:     "bg-transparent text-foreground border border-border hover:bg-surface",
-        ghost:       "bg-transparent text-foreground hover:bg-surface",
-        link:        "bg-transparent text-brand underline underline-offset-4 hover:text-brand-600",
+        primary: "bg-brand text-brand-foreground hover:bg-brand-600",
+        secondary:
+          "bg-surface text-foreground border border-border hover:bg-surface/80",
+        outline:
+          "bg-transparent text-foreground border border-border hover:bg-surface",
+        ghost: "bg-transparent text-foreground hover:bg-surface",
+        link: "bg-transparent text-brand underline underline-offset-4 hover:text-brand-600",
         destructive: "bg-error text-white hover:bg-error/90",
-        success:     "bg-success text-white hover:bg-success/90",
-        warning:     "bg-warning text-black hover:bg-warning/90",
-        info:        "bg-info text-white hover:bg-info/90",
+        success: "bg-success text-white hover:bg-success/90",
+        warning: "bg-warning text-black hover:bg-warning/90",
+        info: "bg-info text-white hover:bg-info/90",
+
+        iconDark: "bg-icon-dark text-icon-fore hover:bg-icon-dark/90",
+        iconTransparent:
+          "bg-transparent text-foreground border border-border " +
+          "hover:bg-foreground/10 hover:border-border/80 " +
+          "active:bg-foreground/15",
       },
       size: {
-        xs:   "h-7  px-2  text-xs",
-        sm:   "h-8  px-3  text-sm",
-        md:   "h-10 px-4  text-sm",
-        lg:   "h-12 px-6  text-base",
-        xl:   "h-14 px-8  text-lg",
+        xs: "h-7  px-2  text-xs",
+        sm: "h-8  px-3  text-sm",
+        md: "h-10 px-4  text-sm",
+        lg: "h-12 px-6  text-base",
+        xl: "h-14 px-8  text-lg",
         icon: "h-10 w-10 p-0",
       },
       radius: {
