@@ -1,7 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 export const buttonVariants = cva(
-  // base
   "inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors " +
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 " +
     "disabled:pointer-events-none disabled:opacity-50 rounded-xl",
@@ -23,7 +22,7 @@ export const buttonVariants = cva(
         iconDark: "bg-icon-dark text-icon-fore hover:bg-icon-dark/90",
         iconTransparent:
           "bg-transparent text-foreground border border-border " +
-          "hover:bg-foreground/10 hover:border-border/80 " +
+          "hover:bg-foreground/10 hover:border-border/80 " + 
           "active:bg-foreground/15",
       },
       size: {
