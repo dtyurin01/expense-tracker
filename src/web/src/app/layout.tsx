@@ -1,8 +1,9 @@
+import "@radix-ui/themes/styles.css";
 import "./globals.css";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import type { Metadata } from 'next';
-import { siteConfig } from '@/config/site';
+import type { Metadata } from "next";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
   title: {
@@ -14,22 +15,22 @@ export const metadata: Metadata = {
   applicationName: siteConfig.name,
   metadataBase: new URL(siteConfig.url),
   alternates: {
-    canonical: '/',
+    canonical: "/",
   },
   openGraph: {
     title: siteConfig.name,
     description: siteConfig.description,
     url: siteConfig.url,
     siteName: siteConfig.name,
-    images: [{ url: siteConfig.ogImage ?? '/og.png' }],
+    images: [{ url: siteConfig.ogImage ?? "/og.png" }],
     locale: siteConfig.locale,
-    type: 'website',
+    type: "website",
   },
   twitter: {
-    card: 'summary_large_image',  
+    card: "summary_large_image",
     title: siteConfig.name,
     description: siteConfig.description,
-    images: [siteConfig.ogImage ?? '/og.png'],
+    images: [siteConfig.ogImage ?? "/og.png"],
     creator: siteConfig.links?.twitter,
   },
   icons: {
@@ -38,11 +39,16 @@ export const metadata: Metadata = {
     apple: siteConfig.icons?.apple,
   },
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: siteConfig.themeColorLight ?? '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: siteConfig.themeColorDark ?? '#000000' },
+    {
+      media: "(prefers-color-scheme: light)",
+      color: siteConfig.themeColorLight ?? "#ffffff",
+    },
+    {
+      media: "(prefers-color-scheme: dark)",
+      color: siteConfig.themeColorDark ?? "#000000",
+    },
   ],
 };
-
 
 export default function RootLayout({
   children,
@@ -50,7 +56,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ru" className={`dark ${GeistMono.variable} ${GeistSans.variable}`}>
+    <html
+      lang="ru"
+      className={`dark ${GeistMono.variable} ${GeistSans.variable}`}
+    >
       <body className={GeistSans.className}>{children}</body>
     </html>
   );
