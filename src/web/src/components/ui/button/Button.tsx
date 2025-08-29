@@ -9,7 +9,7 @@ import {
   iconSizeByButton,
 } from "./button.variants";
 
-export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
+export type ButtonProps = React.ComponentPropsWithoutRef<"button"> &
   ButtonVariantProps & {
     asChild?: boolean;
     isLoading?: boolean;
@@ -17,16 +17,18 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
     rightIcon?: React.ReactNode;
   };
 
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+type AnyRef = React.Ref<HTMLElement>;
+
+export const Button = React.forwardRef<HTMLElement, ButtonProps>(
   (
     {
       className,
-      variant,
-      size,
-      radius,
+      variant = "primary",
+      size = "md",
+      radius = "lg",
       block,
-      asChild,
-      isLoading,
+      asChild = false,
+      isLoading = false,
       disabled,
       leftIcon,
       rightIcon,
@@ -35,35 +37,38 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       onClick,
       ...props
     },
-    ref
+    ref: AnyRef
   ) => {
-    const Comp = asChild ? Slot : "button";
-    const iconSize = iconSizeByButton[size ?? "md"];
     const isDisabled = disabled || isLoading;
-    const hasText =
-      children !== undefined && children !== null && children !== "";
+    const classes = cn(
+      buttonVariants({ variant, size, radius, block }),
+      className,
+      isDisabled && "pointer-events-none opacity-50"
+    );
 
-    function handleClick(e: React.MouseEvent) {
-      if (isDisabled) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      onClick?.(e as React.MouseEvent<HTMLButtonElement, MouseEvent>);
+    if (asChild) {
+      return (
+        <Slot
+          ref={ref as any}
+          className={classes}
+          aria-disabled={isDisabled || undefined}
+          aria-busy={isLoading || undefined}
+          {...props}
+        >
+          {children}
+        </Slot>
+      );
     }
 
+    const iconSize = iconSizeByButton[size!];
+
     return (
-      <Comp
-        ref={ref}
-        className={cn(
-          buttonVariants({ variant, size, radius, block }),
-          !hasText && "gap-0",
-          className,
-          isDisabled && "pointer-events-none opacity-50"
-        )}
-        {...(!asChild
-          ? { type, disabled: isDisabled }
-          : { "aria-disabled": isDisabled, onClick: handleClick })}
+      <button
+        ref={ref as React.Ref<HTMLButtonElement>}
+        type={type}
+        disabled={isDisabled}
+        className={classes}
+        onClick={onClick}
         aria-busy={isLoading || undefined}
         {...props}
       >
@@ -97,7 +102,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             {rightIcon && <span className={iconSize}>{rightIcon}</span>}
           </>
         )}
-      </Comp>
+      </button>
     );
   }
 );
