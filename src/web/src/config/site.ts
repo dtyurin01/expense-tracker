@@ -26,12 +26,6 @@ export const siteConfig: SiteConfig = {
         apple: '/apple-touch-icon.png'
     },
 
-    nav: [
-        { label: 'Home', href: '/' },
-        { label: 'Features', href: '/#features' },
-        { label: 'Pricing', href: '/pricing' },
-        { label: 'Log In', href: '/auth/login' },
-    ],
 
     footer: [
         {
