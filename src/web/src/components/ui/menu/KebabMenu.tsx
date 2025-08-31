@@ -108,7 +108,7 @@ export function KebabMenu({
             const content = (
               <>
                 {item.icon && (
-                  <span className="size-4 shrink-0">{item.icon}</span>
+                  <item.icon className="size-4 shrink-0" aria-hidden="true" />
                 )}
                 <span className="truncate">{item.label}</span>
                 {item.shortcut && (
