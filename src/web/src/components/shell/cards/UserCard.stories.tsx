@@ -57,6 +57,11 @@ export const CustomAvatarUrl: Story = {
     avatarUrl: "https://i.pravatar.cc/96?img=15",
   },
 };
+  
+export const AvatarOnly: Story = {
+  args: { variant: "avatar" },
+};
+
 
 export const InList: Story = {
   render: (args) => (

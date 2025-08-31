@@ -1,6 +1,5 @@
 const config = {
   darkMode: "class",
-  // (в v4 content можно не указывать, но пусть будет)
   content: [
     "./src/**/*.{ts,tsx}",
     "./**/*.stories.@(ts|tsx|mdx)",
@@ -20,7 +19,6 @@ const config = {
       },
     },
     extend: {
-      /* Цвета НЕ описываем — их даёт @theme через --color-* */
       fontFamily: {
         sans: ["var(--font-sans)", "var(--font-geist-sans)"],
         mono: ["var(--font-mono)", "var(--font-geist-mono)"],

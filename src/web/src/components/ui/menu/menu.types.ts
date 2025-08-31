@@ -1,8 +1,8 @@
-import { ReactNode } from "react";
+import { IconType } from "react-icons";
 
 export type MenuItemBase = {
   label: string;
-  icon?: ReactNode;
+  icon?: IconType;
   shortcut?: string;
   disabled?: boolean;
   danger?: boolean;
