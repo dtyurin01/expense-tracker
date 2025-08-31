@@ -46,3 +46,6 @@ export const DarkMode: Story = {
   ],
 };
 
+export const PillOnly: Story = {
+  args: { variant: "pill", pillSize: "md", label: "pro", href: "/pricing" },
+};

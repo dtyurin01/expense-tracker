@@ -1,124 +1,67 @@
-import { Button } from "@/components/ui";
+import AppSidebar from "@/components/shell/sidebar/AppSidebar";
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-dvh bg-background text-foreground">
-      <div className="mx-auto py-6">
-        <div className="flex gap-6">
-          <aside className="w-[280px] shrink-0">
-            <Sidebar />
-          </aside>
+    <div className="min-h-screen bg-background text-foreground">
+      {/* фиксированный сайдбар */}
+      <AppSidebar />
 
-          <section className="flex-1 min-w-0 space-y-6">
-            <div className="flex items-center justify-between">
-              <h1 className="text-h2 font-semibold">Dashboard</h1>
-              <div className="flex items-center gap-2">
-                <button className="rounded-xl border border-border bg-surface-2 px-3 py-2 text-sm">
-                  USD ▾
-                </button>
-                <button className="rounded-xl bg-brand px-3 py-2 text-sm font-medium text-brand-foreground hover:bg-brand/90">
-                  + Add transaction
-                </button>
-              </div>
+      {/* смещаем контент вправо: 
+          на xs/md = 5rem (w-20) + 1.5rem = 6.5rem,
+          на lg     = 320px + 1.5rem */}
+      <main className="px-2 pt-5 pl-[6.5rem] md:pl-2 lg:pl-[calc(320px+1.2rem)]">
+        <section className="min-w-0 space-y-6">
+          <div className="flex items-center justify-between">
+            <h1 className="text-h2 font-semibold">Your Dashboard</h1>
+            <div className="flex items-center gap-2">
+              <button className="rounded-xl border border-border bg-surface-2 px-3 py-2 text-sm">
+                USD ▾
+              </button>
+              <button className="rounded-xl bg-brand px-3 py-2 text-sm font-medium text-brand-foreground hover:bg-brand/90">
+                + Add transaction
+              </button>
             </div>
+          </div>
 
-            <div className="grid grid-cols-12 gap-4 md:gap-6">
-              <Card className="col-span-12 lg:col-span-8" title="Total balance">
-                <Placeholder height="h-52" />
-              </Card>
-              <Card
-                className="col-span-12 lg:col-span-4"
-                title="Receipts split summary"
-                footer
-              >
-                <Placeholder height="h-52" />
-              </Card>
-              <Card
-                className="col-span-12 md:col-span-6 lg:col-span-4"
-                title="Income & Expenses"
-              >
-                <Placeholder height="h-48" />
-              </Card>
-              <Card
-                className="col-span-12 md:col-span-6 lg:col-span-4"
-                title="Spending categories"
-                footer
-              >
-                <Placeholder height="h-48" />
-              </Card>
-              <Card
-                className="col-span-12 lg:col-span-4"
-                title="Latest transactions"
-                footer
-              >
-                <Placeholder height="h-48" />
-              </Card>
-            </div>
-          </section>
-        </div>
-      </div>
-    </div>
-  );
-}
+          <div className="grid grid-cols-12 gap-4 md:gap-6">
+            <Card className="col-span-12 lg:col-span-8" title="Total balance">
+              <Placeholder height="h-52" />
+            </Card>
 
-function Sidebar() {
-  const items = [
-    { label: "Dashboard", active: true, icon: "▦" },
-    { label: "Accounts", icon: "💳" },
-    { label: "Receipts", icon: "🧾" },
-    { label: "Statistics", icon: "📊" },
-  ];
-
-  return (
-    <aside className="shrink-0 sticky top-4 h-[calc(100dvh-3rem)]">
-      {/* Внутренняя «карточка» сайдбара */}
-      <div className="h-full rounded-2xl border border-border bg-surface p-4 flex flex-col">
-        {/* Лого */}
-        <div className="mb-4 flex items-center gap-2">
-          <div className="size-8 rounded-xl bg-brand" />
-          <span className="text-h5 font-semibold">PocketPulse</span>
-        </div>
-
-        {/* Навигация: займёт всё доступное место */}
-        <nav className="space-y-1 overflow-y-auto pr-1">
-          {items.map((i) => (
-            <a
-              key={i.label}
-              href="#"
-              aria-current={i.active ? "page" : undefined}
-              className={`flex items-center gap-3 rounded-2xl px-3 py-2 text-sm
-                ${i.active ? "bg-surface-2" : "hover:bg-surface-2"}`}
+            <Card
+              className="col-span-12 lg:col-span-4"
+              title="Receipts split summary"
+              footer
             >
-              <span className="inline-flex size-5 items-center justify-center">
-                {i.icon}
-              </span>
-              {i.label}
-            </a>
-          ))}
-        </nav>
+              <Placeholder height="h-52" />
+            </Card>
 
-        {/* НИЖНИЙ БЛОК: прижат вниз */}
-        <div className="mt-auto space-y-6 pt-6">
-          <div className="rounded-2xl border border-border p-4">
-            <div className="text-sm font-medium">Explore plans</div>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Free trial ends soon – 7 days left
-            </p>
-            <button className="mt-3 w-full rounded-xl border border-border bg-surface-2 px-3 py-2 text-sm">
-              Upgrade
-            </button>
-          </div>
+            <Card
+              className="col-span-12 md:col-span-6 lg:col-span-4"
+              title="Income & Expenses"
+            >
+              <Placeholder height="h-48" />
+            </Card>
 
-          <div className="flex items-center gap-3 rounded-2xl border border-border p-4">
-            <div className="size-9 rounded-full bg-surface-2" />
-            <div className="text-sm">
-              <div>Nicholas Brown</div>
-              <div className="text-xs text-muted-foreground">Member</div>
-            </div>
+            <Card
+              className="col-span-12 md:col-span-6 lg:col-span-4"
+              title="Spending categories"
+              footer
+            >
+              <Placeholder height="h-48" />
+            </Card>
+
+            <Card
+              className="col-span-12 lg:col-span-4"
+              title="Latest transactions"
+              footer
+            >
+              <Placeholder height="h-48" />
+            </Card>
           </div>
-        </div>
-      </div>
-    </aside>
+        </section>
+      </main>
+    </div>
   );
 }
 
