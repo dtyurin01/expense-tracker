@@ -6,33 +6,42 @@ import { cn } from "@/lib/cn";
 import { KebabMenu } from "@/components/ui/index";
 import type { MenuItem } from "@/components/ui/menu/menu.types";
 
-type UserCardProps = {
+type CommonProps = {
   name: string;
   subtitle?: string;
   avatarUrl?: string;
   className?: string;
-  onClick?: () => void;
   disabled?: boolean;
+  onClick?: () => void;
+  size?: "sm" | "md" | "lg";
+};
 
+type FullProps = CommonProps & {
+  variant?: "full";
+  block?: boolean;
   menuItems?: MenuItem[];
   onMenuOpenChange?: (open: boolean) => void;
 };
 
-export function UserCard({
-  name,
-  subtitle = "Member",
-  avatarUrl,
-  className,
-  onClick,
-  disabled,
-  menuItems = [],
-  onMenuOpenChange,
-}: UserCardProps) {
-  const seed = React.useMemo(() => encodeURIComponent(name || "user"), [name]);
-  const fallbackAvatar = `https://i.pravatar.cc/96?u=${seed}`;
-  const src = avatarUrl ?? fallbackAvatar;
+type AvatarOnlyProps = CommonProps & {
+  variant: "avatar";
+  href?: "string";
+  "aria-label"?: string;
+};
 
-  const [imgOk, setImgOk] = React.useState(true);
+export type UserCardProps = FullProps | AvatarOnlyProps;
+
+export function UserCard(props: UserCardProps) {
+  const {
+    name,
+    subtitle = "Member",
+    avatarUrl,
+    className,
+    disabled,
+    onClick,
+    size = "md",
+  } = props;
+
   const initials = React.useMemo(
     () =>
       name
@@ -43,56 +52,104 @@ export function UserCard({
         .join(""),
     [name]
   );
+
+  const seed = React.useMemo(() => encodeURIComponent(name || "user"), [name]);
+  const fallbackAvatar = `https://i.pravatar.cc/160?u=${seed}`;
+  const src = avatarUrl ?? fallbackAvatar;
+  const [imgOk, setImgOk] = React.useState(true);
+
+  const avatarSize =
+    size === "sm"
+      ? "h-8 w-8 text-xs"
+      : size === "lg"
+      ? "h-12 w-12"
+      : "h-10 w-10";
+
+  if (props.variant === "avatar") {
+    const Wrapper = onClick ? "button" : "div";
+    return (
+      <Wrapper
+        type={onClick ? "button" : undefined}
+        onClick={disabled ? undefined : onClick}
+        aria-label={props["aria-label"] ?? name}
+        className={cn(
+          "inline-flex items-center justify-center",
+          disabled && "pointer-events-none opacity-60",
+          className
+        )}
+      >
+        <div
+          className={cn(
+            "relative overflow-hidden rounded-full ring-1 ring-border/60 bg-surface/5 shadow-sm",
+            avatarSize
+          )}
+        >
+          {imgOk ? (
+            <Image
+              src={src}
+              alt={`${name} avatar`}
+              fill
+              sizes="48px"
+              className="object-cover"
+              onError={() => setImgOk(false)}
+              draggable={false}
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+              {initials || "?"}
+            </div>
+          )}
+        </div>
+      </Wrapper>
+    );
+  }
+
+  const { block, menuItems, onMenuOpenChange } = props as FullProps;
+
   return (
     <div
+      onClick={disabled ? undefined : onClick}
       className={cn(
-        "group relative flex items-center gap-3 rounded-full border border-border/80 bg-surface/5",
-        "px-3 py-2 shadow-sm hover:bg-surface/10 hover:border-border transition-colors",
-        "focus-within:ring-2 focus-within:ring-brand/50",
-        disabled && "opacity-60 pointer-events-none",
+        "group relative flex items-center gap-3 rounded-2xl border border-border/60 bg-surface/5 px-4 py-3",
+        "hover:bg-surface/10 transition-colors",
+        disabled && "pointer-events-none opacity-60",
+        block && "w-full",
         className
       )}
-      onClick={onClick}
-      role={onClick ? "button" : undefined}
-      tabIndex={onClick ? 0 : -1}
     >
-      <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full ring-1 ring-border/60">
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-full ring-1 ring-border/60 bg-surface shadow-sm",
+          avatarSize
+        )}
+      >
         {imgOk ? (
           <Image
             src={src}
             alt={`${name} avatar`}
             fill
-            sizes="40px"
+            sizes="64px"
             className="object-cover"
             onError={() => setImgOk(false)}
             draggable={false}
-            priority={false}
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-surface text-sm text-muted-foreground">
+          <div className="flex h-full w-full items-center justify-center text-muted-foreground">
             {initials || "?"}
           </div>
         )}
       </div>
 
-      <div className="min-w-0 flex-1">
-        <div className="truncate text-base font-semibold leading-tight text-foreground">
-          {name}
-        </div>
-        <div className="truncate text-sm leading-tight text-muted-foreground">
-          {subtitle}
-        </div>
+      <div className="min-w-0">
+        <div className="truncate text-sm font-medium">{name}</div>
+        <div className="truncate text-xs text-muted-foreground">{subtitle}</div>
       </div>
 
-      {menuItems.length > 0 && (
-        <KebabMenu
-          items={menuItems}
-          onOpenChange={onMenuOpenChange}
-          sideOffset={12}
-          elevation={2}
-          radius="lg"
-        />
-      )}
+      {menuItems?.length ? (
+        <div className="ml-auto">
+          <KebabMenu items={menuItems} onOpenChange={onMenuOpenChange} />
+        </div>
+      ) : null}
     </div>
   );
 }
