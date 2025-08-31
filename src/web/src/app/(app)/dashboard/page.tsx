@@ -3,18 +3,14 @@ import AppSidebar from "@/components/shell/sidebar/AppSidebar";
 export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* фиксированный сайдбар */}
       <AppSidebar />
 
-      {/* смещаем контент вправо: 
-          на xs/md = 5rem (w-20) + 1.5rem = 6.5rem,
-          на lg     = 320px + 1.5rem */}
       <main className="px-2 pt-5 pl-[6.5rem] md:pl-2 lg:pl-[calc(320px+1.2rem)]">
         <section className="min-w-0 space-y-6">
           <div className="flex items-center justify-between">
             <h1 className="text-h2 font-semibold">Your Dashboard</h1>
             <div className="flex items-center gap-2">
-              <button className="rounded-xl border border-border bg-surface-2 px-3 py-2 text-sm">
+              <button className="rounded-xl border border-border p-2 px-3 py-2 text-sm">
                 USD ▾
               </button>
               <button className="rounded-xl bg-brand px-3 py-2 text-sm font-medium text-brand-foreground hover:bg-brand/90">
