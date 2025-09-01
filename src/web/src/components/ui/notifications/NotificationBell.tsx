@@ -5,7 +5,6 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { FiBell } from "react-icons/fi";
 import { cn } from "@/lib/cn";
 import { Button } from "@/components/ui/button/Button";
-import { menuContent } from "@/components/ui/menu/menu.variants";
 import type { NotificationItem } from "@/types/notification";
 import {
   bellTrigger,
@@ -65,13 +64,15 @@ export function NotificationBell({
               : "Notifications"
           }
         >
-          <FiBell className="size-5" />
-          {unreadCount > 0 && (
-            <span
-              aria-hidden
-              className="absolute right-1 top-1 h-2.5 w-2.5 rounded-full bg-error ring-2 ring-surface"
-            />
-          )}
+          <span className="relative place-items-center">
+            <FiBell className="size-5" aria-hidden />
+            {unreadCount > 0 && (
+              <span
+                aria-hidden
+                className="absolute right-0 top-0 size-2 rounded-full bg-error"
+              />
+            )}
+          </span>
         </Button>
       </DropdownMenu.Trigger>
 
