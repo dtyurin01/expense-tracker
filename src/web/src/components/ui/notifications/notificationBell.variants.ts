@@ -8,7 +8,7 @@ export const bellTrigger = cva(
     variants: {
       size: {
         md: "h-9  w-9  p-2",
-        lg: "h-12 w-12 p-3",
+        lg: "h-11 w-11 p-0",
       },
       tone: {
         ghost: "",

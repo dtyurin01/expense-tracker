@@ -32,7 +32,7 @@ export default function AppSidebar() {
 
       <aside
         className={cn(
-          "fixed inset-y-2 left-1 shrink-0 w-20 lg:w-[320px]",
+          "fixed inset-y-2 left-2 shrink-0 w-20 lg:w-[318px]",
           "transition-transform duration-200 ease-out will-change-transform",
           !mdOpen && "md:-translate-x-[calc(100%+0.5rem)] lg:translate-x-0"
         )}

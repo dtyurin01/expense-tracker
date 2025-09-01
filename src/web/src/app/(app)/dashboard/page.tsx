@@ -1,20 +1,62 @@
 import AppSidebar from "@/components/shell/sidebar/AppSidebar";
+import { FiSearch, FiBell } from "react-icons/fi";
 
 export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AppSidebar />
 
-      <main className="px-2 pt-5 pl-[6.5rem] md:pl-2 lg:pl-[calc(320px+1.2rem)]">
+      <main className="px-3 pt-5 pl-[6.5rem] md:pl-2 lg:pl-[calc(320px+1.2rem)]">
         <section className="min-w-0 space-y-6">
-          <div className="flex items-center justify-between">
-            <h1 className="text-h2 font-semibold">Your Dashboard</h1>
-            <div className="flex items-center gap-2">
-              <button className="rounded-xl border border-border p-2 px-3 py-2 text-sm">
-                USD ▾
+          <div className="flex items-center">
+            <div className="pl-2">
+              <h1 className="text-2xl font-semibold leading-tight">Dashboard</h1>
+              <p className="mt-1 text-md text-muted-foreground">
+                Hi Nicholas, here are your financial stats
+              </p>
+            </div>
+
+            <div className="ml-auto flex items-center gap-2">
+              <button
+                aria-label="Search"
+                className="grid size-10 place-items-center rounded-full border border-border bg-surface/10 hover:bg-surface/20"
+              >
+                <FiSearch className="size-5" />
               </button>
-              <button className="rounded-xl bg-brand px-3 py-2 text-sm font-medium text-brand-foreground hover:bg-brand/90">
-                + Add transaction
+              <button
+                aria-label="Notifications"
+                className="relative hidden sm:grid size-10 place-items-center rounded-full border border-border bg-surface/10 hover:bg-surface/20"
+              >
+                <FiBell className="size-5" />
+                <span
+                  aria-hidden
+                  className="absolute right-2 top-2 size-2 rounded-full bg-error"
+                />
+              </button>
+              <button className="h-10 rounded-xl bg-brand px-4 text-sm font-medium text-brand-foreground hover:bg-brand-600">
+                <span className="hidden md:inline">+ Add transaction</span>
+                <span className="md:hidden">＋</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Row 2 — заголовок слева, ЕДИНЫЙ блок фильтров справа */}
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            {/* ВАЖНО: один общий правый блок, который уезжает вправо */}
+            <div className="ml-auto flex items-center gap-2">
+              {/* Segments */}
+              <div className="inline-flex h-10 items-center rounded-2xl border border-border bg-surface-2 p-0.5">
+                <button className="rounded-xl px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground">
+                  Personal
+                </button>
+                <button className="rounded-xl bg-surface px-3 py-1.5 text-sm font-medium">
+                  All family
+                </button>
+              </div>
+
+              {/* Currency — рядом с сегментами, той же высоты */}
+              <button className="h-10 rounded-xl border border-border bg-surface-2 px-3 text-sm">
+                USD <span className="align-[-1px]">▾</span>
               </button>
             </div>
           </div>
