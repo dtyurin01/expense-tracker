@@ -32,7 +32,7 @@ export default function AppSidebar() {
 
       <aside
         className={cn(
-          "fixed inset-y-2 left-0 shrink-0 w-20 lg:w-[320px]",
+          "fixed inset-y-2 left-2 shrink-0 w-20 lg:w-[318px]",
           "transition-transform duration-200 ease-out will-change-transform",
           !mdOpen && "md:-translate-x-[calc(100%+0.5rem)] lg:translate-x-0"
         )}
@@ -49,7 +49,7 @@ export default function AppSidebar() {
             <FiChevronLeft className="size-5" aria-hidden />
           </button>
 
-          <div className="mb-3 lg:mb-4 flex w-full items-center gap-2 justify-start md:justify-center lg:justify-start">
+          <div className="mb-3 lg:mb-4 flex w-full items-center gap-2 justify-start md:justify-center px-2 lg:justify-start">
             <div className="relative size-8 rounded-xl overflow-hidden shrink-0">
               <div className="absolute inset-0 bg-gradient-to-br from-brand-300 to-brand-700" />
             </div>
@@ -71,7 +71,7 @@ export default function AppSidebar() {
                   aria-label={i.label}
                   title={i.label}
                   className={cn(
-                    "flex w-full items-center rounded-2xl text-sm transition-colors",
+                    "flex w-full items-center rounded-2xl text-md transition-colors",
                     "h-10 px-0 lg:px-3",
                     "justify-center lg:justify-start",
                     active

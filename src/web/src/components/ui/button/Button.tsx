@@ -97,9 +97,17 @@ export const Button = React.forwardRef<HTMLElement, ButtonProps>(
           </svg>
         ) : (
           <>
-            {leftIcon && <span className={iconSize}>{leftIcon}</span>}
+            {leftIcon && (
+              <span className={cn(iconSize, "inline-flex items-center")}>
+                {leftIcon}
+              </span>
+            )}
             <span className="truncate">{children}</span>
-            {rightIcon && <span className={iconSize}>{rightIcon}</span>}
+            {rightIcon && (
+              <span className={cn(iconSize, "inline-flex items-center")}>
+                {rightIcon}
+              </span>
+            )}
           </>
         )}
       </button>
