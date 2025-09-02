@@ -9,6 +9,7 @@ import { Button } from "@/components/ui";
 import SearchButton from "@/components/ui/search/SearchButton";
 import { CurrencySelect } from "@/components/ui/currencySelector/CurrencySelect";
 import { SegmentedControl } from "@/components/ui/segmentedControl/SegmentedControl";
+import SearchDialog from "@/components/ui/search/SearchDialog";
 
 type DashboardHeaderProps = {
   title: string;
@@ -58,9 +59,10 @@ export function DashboardHeader({
   segmentOptions = ["Personal", "All family"],
 }: DashboardHeaderProps) {
   const [items, setItems] = React.useState<NotificationItem[]>(initial);
-  const [open, setOpen] = React.useState(false);
+  const [openNotification, setOpenNotification] = React.useState(false);
   const [currency, setCurrency] = React.useState("usd");
   const [value, setValue] = React.useState(segmentOptions[0]);
+  const [searchOpen, setSearchOpen] = React.useState(false);
 
   const markAllRead = () =>
     setItems((prev) => prev.map((n) => ({ ...n, unread: false })));
@@ -76,12 +78,21 @@ export function DashboardHeader({
         </div>
 
         <div className="ml-auto flex items-center gap-2">
-          <SearchButton />
+          <SearchButton onClick={() => setSearchOpen(true)} />
+
+          <SearchDialog
+            open={searchOpen}
+            onOpenChange={setSearchOpen}
+            onSubmit={(q) => {
+              onSearchClick?.();
+              console.log("search:", q);
+            }}
+          />
 
           <NotificationBell
             items={items}
-            open={open}
-            onOpenChange={setOpen}
+            open={openNotification}
+            onOpenChange={setOpenNotification}
             onMarkAllRead={markAllRead}
             side="bottom"
             align="end"
