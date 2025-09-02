@@ -2,7 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 export const bellTrigger = cva(
   "relative inline-flex items-center justify-center rounded-full " +
-    "text-muted-foreground hover:text-foreground " +
+    "hover:bg-foreground/10 hover:border-border/80 " +
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50",
   {
     variants: {
@@ -12,7 +12,7 @@ export const bellTrigger = cva(
       },
       tone: {
         ghost: "",
-        surface: "bg-surface! border border-border hover:bg-surface/80",
+        surface: "bg-surface border border-border hover:bg-surface/80",
       },
     },
     defaultVariants: { size: "lg", tone: "ghost" },
@@ -20,7 +20,7 @@ export const bellTrigger = cva(
 );
 
 export const notificationContent = cva(
-  "w-80 overflow-hidden bg-surface border border-border will-change-transform",
+  "w-80 overflow-hidden bg-surface border border-border will-change-transform ",
   {
     variants: {
       elevation: { 0: "shadow-none", 1: "shadow-md", 2: "shadow-lg" },
