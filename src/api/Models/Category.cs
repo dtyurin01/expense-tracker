@@ -7,5 +7,4 @@ public class Category
     public ApplicationUser User { get; set; } = default!;
     public string Name { get; set; } = default!;
     public ICollection<Expense> Expenses { get; set; } = new List<Expense>();
-
 }

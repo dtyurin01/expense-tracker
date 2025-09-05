@@ -15,7 +15,7 @@ export default function DashboardPage() {
                   USD ▾
                 </button>
                 <button className="rounded-xl bg-brand px-3 py-2 text-sm font-medium text-brand-foreground hover:bg-brand/90">
-                  + Add transaction
+                  + Add expense
                 </button>
               </div>
             </div>
