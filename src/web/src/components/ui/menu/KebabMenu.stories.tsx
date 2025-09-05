@@ -22,14 +22,14 @@ const meta: Meta<typeof KebabMenu> = {
       { type: "label", label: "Actions" },
       {
         label: "Profile",
-        icon: <FiUser />,
+        icon: FiUser,
         onSelect: () => console.log("Profile"),
       },
-      { label: "Edit", icon: <FiEdit />, onSelect: () => console.log("Edit") },
+      { label: "Edit", icon: FiEdit, onSelect: () => console.log("Edit") },
       { type: "separator" },
       {
         label: "Logout",
-        icon: <FiLogOut />,
+        icon: FiLogOut,
         danger: true,
         onSelect: () => console.log("Logout"),
       },
@@ -61,11 +61,11 @@ export const Default: Story = {};
 export const WithDanger: Story = {
   args: {
     items: [
-      { label: "Edit", icon: <FiEdit />, onSelect: () => console.log("Edit") },
+      { label: "Edit", icon: FiEdit, onSelect: () => console.log("Edit") },
       { type: "separator" },
       {
         label: "Delete",
-        icon: <FiTrash2 />,
+        icon: FiTrash2,
         danger: true,
         onSelect: () => console.log("Delete"),
       },
@@ -86,13 +86,13 @@ export const LinkItems: Story = {
       {
         label: "Open Docs",
         href: "https://example.com",
-        icon: <FiMoreHorizontal />,
+        icon: FiMoreHorizontal,
         target: "_blank",
       },
       { type: "separator" },
       {
         label: "Profile",
-        icon: <FiUser />,
+        icon: FiUser,
         onSelect: () => console.log("Action still works"),
       },
     ],
@@ -114,19 +114,18 @@ export const DisabledItems: Story = {
     items: [
       {
         label: "Profile",
-        icon: <FiUser />,
+        icon: FiUser,
         disabled: true,
         onSelect: () => {},
       },
-      { label: "Edit", icon: <FiEdit />, onSelect: () => console.log("Edit") },
+      { label: "Edit", icon: FiEdit, onSelect: () => console.log("Edit") },
       { type: "separator" },
       {
         label: "Logout",
-        icon: <FiLogOut />,
+        icon: FiLogOut,
         danger: true,
         onSelect: () => console.log("Logout"),
       },
     ],
   },
 };
-
