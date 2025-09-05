@@ -7,6 +7,9 @@
   --color-surface: hsl(0 0% 100%);
   --color-border: hsl(220 3% 63%); /* #9EA0A5 */
 
+  --hover-surface: var(--color-surface); /* = bg-surface */
+  --hover-border: hsl(220 3% 63% / 0.8);
+
   /* brand */
   --color-brand: hsl(198 81% 67%); /* #64C2F0 */
   --color-brand-300: hsl(198 86% 80%);
@@ -35,6 +38,9 @@
   --color-surface: hsl(220 21% 12%); /* #181A25 */
   --color-border: hsl(220 17% 18%); /* #252A35 */
 
+  --hover-surface: var(--color-surface); /* = bg-surface */
+  --hover-border: hsl(220 3% 63% / 0.8);
+
   --color-brand: hsl(198 81% 67%);
   --color-brand-300: hsl(198 86% 80%);
   --color-brand-600: hsl(198 74% 56%);
@@ -52,6 +58,39 @@
   --color-icon-fore: hsl(0 0% 96%);
 }
 
+@keyframes dialog-overlay-show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes dialog-overlay-hide {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes drawer-right-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes drawer-right-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
 :root {
   color-scheme: light;
 }

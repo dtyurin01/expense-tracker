@@ -110,7 +110,7 @@ export function UserCard(props: UserCardProps) {
     <div
       onClick={disabled ? undefined : onClick}
       className={cn(
-        "group relative flex items-center gap-3 rounded-2xl border border-border/60 bg-surface/5 px-4 py-3",
+        "group relative flex items-center gap-3 rounded-2xl border border-2 border-border bg-surface/5 px-4 py-3",
         "hover:bg-surface/10 transition-colors",
         disabled && "pointer-events-none opacity-60",
         block && "w-full",
@@ -147,7 +147,7 @@ export function UserCard(props: UserCardProps) {
 
       {menuItems?.length ? (
         <div className="ml-auto">
-          <KebabMenu items={menuItems} onOpenChange={onMenuOpenChange} />
+          <KebabMenu align="start" items={menuItems} onOpenChange={onMenuOpenChange} />
         </div>
       ) : null}
     </div>

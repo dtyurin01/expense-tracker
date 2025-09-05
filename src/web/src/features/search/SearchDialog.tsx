@@ -37,13 +37,13 @@ export default function SearchDialog({
     >
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-[1px]" />
-        <Dialog.Content className="fixed left-1/2 top-24 w-[min(90vw,720px)] -translate-x-1/2 rounded-2xl border border-border bg-surface p-3 shadow-xl">
+        <Dialog.Content className="fixed left-1/2 top-24 w-[min(90vw,720px)] -translate-x-1/2 rounded-2xl border border-border bg-surface px-2 py-1 shadow-xl">
           <Dialog.Title className="sr-only">Search</Dialog.Title>
           <Dialog.Description className="sr-only">
             Enter some text
           </Dialog.Description>
           <form onSubmit={handleSubmit} className="flex items-center gap-2">
-            <FiSearch className="size-5 text-muted-foreground" aria-hidden />
+            <FiSearch className=" size-5 text-muted-foreground" aria-hidden />
             <input
               autoFocus
               value={q}
@@ -55,13 +55,16 @@ export default function SearchDialog({
               Search
             </Button>
             <Dialog.Close asChild>
-              <button
+              <Button
                 type="button"
-                aria-label="Закрыть"
-                className="rounded-md p-2 text-muted-foreground hover:text-foreground"
+                aria-label="Close"
+                variant="ghost"
+                size="icon"
+                radius="md"
+                className="text-muted-foreground hover:text-foreground w-8 h-10"
               >
-                <FiX className="size-4" />
-              </button>
+                <FiX className="size-4" aria-hidden />
+              </Button>
             </Dialog.Close>
           </form>
         </Dialog.Content>

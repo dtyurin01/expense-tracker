@@ -3,13 +3,13 @@
 import * as React from "react";
 import { FiPlus } from "react-icons/fi";
 import { cn } from "@/lib/cn";
-import { NotificationBell } from "@/components/ui/notifications/NotificationBell";
+import { NotificationBell } from "@/features/notifications/NotificationBell";
 import { NotificationItem } from "@/types/notification";
 import { Button } from "@/components/ui";
-import SearchButton from "@/components/ui/search/SearchButton";
-import { CurrencySelect } from "@/components/ui/currencySelector/CurrencySelect";
+import SearchButton from "@/features/search/SearchButton";
+import { CurrencySelect } from "@/features/currencySelector/CurrencySelect";
 import { SegmentedControl } from "@/components/ui/segmentedControl/SegmentedControl";
-import SearchDialog from "@/components/ui/search/SearchDialog";
+import SearchDialog from "@/features/search/SearchDialog";
 
 type DashboardHeaderProps = {
   title: string;
@@ -50,7 +50,7 @@ const initial: NotificationItem[] = [
   },
 ];
 
-export function DashboardHeader({
+export function AppHeader({
   title,
   subtitle,
   className,
@@ -107,7 +107,7 @@ export function DashboardHeader({
             radius="lg"
             leftIcon={<FiPlus aria-hidden />}
           >
-            Add transcation
+            Add expense
           </Button>
         </div>
       </div>
@@ -120,7 +120,9 @@ export function DashboardHeader({
             onChange={setValue}
             size="sm"
             radius="lg"
-            className="bg-surface/60"
+            className="bg-surface/60 w-70"
+            block
+            equal
           />
 
           <CurrencySelect value={currency} onChange={setCurrency} />
