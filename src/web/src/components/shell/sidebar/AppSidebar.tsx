@@ -10,6 +10,7 @@ import { menuItems, isActivePath } from "@/config/menu";
 import { UpgradeCard } from "@/components/shell/cards/UpgradeCard";
 import { UserCard } from "@/components/shell/cards/UserCard";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { Button } from "@/components/ui";
 
 export default function AppSidebar() {
   const pathname = usePathname();
@@ -18,16 +19,18 @@ export default function AppSidebar() {
   return (
     <>
       {!mdOpen && (
-        <button
+        <Button
           onClick={() => setMdOpen(true)}
           aria-label="Open sidebar"
+          variant="secondary"
+          size="icon"
+          radius="full"
           className="hidden md:flex lg:hidden fixed z-50 top-1/2 left-2 -translate-y-1/2
-                     size-9 items-center justify-center rounded-full
-                     border border-border bg-surface shadow-md
-                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50"
+             border bg-surface shadow-md
+             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50"
         >
           <FiChevronRight className="size-5" aria-hidden />
-        </button>
+        </Button>
       )}
 
       <aside
@@ -38,16 +41,18 @@ export default function AppSidebar() {
         )}
       >
         <div className="relative h-full flex flex-col rounded-2xl border border-border bg-surface p-2 lg:p-4">
-          <button
+          <Button
             onClick={() => setMdOpen(false)}
             aria-label="Close sidebar"
+            variant="secondary"
+            size="icon"
+            radius="full"
             className="hidden md:flex lg:hidden absolute z-10 top-1/2 -translate-y-1/2 -right-3
-                       size-9 items-center justify-center rounded-full
-                       border border-border bg-surface shadow-md
-                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50"
+             border bg-surface shadow-md
+             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50"
           >
             <FiChevronLeft className="size-5" aria-hidden />
-          </button>
+          </Button>
 
           <div className="mb-3 lg:mb-4 flex w-full items-center gap-2 justify-start md:justify-center px-2 lg:justify-start">
             <div className="relative size-8 rounded-xl overflow-hidden shrink-0">
@@ -75,7 +80,7 @@ export default function AppSidebar() {
                     "h-10 px-0 lg:px-3",
                     "justify-center lg:justify-start",
                     active
-                      ? "bg-surface/70 border border-border"
+                      ? "bg-surface/70 border border-2 border-border"
                       : "hover:bg-surface/60"
                   )}
                 >

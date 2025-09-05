@@ -4,7 +4,7 @@ export const selectTriggerVariants = cva(
   "inline-flex items-center justify-between gap-2 whitespace-nowrap transition-colors " +
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 " +
     "disabled:pointer-events-none disabled:opacity-50 " +
-    "leading-none",
+    "leading-none hover:bg-foreground/10 hover:border-border/80",
   {
     variants: {
       variant: {

@@ -16,6 +16,7 @@ import {
   time,
   footer,
 } from "./notificationBell.variants";
+import Link from "next/link";
 
 type NotificationBellProps = {
   items: NotificationItem[];
@@ -84,12 +85,15 @@ export function NotificationBell({
         >
           <div className={notificationHeader()}>
             <div className="text-sm font-semibold">Notifications</div>
-            <button
+            <Button
+              variant="ghost"
+              size="xs"
+              radius="md"
               onClick={onMarkAllRead}
-              className="text-xs text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground"
             >
               Mark all as read
-            </button>
+            </Button>
           </div>
 
           <ul className={notificationList()}>
@@ -115,9 +119,9 @@ export function NotificationBell({
           </ul>
 
           <div className={footer()}>
-            <a href="/notifications" className="text-brand hover:underline">
+            <Link href="/notifications" className="text-brand hover:underline">
               View all
-            </a>
+            </Link>
           </div>
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
