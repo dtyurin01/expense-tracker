@@ -92,7 +92,7 @@ public static class CategoriesEndpoints
             if (entity is null) return Results.NotFound();
 
             if (entity.Expenses.Any())
-                return Results.Conflict("Category has expenses, cannot delete."); // из-за OnDelete.Restrict
+                return Results.Conflict("Category has expenses, cannot delete."); // OnDelete.Restrict
 
             db.Categories.Remove(entity);
             await db.SaveChangesAsync();
