@@ -6,7 +6,8 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button/Button";
-import { Select } from "@/components/ui/select/Select";
+import { Select, SelectItem } from "@/components/ui/select/Select";
+import { Input } from "@/components/ui/input/Input";
 
 import {
   ExpenseCreateSchema,
@@ -14,28 +15,33 @@ import {
   type ExpenseCreateInput,
 } from "@/schemas/expense";
 import type { Category } from "@/schemas/category";
+import { toLocalISO } from "@/lib/date-io";
+import { DatePicker } from "@/components/ui/date/DatePicker";
+import { FiPlusCircle } from "react-icons/fi";
 
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onCreate: (dto: ExpenseCreate) => void;
-  categories: Category[];
+  categories: ReadonlyArray<Category> | (() => ReadonlyArray<Category>);
 };
 
-export default function AddExpenseDialog({
-  open,
-  onOpenChange,
-  onCreate,
-  categories,
-}: Props) {
-  const makeDefaults = React.useCallback<() => ExpenseCreateInput>(
-    () => ({
-      categoryId: categories[0]?.id ?? "",
+export default function AddExpenseDialog(props: Props) {
+  const { open, onOpenChange, onCreate, categories } = props;
+
+  const categoriesRef = React.useRef<ReadonlyArray<Category>>(
+    typeof categories === "function" ? categories() : categories
+  );
+  const cats = categoriesRef.current;
+
+  const makeDefaults = React.useCallback(
+    (): ExpenseCreateInput => ({
+      categoryId: cats[0]?.id ?? "",
       amount: 0,
-      occurredAt: new Date().toISOString().slice(0, 10),
+      occurredAt: toLocalISO(new Date()),
       note: "",
     }),
-    [categories]
+    [cats]
   );
 
   const {
@@ -87,7 +93,10 @@ export default function AddExpenseDialog({
         "
         >
           <Dialog.Title className="text-lg font-semibold">
-            Add expense
+            <div className="flex items-center gap-2">
+              <FiPlusCircle className="size-5" aria-hidden />
+              <span>Add expense</span>
+            </div>
           </Dialog.Title>
           <Dialog.Description className="sr-only">
             Add expense
@@ -95,19 +104,21 @@ export default function AddExpenseDialog({
 
           <form onSubmit={handleSubmit(onSubmit)} className="mt-3 space-y-3">
             <div className="grid gap-3 sm:grid-cols-2">
+              {/* Amount */}
               <div>
-                <label className="mb-1 block text-sm">Amount</label>
-                <input
-                  {...register("amount")}
-                  inputMode="decimal"
+                <Input
+                  label="Amount"
                   placeholder="0.00"
-                  className="w-full rounded-xl border border-border bg-surface-2 px-3 py-2 outline-none"
+                  inputMode="decimal"
+                  {...register("amount", { valueAsNumber: true })}
+                  block
+                  size="md"
+                  radius="lg"
+                  status={errors.amount ? "error" : "default"}
+                  errorText={
+                    errors.amount ? String(errors.amount.message) : undefined
+                  }
                 />
-                {errors.amount && (
-                  <p className="mt-1 text-sm text-error">
-                    {String(errors.amount.message)}
-                  </p>
-                )}
               </div>
 
               {/* Category */}
@@ -119,12 +130,16 @@ export default function AddExpenseDialog({
                   render={({ field }) => (
                     <Select
                       value={field.value}
+                      block
                       onValueChange={field.onChange}
-                      options={categories.map((c) => ({
-                        label: c.name,
-                        value: c.id,
-                      }))}
-                    />
+                      placeholder="Choose a category"
+                    >
+                      {cats.map((c) => (
+                        <SelectItem key={c.id} value={c.id}>
+                          {c.name}
+                        </SelectItem>
+                      ))}
+                    </Select>
                   )}
                 />
                 {errors.categoryId && (
@@ -135,33 +150,42 @@ export default function AddExpenseDialog({
               </div>
 
               {/* Date */}
-              <div>
-                <label className="mb-1 block text-sm">Date</label>
-                <input
-                  type="date"
-                  {...register("occurredAt")}
-                  className="w-full rounded-xl border border-border bg-surface-2 px-3 py-2 outline-none"
-                />
-                {errors.occurredAt && (
-                  <p className="mt-1 text-sm text-error">
-                    {String(errors.occurredAt.message)}
-                  </p>
-                )}
+              <div className="col-span-full sm:col-span-2">
+                <Controller
+                  name="occurredAt"
+                  control={control}
+                  render={({ field }) => (
+                    <DatePicker
+                      value={field.value}
+                      onChange={field.onChange}
+                      min="2020-01-01"
+                      ui={{
+                        size: "md",
+                        radius: "lg",
+                        tone: errors.occurredAt ? "destructive" : "brand",
+                      }}
+                      className={
+                        errors.occurredAt ? "ring-1 ring-destructive/40" : ""
+                      }
+                    ></DatePicker>
+                  )}
+                ></Controller>
               </div>
 
               {/* Note */}
               <div className="sm:col-span-2">
-                <label className="mb-1 block text-sm">Note (optional)</label>
-                <input
-                  {...register("note")}
+                <Input
+                  label="Note (optional)"
                   placeholder="Comment"
-                  className="w-full rounded-xl border border-border bg-surface-2 px-3 py-2 outline-none"
+                  {...register("note")}
+                  block
+                  size="md"
+                  radius="lg"
+                  status={errors.note ? "error" : "default"}
+                  errorText={
+                    errors.note ? String(errors.note.message) : undefined
+                  }
                 />
-                {errors.note && (
-                  <p className="mt-1 text-sm text-error">
-                    {String(errors.note.message)}
-                  </p>
-                )}
               </div>
             </div>
 

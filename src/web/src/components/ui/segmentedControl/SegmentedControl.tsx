@@ -10,8 +10,8 @@ type SegmentedControlProps = {
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "icon";
   radius?: "sm" | "md" | "lg" | "full";
   className?: string;
-  block?: boolean; // <- NEW: растягиваем контейнер
-  equal?: boolean; // <- NEW: равная ширина кнопок
+  block?: boolean; 
+  equal?: boolean; 
 };
 
 export function SegmentedControl({
@@ -30,7 +30,7 @@ export function SegmentedControl({
       aria-label="Segments"
       className={cn(
         "inline-flex items-center rounded-2xl border border-border bg-surface/60 p-0.5",
-        block && "w-full", // растягиваем плашку
+        block && "w-full", 
         className
       )}
     >
@@ -47,7 +47,7 @@ export function SegmentedControl({
             radius={radius}
             className={cn(
               "px-3",
-              equal && "flex-1", // равная ширина сегментов
+              equal && "flex-1", 
               active ? "font-medium" : "text-muted-foreground"
             )}
           >
