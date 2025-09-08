@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { isISODateString } from "@/lib/date-io";
+
 // Accepts a number or a string ("12,34" / "12.34"), validates the range and 2 decimal places
 export const zMoney = z.preprocess(
   (v) => {
@@ -20,3 +22,7 @@ export const zMoney = z.preprocess(
       "No more than 2 decimal places"
     )
 );
+
+export const zIsoDate = z
+  .string()
+  .refine(isISODateString, { message: "Invalid date (YYYY-MM-DD)" });

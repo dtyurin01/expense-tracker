@@ -6,23 +6,17 @@ import AppSidebar from "@/components/shell/sidebar/AppSidebar";
 import AddExpenseDialog from "@/features/expenses/components/AddExpenseDialog";
 
 import type { ExpenseCreate } from "@/schemas/expense";
-import type { Category } from "@/schemas/category";
 import { useState } from "react";
+import { getBaseCategories } from "@/data/categories";
 
 export default function AppShell() {
   const [addOpen, setAddOpen] = useState(false);
 
-  const [categories] = useState<Category[]>([
-    { id: "food", name: "Food" },
-    { id: "transport", name: "Transport" },
-    { id: "shopping", name: "Shopping" },
-    { id: "rent", name: "Rent" },
-  ]);
-
   const handleCreate = (dto: ExpenseCreate) => {
-    // TODO: вызови свой API / mutation
+    // TODO: call API / mutation
     console.log("Create expense:", dto);
-    // здесь же можно показать тост/нотификацию
+
+    // TODO: Notification When added
   };
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -85,7 +79,7 @@ export default function AppShell() {
         open={addOpen}
         onOpenChange={setAddOpen}
         onCreate={handleCreate}
-        categories={categories}
+        categories={getBaseCategories()}
       />
     </div>
   );
