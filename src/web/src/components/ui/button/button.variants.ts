@@ -9,7 +9,7 @@ export const buttonVariants = cva(
       variant: {
         primary: "bg-brand text-brand-foreground hover:bg-brand-600",
         secondary:
-          "bg-surface text-foreground border border-border hover:bg-surface/80",
+          "bg-brand text-brand-foreground border border-border hover:bg-brand/90",
         outline:
           "bg-transparent text-foreground border border-border hover:bg-surface",
         ghost: "bg-transparent text-foreground hover:bg-surface",
@@ -22,7 +22,7 @@ export const buttonVariants = cva(
         iconDark: "bg-icon-dark text-icon-fore hover:bg-icon-dark/90",
         iconTransparent:
           "bg-transparent text-foreground border border-border " +
-          "hover:bg-surface hover:border-border/80 " + 
+          "hover:bg-surface hover:border-border/80 " +
           "active:bg-foreground/15",
       },
       size: {

@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button/Button";
 import { Select, SelectItem } from "@/components/ui/select/Select";
 import { Input } from "@/components/ui/input/Input";
-
+import { SegmentedControl } from "@/components/ui/segmentedControl/SegmentedControl";
 import {
   ExpenseCreateSchema,
   type ExpenseCreate,
@@ -17,7 +17,8 @@ import {
 import type { Category } from "@/schemas/category";
 import { toLocalISO } from "@/lib/date-io";
 import { DatePicker } from "@/components/ui/date/DatePicker";
-import { FiPlusCircle } from "react-icons/fi";
+import { FiPlusCircle, FiX } from "react-icons/fi";
+import { CurrencySelect } from "@/features/currencySelector/CurrencySelect";
 
 type Props = {
   open: boolean;
@@ -40,6 +41,8 @@ export default function AddExpenseDialog(props: Props) {
       amount: 0,
       occurredAt: toLocalISO(new Date()),
       note: "",
+      entryType: "Expense",
+      currency: "eur",
     }),
     [cats]
   );
@@ -49,6 +52,7 @@ export default function AddExpenseDialog(props: Props) {
     handleSubmit,
     control,
     reset,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<ExpenseCreateInput, any, ExpenseCreate>({
     resolver: zodResolver(ExpenseCreateSchema),
@@ -67,6 +71,8 @@ export default function AddExpenseDialog(props: Props) {
       amount: data.amount,
       occurredAt: data.occurredAt,
       note: data.note?.trim() || undefined,
+      entryType: data.entryType,
+      currency: data.currency,
     });
     reset(makeDefaults());
     onOpenChange(false);
@@ -87,27 +93,83 @@ export default function AddExpenseDialog(props: Props) {
           fixed right-0 top-0 h-screen w-screen lg:w-[33vw]
           rounded-none lg:rounded-l-xl
           border-l border-border bg-surface shadow-2xl
-          p-4 overflow-y-auto
+          p-4 flex flex-col
           data-[state=open]:animate-[drawer-right-in_250ms_ease-out]
           data-[state=closed]:animate-[drawer-right-out_250ms_ease-in]
         "
         >
-          <Dialog.Title className="text-lg font-semibold">
-            <div className="flex items-center gap-2">
-              <FiPlusCircle className="size-5" aria-hidden />
-              <span>Add expense</span>
+          <Dialog.Title asChild>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-lg font-semibold">
+                <FiPlusCircle className="size-5" aria-hidden />
+                <span>Add expense</span>
+              </div>
+
+              <Dialog.Close asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  radius="full"
+                  aria-label="Close"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <FiX className="size-5" aria-hidden />
+                </Button>
+              </Dialog.Close>
             </div>
           </Dialog.Title>
           <Dialog.Description className="sr-only">
             Add expense
           </Dialog.Description>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-3 space-y-3">
-            <div className="grid gap-3 sm:grid-cols-2">
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-3 flex flex-col flex-1 gap-3">
+            <div className="grid gap-4 sm:grid-cols-2  min-h-0">
+              {/* Expense or Income */}
+              <div className="col-span-full">
+                <Controller
+                  name="entryType"
+                  control={control}
+                  render={({ field }) => (
+                    <SegmentedControl
+                      options={["Expense", "Income"]}
+                      value={field.value ?? "Expense"}
+                      onChange={field.onChange}
+                      size="sm"
+                      radius="lg"
+                      block
+                      equal
+                    />
+                  )}
+                />
+              </div>
+
+              {/* Currency */}
+              <div className="">
+                <label className="mb-1 block text-sm">Currency</label>
+                <Controller
+                  name="currency"
+                  control={control}
+                  render={({ field }) => (
+                    <CurrencySelect
+                      value={field.value ?? "eur"}
+                      onChange={field.onChange}
+                      variant="secondary"
+                      size="md"
+                      radius="lg"
+                      block
+                    />
+                  )}
+                />
+                {errors.currency && (
+                  <p className="mt-1 text-sm text-error">
+                    {String(errors.currency.message)}
+                  </p>
+                )}
+              </div>
               {/* Amount */}
               <div>
                 <Input
-                  label="Amount"
+                  label={`Amount (${watch("entryType")})`}
                   placeholder="0.00"
                   inputMode="decimal"
                   {...register("amount", { valueAsNumber: true })}
@@ -122,7 +184,7 @@ export default function AddExpenseDialog(props: Props) {
               </div>
 
               {/* Category */}
-              <div>
+              <div className="col-span-full">
                 <label className="mb-1 block text-sm">Category</label>
                 <Controller
                   name="categoryId"
@@ -189,9 +251,9 @@ export default function AddExpenseDialog(props: Props) {
               </div>
             </div>
 
-            <div className="mt-1 flex justify-end gap-2">
+            <div className="mt-auto pt-4 flex justify-end gap-1">
               <Dialog.Close asChild>
-                <Button type="button" variant="ghost" radius="lg">
+                <Button type="button" block variant="outline" radius="lg">
                   Cancel
                 </Button>
               </Dialog.Close>
@@ -199,6 +261,7 @@ export default function AddExpenseDialog(props: Props) {
                 type="submit"
                 variant="primary"
                 radius="lg"
+                block
                 disabled={isSubmitting}
               >
                 Save
