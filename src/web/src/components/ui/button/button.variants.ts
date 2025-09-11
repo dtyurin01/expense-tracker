@@ -7,19 +7,24 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-brand text-brand-foreground hover:bg-brand-600",
+        primary:
+          "bg-brand text-brand-foreground hover:bg-brand-600 active:bg-brand-700",
         secondary:
-          "bg-brand text-brand-foreground border border-border hover:bg-brand/90",
+          "bg-surface text-foreground border border-border hover:bg-surface/80 active:bg-surface/70",
         outline:
-          "bg-transparent text-foreground border border-border hover:bg-surface",
-        ghost: "bg-transparent text-foreground hover:bg-surface",
-        link: "bg-transparent text-brand underline underline-offset-4 hover:text-brand-600",
-        destructive: "bg-error text-white hover:bg-error/90",
-        success: "bg-success text-white hover:bg-success/90",
-        warning: "bg-warning text-black hover:bg-warning/90",
-        info: "bg-info text-white hover:bg-info/90",
+          "bg-transparent text-foreground border border-border hover:bg-surface active:bg-surface/80",
+        ghost:
+          "bg-transparent text-foreground hover:bg-surface active:bg-surface/80",
+        link: "bg-transparent text-brand underline underline-offset-4 hover:text-brand-600 active:text-brand-700",
+        destructive: "bg-error text-white hover:bg-error/90 active:bg-error/95",
+        success:
+          "bg-success text-white hover:bg-success/90 active:bg-success/95",
+        warning:
+          "bg-warning text-black hover:bg-warning/90 active:bg-warning/95",
+        info: "bg-info text-white hover:bg-info/90 active:bg-info/95",
 
-        iconDark: "bg-icon-dark text-icon-fore hover:bg-icon-dark/90",
+        iconDark:
+          "bg-icon-dark text-icon-fore hover:bg-icon-dark/90 active:bg-icon-dark/80",
         iconTransparent:
           "bg-transparent text-foreground border border-border " +
           "hover:bg-surface hover:border-border/80 " +
@@ -27,11 +32,11 @@ export const buttonVariants = cva(
       },
       size: {
         xs: "h-7  px-2  text-xs",
-        sm: "h-9    px-3  text-sm",
-        md: "h-10 px-3  text-sm",
+        sm: "h-8  px-3  text-sm",
+        md: "h-10 px-4  text-sm",
         lg: "h-12 px-6  text-base",
         xl: "h-14 px-8  text-lg",
-        icon: "h-11 w-11 p-0",
+        icon: "h-10 w-10 p-0",
       },
       radius: {
         sm: "rounded-md",

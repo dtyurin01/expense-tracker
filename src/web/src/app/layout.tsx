@@ -38,16 +38,6 @@ export const metadata: Metadata = {
     shortcut: siteConfig.icons?.shortcut,
     apple: siteConfig.icons?.apple,
   },
-  themeColor: [
-    {
-      media: "(prefers-color-scheme: light)",
-      color: siteConfig.themeColorLight ?? "#ffffff",
-    },
-    {
-      media: "(prefers-color-scheme: dark)",
-      color: siteConfig.themeColorDark ?? "#000000",
-    },
-  ],
 };
 
 export default function RootLayout({
@@ -57,7 +47,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="ru"
+      lang="uk"
       className={`dark ${GeistMono.variable} ${GeistSans.variable}`}
     >
       <body className={GeistSans.className}>{children}</body>

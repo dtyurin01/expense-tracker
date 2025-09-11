@@ -4,7 +4,7 @@ import * as React from "react";
 import { FiPlus } from "react-icons/fi";
 import { cn } from "@/lib/cn";
 import { NotificationBell } from "@/features/notifications/NotificationBell";
-import { NotificationItem } from "@/types/notification";
+import { NotificationItem } from "@/types/notificationItem";
 import { Button } from "@/components/ui";
 import SearchButton from "@/features/search/SearchButton";
 import { CurrencySelect } from "@/features/currencySelector/CurrencySelect";

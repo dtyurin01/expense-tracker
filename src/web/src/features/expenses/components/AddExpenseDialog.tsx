@@ -54,7 +54,7 @@ export default function AddExpenseDialog(props: Props) {
     reset,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<ExpenseCreateInput, any, ExpenseCreate>({
+  } = useForm<ExpenseCreateInput>({
     resolver: zodResolver(ExpenseCreateSchema),
     defaultValues: makeDefaults(),
     mode: "onSubmit",
@@ -65,14 +65,14 @@ export default function AddExpenseDialog(props: Props) {
     reset(makeDefaults());
   };
 
-  const onSubmit = (data: ExpenseCreate) => {
+  const onSubmit = (data: ExpenseCreateInput) => {
     onCreate({
       categoryId: data.categoryId,
-      amount: data.amount,
+      amount: Number(data.amount),
       occurredAt: data.occurredAt,
       note: data.note?.trim() || undefined,
-      entryType: data.entryType,
-      currency: data.currency,
+      entryType: data.entryType ?? "Expense",
+      currency: data.currency ?? "eur",
     });
     reset(makeDefaults());
     onOpenChange(false);
@@ -86,6 +86,7 @@ export default function AddExpenseDialog(props: Props) {
           fixed inset-0 bg-black/50 backdrop-blur-[1px]
           data-[state=open]:animate-[dialog-overlay-show_250ms_ease-out]
           data-[state=closed]:animate-[dialog-overlay-hide_250ms_ease-in]
+          z-[60]
         "
         />
         <Dialog.Content
@@ -96,6 +97,7 @@ export default function AddExpenseDialog(props: Props) {
           p-4 flex flex-col
           data-[state=open]:animate-[drawer-right-in_250ms_ease-out]
           data-[state=closed]:animate-[drawer-right-out_250ms_ease-in]
+          z-[70]
         "
         >
           <Dialog.Title asChild>
@@ -122,7 +124,10 @@ export default function AddExpenseDialog(props: Props) {
             Add expense
           </Dialog.Description>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-3 flex flex-col flex-1 gap-3">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="mt-3 flex flex-col flex-1 gap-3"
+          >
             <div className="grid gap-4 sm:grid-cols-2  min-h-0">
               {/* Expense or Income */}
               <div className="col-span-full">

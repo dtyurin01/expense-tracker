@@ -44,7 +44,7 @@ export interface SwitchProps
 }
 
 export const Switch = React.forwardRef<
-  React.ElementRef<typeof SwitchPrimitive.Root>,
+  React.ComponentRef<typeof SwitchPrimitive.Root>,
   SwitchProps
 >(({ className, size, ...props }, ref) => {
   const s = size ?? "md";
