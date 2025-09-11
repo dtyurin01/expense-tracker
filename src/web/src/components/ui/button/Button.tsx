@@ -49,7 +49,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProps>(
     if (asChild) {
       return (
         <Slot
-          ref={ref as any}
+          ref={ref as React.Ref<HTMLElement>}
           className={classes}
           aria-disabled={isDisabled || undefined}
           aria-busy={isLoading || undefined}
@@ -104,7 +104,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProps>(
             )}
             <span className="truncate">{children}</span>
             {rightIcon && (
-              <span className={cn(iconSize, "inline-flex items-center")}>
+              <span className={cn(iconSize, "ml-1 inline-flex items-center")}>
                 {rightIcon}
               </span>
             )}
