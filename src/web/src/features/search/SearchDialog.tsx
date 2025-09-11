@@ -36,8 +36,8 @@ export default function SearchDialog({
       }}
     >
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-[1px]" />
-        <Dialog.Content className="fixed left-1/2 top-24 w-[min(90vw,720px)] -translate-x-1/2 rounded-2xl border border-border bg-surface px-2 py-1 shadow-xl">
+        <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-[1px] z-[60]" />
+        <Dialog.Content className="fixed z-[70] left-1/2 top-24 w-[min(90vw,720px)] -translate-x-1/2 rounded-2xl border border-border bg-surface px-2 py-1.5 shadow-xl">
           <Dialog.Title className="sr-only">Search</Dialog.Title>
           <Dialog.Description className="sr-only">
             Enter some text

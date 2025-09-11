@@ -22,10 +22,10 @@ export default function AppSidebar() {
         <Button
           onClick={() => setMdOpen(true)}
           aria-label="Open sidebar"
-          variant="secondary"
+          variant="iconTransparent"
           size="icon"
           radius="full"
-          className="hidden md:flex lg:hidden fixed z-50 top-1/2 left-2 -translate-y-1/2
+          className="hidden md:flex lg:hidden fixed z-10 top-1/2 left-2 -translate-y-1/2
              border bg-surface shadow-md
              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50"
         >
@@ -35,7 +35,7 @@ export default function AppSidebar() {
 
       <aside
         className={cn(
-          "fixed inset-y-2 left-2 shrink-0 w-20 lg:w-[318px]",
+          "fixed inset-y-2 left-2 shrink-0 w-20 lg:w-[318px] z-1",
           "transition-transform duration-200 ease-out will-change-transform",
           !mdOpen && "md:-translate-x-[calc(100%+0.5rem)] lg:translate-x-0"
         )}
@@ -44,7 +44,7 @@ export default function AppSidebar() {
           <Button
             onClick={() => setMdOpen(false)}
             aria-label="Close sidebar"
-            variant="secondary"
+            variant="iconTransparent"
             size="icon"
             radius="full"
             className="hidden md:flex lg:hidden absolute z-10 top-1/2 -translate-y-1/2 -right-3

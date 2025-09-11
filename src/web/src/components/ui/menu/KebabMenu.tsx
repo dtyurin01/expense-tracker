@@ -79,7 +79,7 @@ export function KebabMenu({
           align={align}
           sideOffset={sideOffset}
           collisionPadding={collisionPadding}
-          className={cn(menuContent({ elevation, radius }), contentClassName)}
+          className={cn(menuContent({ elevation, radius }), contentClassName, "z-55")}
         >
           {items.map((item, idx) => {
             if ("type" in item) {

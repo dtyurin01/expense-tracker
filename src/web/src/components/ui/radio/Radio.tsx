@@ -38,7 +38,7 @@ export interface RadioProps
 }
 
 export const Radio = React.forwardRef<
-  React.ElementRef<typeof RadioGroupPrimitive.Item>,
+  React.ComponentRef<typeof RadioGroupPrimitive.Item>,
   RadioProps
 >(({ className, size, ...props }, ref) => {
   return (
