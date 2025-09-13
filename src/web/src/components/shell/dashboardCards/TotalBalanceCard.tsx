@@ -16,6 +16,7 @@ import { FiArrowUpRight } from "react-icons/fi";
 import { DateRangeButton } from "@/components/ui/date/DateRangeButton";
 import type { Period } from "@/schemas/period";
 import type { MenuItem } from "@/components/ui/menu/menu.types";
+import Link from "next/link";
 
 export type TotalBalanceCardProps = {
   title?: string;
@@ -86,7 +87,7 @@ export function TotalBalanceCard({
           rightIcon={<FiArrowUpRight />}
           onClick={onViewReport}
         >
-          View report
+          <Link href="/reports/balance">View all</Link>
         </Button>
       </CardFooter>
     </Card>
