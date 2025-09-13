@@ -29,8 +29,8 @@ export function SegmentedControl({
       role="tablist"
       aria-label="Segments"
       className={cn(
-        "inline-flex items-center rounded-2xl border border-border bg-surface/60 p-0.5",
-        block && "w-full", 
+        "inline-flex items-center rounded-2xl border border-border bg-surface/60 p-1",
+        block && "w-full",
         className
       )}
     >
@@ -46,7 +46,7 @@ export function SegmentedControl({
             size={size}
             radius={radius}
             className={cn(
-              "px-3",
+              "px-3 py-1",
               equal && "flex-1", 
               active ? "font-medium" : "text-muted-foreground"
             )}
