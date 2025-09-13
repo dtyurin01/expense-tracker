@@ -4,7 +4,7 @@ import * as React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { FiBell } from "react-icons/fi";
 import { Button } from "@/components/ui/button/Button";
-import type { NotificationItem } from "@/types/notification";
+import type { NotificationItem } from "@/types/notificationItem";
 import {
   notificationContent,
   notificationHeader,

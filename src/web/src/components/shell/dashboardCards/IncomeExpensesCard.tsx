@@ -1,0 +1,67 @@
+"use client";
+
+import * as React from "react";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card/Card";
+import { DateRangeButton } from "@/components/ui/date/DateRangeButton";
+import type { Period } from "@/schemas/period";
+import { Button } from "@/components/ui";
+import { FiArrowUpRight } from "react-icons/fi";
+import Link from "next/link";
+
+export type IncomeExpensesCardProps = {
+  title?: string;
+  chart?: React.ReactNode;
+
+  period?: Period;
+  onPeriodChange?: (v: Period) => void;
+  periodMin?: string;
+  periodMax?: string;
+  periodLabel?: string;
+
+  className?: string;
+};
+
+export function IncomeExpensesCard({
+  title = "Income & Expenses",
+  chart,
+  period,
+  onPeriodChange,
+  periodMin,
+  periodMax,
+  periodLabel = "Period",
+  className = "",
+}: IncomeExpensesCardProps) {
+  return (
+    <Card className={`h-full flex flex-col ${className}`}>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+        <DateRangeButton
+          period={period}
+          onChange={onPeriodChange}
+          min={periodMin}
+          max={periodMax}
+          label={periodLabel}
+        />
+      </CardHeader>
+
+      <CardContent className="flex-1 min-h-0">
+        {chart ?? (
+          <div className="h-full rounded-xl border border-border/70 bg-surface/40 grid place-items-center text-xs text-muted-foreground">
+            Bar chart
+          </div>
+        )}
+      </CardContent>
+      <CardFooter className="mt-auto flex justify-end">
+        <Button variant="outline" radius="lg" rightIcon={<FiArrowUpRight />}>
+          <Link href="/reports/income-expenses">View all</Link>
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+}

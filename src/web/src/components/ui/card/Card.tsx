@@ -91,7 +91,7 @@ export const CardActions = React.forwardRef<HTMLDivElement, CardSectionProps>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn("flex items-center ", className)}
+      className={cn("flex items-center", className)}
       {...props}
     />
   )
