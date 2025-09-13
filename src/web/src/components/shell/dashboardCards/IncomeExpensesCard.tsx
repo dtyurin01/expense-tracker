@@ -6,9 +6,13 @@ import {
   CardHeader,
   CardTitle,
   CardContent,
+  CardFooter,
 } from "@/components/ui/card/Card";
 import { DateRangeButton } from "@/components/ui/date/DateRangeButton";
 import type { Period } from "@/schemas/period";
+import { Button } from "@/components/ui";
+import { FiArrowUpRight } from "react-icons/fi";
+import Link from "next/link";
 
 export type IncomeExpensesCardProps = {
   title?: string;
@@ -53,6 +57,11 @@ export function IncomeExpensesCard({
           </div>
         )}
       </CardContent>
+      <CardFooter className="mt-auto flex justify-end">
+        <Button variant="outline" radius="lg" rightIcon={<FiArrowUpRight />}>
+          <Link href="/reports/income-expenses">View all</Link>
+        </Button>
+      </CardFooter>
     </Card>
   );
 }

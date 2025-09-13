@@ -17,7 +17,7 @@ export default function SearchButton({
   label = "Search",
   icon = <FiSearch className="size-5" />,
   className,
-  variant = "outline",
+  variant = "iconTransparent",
   radius = "full",
   block = false,
   ...props

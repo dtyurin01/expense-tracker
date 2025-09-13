@@ -14,6 +14,7 @@ import { FiArrowUpRight } from "react-icons/fi";
 import type { MenuItem } from "@/components/ui/menu/menu.types";
 import { Period } from "@/schemas/period";
 import { DateRangeButton } from "@/components/ui/date/DateRangeButton";
+import Link from "next/link";
 
 export type LatestTransactionsCardProps = {
   title?: string;
@@ -70,7 +71,7 @@ export function LatestTransactionsCard({
           rightIcon={<FiArrowUpRight />}
           onClick={onViewAll}
         >
-          View all
+          <Link href="/transactions">View all</Link>
         </Button>
       </CardFooter>
     </Card>
