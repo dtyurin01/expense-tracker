@@ -8,7 +8,7 @@ import AddExpenseDialog from "@/features/expenses/components/AddExpenseDialog";
 import type { ExpenseCreate } from "@/schemas/expense";
 import { useState } from "react";
 import { getBaseCategories } from "@/data/categories";
-import DashboardCardsDemo from "@/components/shell/dashboardCards/DashboardCard";
+import DashboardCardsDemo from "@/components/shell/dashboardCards/DashboardCards";
 
 export default function AppShell() {
   const [addOpen, setAddOpen] = useState(false);
