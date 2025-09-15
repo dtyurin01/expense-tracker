@@ -1,88 +1,74 @@
-// src/mocks/dashboard.ts
+import type { Period } from "@/schemas/period";
 
-// === API response types (as from backend) ===
-export type Period = { from?: string; to?: string };
-
-export type BalancePoint = { month: string; value: number }; // Total balance (area)
-export type IEPoint = { month: string; income: number; expense: number }; // Income & Expenses (bars)
+// ===== Response types =====
+export type BalancePoint = { month: string; value: number }; // YYYY-MM
+export type IEPoint = { month: string; income: number; expense: number }; // YYYY-MM
 export type Slice = {
   id: string;
   label: string;
   value: number;
   color?: string;
 };
-
 export type TxRow = {
   id: string;
   cardMasked: string; // ********0211
   dateISO: string; // 2024-12-09
   category: string; // "Car", "Groceries", "Salary"
-  amount: number; // - = expense, + = income
+  amount: number; // - expense, + income
   currency: "USD" | "EUR";
 };
 
 export type DashboardResponse = {
-  period: Period; // period applied by the server
-  currency: "USD";
-  timezone: string; // user's timezone used for aggregation
-  generatedAt: string;
-
-  totalBalance: BalancePoint[]; // series for AreaChart
-  incomeExpenses: IEPoint[]; // series for BarChart
-
-  receiptsSplit: {
-    // donut for "Receipts split summary"
-    total: number;
-    groups: Slice[]; // for example: [{id:"food", value:1600}, {id:"non-food", value:1400}]
-  };
-
-  categories: {
-    // "Spending categories"
-    slices: Slice[]; // full slice (for legend/table)
-    top: Slice[]; // top-N (for donut)
-    others?: { label: string; value: number }; // aggregated "Others" tail
-  };
-
-  latestTransactions: {
-    // "Latest transactions" table
-    rows: TxRow[];
-    pageInfo: { page: number; pageSize: number; total: number };
-  };
+  period: Period;
+  currency: "USD" | "EUR";
+  totalBalance: BalancePoint[];
+  incomeExpenses: IEPoint[];
+  receiptsSplit: { total: number; groups: Slice[] };
+  categories: Slice[]; // already top-N + "Others"
+  latestTransactions: TxRow[];
+  updatedAt: string; // ISO
 };
 
-// === Mock aggregated data (ready for charts) ===
+// ===== Raw mock data (as in the screenshot), but already aggregated =====
+const MONTHS = [
+  "2024-08",
+  "2024-09",
+  "2024-10",
+  "2024-11",
+  "2024-12",
+  "2025-01",
+  "2025-02",
+] as const;
 
-const balance: BalancePoint[] = [
-  { month: "Aug", value: 4800 },
-  { month: "Sep", value: 5000 },
-  { month: "Oct", value: 4500 },
-  { month: "Nov", value: 6000 },
-  { month: "Dec", value: 5200 },
-  { month: "Jan", value: 5800 },
-  { month: "Feb", value: 6100 },
+const BALANCE: BalancePoint[] = [
+  { month: "2024-08", value: 4800 },
+  { month: "2024-09", value: 5000 },
+  { month: "2024-10", value: 4500 },
+  { month: "2024-11", value: 6000 },
+  { month: "2024-12", value: 5200 },
+  { month: "2025-01", value: 5800 },
+  { month: "2025-02", value: 6100 },
 ];
 
-const incomeExpenses: IEPoint[] = [
-  { month: "Aug", income: 4300, expense: 2500 },
-  { month: "Sep", income: 4100, expense: 3000 },
-  { month: "Oct", income: 5200, expense: 2800 },
-  { month: "Nov", income: 6100, expense: 3600 },
-  { month: "Dec", income: 5000, expense: 4200 },
-  { month: "Jan", income: 4500, expense: 3100 },
-  { month: "Feb", income: 5600, expense: 3300 },
+const INCOME_EXPENSES: IEPoint[] = [
+  { month: "2024-08", income: 4300, expense: 2500 },
+  { month: "2024-09", income: 4100, expense: 3000 },
+  { month: "2024-10", income: 5200, expense: 2800 },
+  { month: "2024-11", income: 6100, expense: 3600 },
+  { month: "2024-12", income: 5000, expense: 4200 },
+  { month: "2025-01", income: 4500, expense: 3100 },
+  { month: "2025-02", income: 5600, expense: 3300 },
 ];
 
-// To match the card text: Food $1600 · Non-food $1400
-const receiptsSplit = {
-  total: 3000,
+const RECEIPTS = {
+  total: 2800,
   groups: [
     { id: "food", label: "Food", value: 1600, color: "#22c55e" },
     { id: "non-food", label: "Non-food", value: 1400, color: "#ef4444" },
   ] as Slice[],
 };
 
-// Full list of categories (legend) — as on the screenshot
-const categorySlices: Slice[] = [
+const CATEGORY_SLICES: Slice[] = [
   { id: "groceries", label: "Groceries", value: 500, color: "#3b82f6" },
   { id: "utilities", label: "Utilities", value: 400, color: "#60a5fa" },
   { id: "car", label: "Car", value: 150, color: "#93c5fd" },
@@ -97,24 +83,7 @@ const categorySlices: Slice[] = [
   { id: "beauty", label: "Beauty", value: 25, color: "#14b8a6" },
 ];
 
-// helper for top-N with 'Others'
-function topNWithOthers(slices: Slice[], n: number) {
-  const sorted = [...slices].sort((a, b) => b.value - a.value);
-  const top = sorted.slice(0, n);
-  const rest = sorted.slice(n);
-  const othersValue = rest.reduce((sum, s) => sum + s.value, 0);
-  const others =
-    othersValue > 0 ? { label: "Others", value: othersValue } : undefined;
-  return { top, others };
-}
-
-const { top: categoriesTop, others: categoriesOthers } = topNWithOthers(
-  categorySlices,
-  10
-);
-
-// Latest transactions (server already filtered by period and sorted)
-const latestRows: TxRow[] = [
+const TXS: TxRow[] = [
   {
     id: "t1",
     cardMasked: "********0211",
@@ -134,7 +103,7 @@ const latestRows: TxRow[] = [
   {
     id: "t3",
     cardMasked: "********1077",
-    dateISO: "2024-11-30",
+    dateISO: "2024-11-30", // valid date (instead of nonexistent 31 Nov)
     category: "Salary",
     amount: 350.0,
     currency: "USD",
@@ -157,35 +126,78 @@ const latestRows: TxRow[] = [
   },
 ];
 
-// === Export 'as from backend' ===
+// ===== Helpers =====
+function toDate(d: string) {
+  // d: YYYY-MM or YYYY-MM-DD
+  const iso = d.length === 7 ? `${d}-01` : d;
+  return new Date(iso + "T00:00:00");
+}
 
-export const dashboardMock: DashboardResponse = {
-  period: { from: "2024-08-01", to: "2025-02-28" },
-  currency: "USD",
-  timezone: "America/New_York",
-  generatedAt: new Date().toISOString(),
+function inPeriod(dateISO: string, period?: Period) {
+  if (!period?.from && !period?.to) return true;
+  const t = toDate(dateISO).getTime();
+  const from = period?.from ? toDate(period.from).getTime() : -Infinity;
+  const to = period?.to ? toDate(period.to).getTime() : Infinity;
+  return t >= from && t <= to;
+}
 
-  totalBalance: balance,
-  incomeExpenses,
+function filterSeriesByPeriod<T extends { month: string }>(
+  series: T[],
+  period?: Period
+) {
+  if (!period?.from && !period?.to) return series;
+  return series.filter((p) => inPeriod(p.month, period));
+}
 
-  receiptsSplit,
+function topNSlices(slices: Slice[], n = 10): Slice[] {
+  const sorted = [...slices].sort((a, b) => b.value - a.value);
+  if (sorted.length <= n) return sorted;
+  const top = sorted.slice(0, n);
+  const othersTotal = sorted.slice(n).reduce((s, x) => s + x.value, 0);
+  if (othersTotal > 0) {
+    top.push({
+      id: "others",
+      label: "Others",
+      value: othersTotal,
+      color: "#94a3b8", // slate-400
+    });
+  }
+  return top;
+}
 
-  categories: {
-    slices: categorySlices,
-    top: categoriesTop,
-    others: categoriesOthers,
-  },
+// ===== Public mocks API =====
+export function getDashboardMock(
+  period?: Period,
+  opts?: {
+    topCategories?: number;
+    includeLatest?: number;
+    currency?: "USD" | "EUR";
+  }
+): DashboardResponse {
+  const effective: Period = {
+    from: period?.from ?? `${MONTHS[0]}-01`,
+    to: period?.to ?? `${MONTHS[MONTHS.length - 1]}-28`,
+  };
 
-  latestTransactions: {
-    rows: latestRows.slice(0, 3), // as if page=1&pageSize=3
-    pageInfo: { page: 1, pageSize: 3, total: latestRows.length },
-  },
-};
+  return {
+    period: effective,
+    currency: opts?.currency ?? "USD",
+    totalBalance: filterSeriesByPeriod(BALANCE, effective),
+    incomeExpenses: filterSeriesByPeriod(INCOME_EXPENSES, effective),
+    receiptsSplit: RECEIPTS,
+    categories: topNSlices(CATEGORY_SLICES, opts?.topCategories ?? 10),
+    latestTransactions: TXS.filter((tx) =>
+      inPeriod(tx.dateISO, effective)
+    ).slice(0, opts?.includeLatest ?? 5),
+    updatedAt: new Date().toISOString(),
+  };
+}
 
-// (optional) 'request simulation' — convenient to use with SWR/React Query
-export async function fetchDashboardMock(
-  _period?: Period
-): Promise<DashboardResponse> {
-  // you can modify data here depending on _period
-  return dashboardMock;
+// Helper for links with period (?from=&to=)
+export function withPeriod(base: string, p?: Period) {
+  if (!p?.from && !p?.to) return base;
+  const qs = new URLSearchParams();
+  if (p?.from) qs.set("from", p.from);
+  if (p?.to) qs.set("to", p.to);
+  return `${base}?${qs.toString()}`;
 }
