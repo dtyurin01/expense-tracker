@@ -93,6 +93,7 @@ export function DateRangeButton({
           size={"sm"}
           aria-label={label}
           disabled={disabled}
+          className="hover:bg-foreground/2 active:bg-foreground/2"
           {...buttonProps}
         >
           <div className="flex items-center gap-2">

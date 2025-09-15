@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 export const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap font-medium transition-colors " +
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 " +
-    "disabled:pointer-events-none disabled:opacity-50 rounded-xl",
+    "disabled:pointer-events-none disabled:opacity-50 rounded-xl cursor-pointer ",
   {
     variants: {
       variant: {

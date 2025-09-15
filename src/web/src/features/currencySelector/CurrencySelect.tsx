@@ -6,16 +6,11 @@ import {
   SelectItem,
   SelectSeparator,
 } from "@/components/ui/select/Select";
-import {
-  TbCurrencyDollar,
-  TbCurrencyEuro,
-  TbCurrencyPound,
-  TbCurrencyHryvnia,
-} from "react-icons/tb";
+import { currencies, currencyList, type CurrencyCode } from "@/lib/currencies";
 
 type Props = {
-  value: string;
-  onChange: (v: string) => void;
+  value: CurrencyCode;
+  onChange: (v: CurrencyCode) => void;
   variant?: "primary" | "secondary" | "outline" | "ghost";
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "icon";
   radius?: "sm" | "md" | "lg" | "full";
@@ -34,47 +29,27 @@ export function CurrencySelect({
   disabled,
   className,
 }: Props) {
-  const icons: Record<string, React.ReactNode> = {
-    usd: <TbCurrencyDollar className="size-4" />,
-    eur: <TbCurrencyEuro className="size-4" />,
-    gbp: <TbCurrencyPound className="size-4" />,
-    uah: <TbCurrencyHryvnia className="size-4" />,
-  };
-
   return (
     <Select
       value={value}
-      onValueChange={onChange}
+      onValueChange={(v) => onChange(v as CurrencyCode)}
       variant={variant}
       size={size}
       radius={radius}
       block={block}
       disabled={disabled}
       placeholder="Select…"
-      leftSlot={icons[value]}
+      leftSlot={currencies[value]?.icon}
       className={className}
     >
-      <SelectItem
-        value="usd"
-        leftIcon={<TbCurrencyDollar className="size-4" />}
-      >
-        USD
-      </SelectItem>
-      <SelectItem value="eur" leftIcon={<TbCurrencyEuro className="size-4" />}>
-        EUR
-      </SelectItem>
-      <SelectItem value="gbp" leftIcon={<TbCurrencyPound className="size-4" />}>
-        GBP
-      </SelectItem>
-
-      <SelectSeparator />
-
-      <SelectItem
-        value="uah"
-        leftIcon={<TbCurrencyHryvnia className="size-4" />}
-      >
-        UAH
-      </SelectItem>
+      {currencyList.map((c, i) => (
+        <React.Fragment key={c.value}>
+          <SelectItem value={c.value} leftIcon={c.icon}>
+            {c.label}
+          </SelectItem>
+          {i === 2 && <SelectSeparator />}
+        </React.Fragment>
+      ))}
     </Select>
   );
 }
