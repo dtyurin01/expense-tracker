@@ -9,6 +9,8 @@ import {
   LatestTransactionsCard,
 } from "@/components/shell/dashboardCards";
 import { Period } from "@/schemas/period";
+import { AreaBalanceChart } from "@/features/charts/AreaBalanceChart";
+import { getDashboardMock } from "@/mocks/dashboard";
 // import { AreaChart } from "@/features/charts/AreaChart";
 // import { BarChart } from "@/features/charts/BarChart";
 // import { DonutChart } from "@/features/charts/DonutChart";
@@ -17,6 +19,16 @@ import { Period } from "@/schemas/period";
 export default function DashboardCards() {
   // single period state to sync all cards
   const [period, setPeriod] = React.useState<Period | undefined>(undefined);
+
+  const resp = React.useMemo(
+    () =>
+      getDashboardMock(period, {
+        topCategories: 10,
+        includeLatest: 5,
+        currency: "USD",
+      }),
+    [period]
+  );
 
   return (
     <div className="h-full grid grid-cols-12 gap-4 auto-rows-[minmax(0,1fr)]">
@@ -30,7 +42,12 @@ export default function DashboardCards() {
           { type: "separator" },
           { label: "Export", onSelect: () => console.log("Export TB") },
         ]}
-        // chart={<AreaChart data={...} />}
+        chart={
+          <AreaBalanceChart
+            data={resp.totalBalance}
+            currency={resp.currency ? (resp.currency.toLowerCase() as any) : undefined}
+          />
+        }
       />
 
       <IncomeExpensesCard
