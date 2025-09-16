@@ -9,7 +9,7 @@ import {
   LatestTransactionsCard,
 } from "@/components/shell/dashboardCards";
 import { Period } from "@/schemas/period";
-import { AreaBalanceChart } from "@/features/charts/AreaBalanceChart";
+import { AreaChart } from "@/features/charts/components/AreaChart";
 import { getDashboardMock } from "@/mocks/dashboard";
 // import { AreaChart } from "@/features/charts/AreaChart";
 // import { BarChart } from "@/features/charts/BarChart";
@@ -25,7 +25,7 @@ export default function DashboardCards() {
       getDashboardMock(period, {
         topCategories: 10,
         includeLatest: 5,
-        currency: "USD",
+        currency: "eur", // GET CURRENCY FROM USER PROFILE (CONTEXT)
       }),
     [period]
   );
@@ -43,9 +43,9 @@ export default function DashboardCards() {
           { label: "Export", onSelect: () => console.log("Export TB") },
         ]}
         chart={
-          <AreaBalanceChart
+          <AreaChart
             data={resp.totalBalance}
-            currency={resp.currency ? (resp.currency.toLowerCase() as any) : undefined}
+            currency={resp.currency ? resp.currency : undefined}
           />
         }
       />
