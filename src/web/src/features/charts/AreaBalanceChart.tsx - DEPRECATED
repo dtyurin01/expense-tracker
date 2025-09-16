@@ -1,3 +1,5 @@
+// DEPRECATED - use AreaChart from components/AreaChart.tsx instead
+
 "use client";
 
 import * as React from "react";
@@ -37,7 +39,7 @@ type Props = {
 export function AreaBalanceChart({ data, currency = "usd" }: Props) {
   const onReady = React.useCallback(
     (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
-      Chart.getChart(canvas)?.destroy()
+      Chart.getChart(canvas)?.destroy();
       const nowShort = new Date().toLocaleString(undefined, { month: "short" });
 
       const labels = data.map((d) => {
@@ -52,8 +54,9 @@ export function AreaBalanceChart({ data, currency = "usd" }: Props) {
       gradient.addColorStop(1, "rgba(251,191,36,0.06)"); // amber-400/6
 
       const max = Math.max(...values);
+      const min = Math.min(...values);
       const suggestedMax = Math.ceil(Math.max(max, 7000) / 1000) * 1000;
-      const suggestedMin = 1000;
+      const suggestedMin = Math.floor(Math.min(min, 1000) / 1000) * 1000;
 
       const curr = getCurrency(currency);
       const sym = curr?.label ?? "";
@@ -68,7 +71,7 @@ export function AreaBalanceChart({ data, currency = "usd" }: Props) {
               data: values,
               fill: true,
               backgroundColor: gradient,
-              borderColor: "rgb(249,115,22)", // orange-500
+              borderColor: "hsl(24.581497797356832, 94.97907949790796%, 53.13725490196079%)", // orange-500
               borderWidth: 3,
               tension: 0.4,
               pointBackgroundColor: "rgba(255,255,255,0.95)",
@@ -110,7 +113,7 @@ export function AreaBalanceChart({ data, currency = "usd" }: Props) {
               ticks: {
                 color: "rgba(148,163,184,0.9)",
                 stepSize: 1000,
-                callback: (v) => `${sym}${Number(v) / 1000}k`,
+                callback: (v) => `${sym} ${Number(v) / 1000}k`,
               },
               suggestedMin,
               suggestedMax,

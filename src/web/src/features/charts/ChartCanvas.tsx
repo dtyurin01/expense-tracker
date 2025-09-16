@@ -29,7 +29,7 @@ export function ChartCanvas({
       disposeRef.current?.();
       disposeRef.current = null;
     };
-  }, []); 
+  }, [onReady]); 
 
   return <canvas ref={ref} className={className} />;
 }

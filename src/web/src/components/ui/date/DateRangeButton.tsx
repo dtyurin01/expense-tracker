@@ -38,8 +38,6 @@ export function DateRangeButton({
   max,
   label = "Period",
   locale = de,
-  side = "bottom",
-  align = "start",
   sideOffset = 8,
   ui,
   ...buttonProps
@@ -106,7 +104,7 @@ export function DateRangeButton({
 
       <Popover.Content
         side="bottom"
-        align="start"
+        align="end"
         sideOffset={sideOffset}
         className="z-50 rounded-2xl border border-border bg-surface p-2"
       >
