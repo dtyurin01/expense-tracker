@@ -93,7 +93,8 @@ export function DateRangeButton({
           size={"sm"}
           aria-label={label}
           disabled={disabled}
-          className="hover:bg-foreground/2 active:bg-foreground/2"
+          className="hover:bg-foreground/2 active:bg-foreground/2
+          "
           {...buttonProps}
         >
           <div className="flex items-center gap-2">
@@ -104,8 +105,8 @@ export function DateRangeButton({
       </Popover.Trigger>
 
       <Popover.Content
-        side={side}
-        align={align}
+        side="bottom"
+        align="start"
         sideOffset={sideOffset}
         className="z-50 rounded-2xl border border-border bg-surface p-2"
       >

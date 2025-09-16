@@ -25,7 +25,7 @@ export default function DashboardCards() {
       getDashboardMock(period, {
         topCategories: 10,
         includeLatest: 5,
-        currency: "USD",
+        currency: "eur", // GET CURRENCY FROM USER PROFILE (CONTEXT)
       }),
     [period]
   );
@@ -45,7 +45,7 @@ export default function DashboardCards() {
         chart={
           <AreaBalanceChart
             data={resp.totalBalance}
-            currency={resp.currency ? (resp.currency.toLowerCase() as any) : undefined}
+            currency={resp.currency ? resp.currency : undefined}
           />
         }
       />

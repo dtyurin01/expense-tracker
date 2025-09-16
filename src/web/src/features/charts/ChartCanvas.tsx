@@ -2,23 +2,34 @@
 
 import * as React from "react";
 
-export type ChartCanvasProps = {
+export function ChartCanvas({
+  onReady,
+  className,
+}: {
+  onReady?: (
+    ctx: CanvasRenderingContext2D,
+    el: HTMLCanvasElement
+  ) => void | (() => void);
   className?: string;
-  onReady: (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => void;
-};
-
-export function ChartCanvas({ className, onReady }: ChartCanvasProps) {
-  const ref = React.useRef<HTMLCanvasElement | null>(null);
+}) {
+  const ref = React.useRef<HTMLCanvasElement>(null);
+  const disposeRef = React.useRef<VoidFunction | null>(null);
 
   React.useEffect(() => {
-    const canvas = ref.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
+    const el = ref.current;
+    if (!el || !onReady) return;
+    const ctx = el.getContext("2d");
     if (!ctx) return;
 
-    onReady(ctx, canvas);
-  }, [onReady]);
+    disposeRef.current?.();
+    const d = onReady(ctx, el);
+    disposeRef.current = typeof d === "function" ? d : null;
 
-  return <canvas ref={ref} className={className ?? "h-full w-full"} />;
+    return () => {
+      disposeRef.current?.();
+      disposeRef.current = null;
+    };
+  }, []); 
+
+  return <canvas ref={ref} className={className} />;
 }

@@ -81,7 +81,7 @@ export function Select({
       <RadixSelect.Portal>
         <RadixSelect.Content
           className={cn(
-            "z-50 overflow-hidden border border-border bg-surface text-foreground shadow-lg",
+            "z-80 overflow-hidden border border-border bg-surface text-foreground shadow-lg",
             "data-[state=open]:animate-in data-[state=closed]:animate-out",
             contentRadiusByTrigger[radius ?? "lg"],
             "w-[var(--radix-select-trigger-width)] max-w-[95vw]"

@@ -1,3 +1,4 @@
+import { CurrencyCode } from "@/lib/currencies";
 import type { Period } from "@/schemas/period";
 
 // ===== Response types =====
@@ -15,12 +16,12 @@ export type TxRow = {
   dateISO: string; // 2024-12-09
   category: string; // "Car", "Groceries", "Salary"
   amount: number; // - expense, + income
-  currency: "USD" | "EUR";
+  currency: CurrencyCode;
 };
 
 export type DashboardResponse = {
   period: Period;
-  currency: "USD" | "EUR";
+  currency: CurrencyCode;
   totalBalance: BalancePoint[];
   incomeExpenses: IEPoint[];
   receiptsSplit: { total: number; groups: Slice[] };
@@ -90,7 +91,7 @@ const TXS: TxRow[] = [
     dateISO: "2024-12-09",
     category: "Car",
     amount: -129.0,
-    currency: "USD",
+    currency: "usd",
   },
   {
     id: "t2",
@@ -98,15 +99,15 @@ const TXS: TxRow[] = [
     dateISO: "2024-12-08",
     category: "Groceries",
     amount: -150.0,
-    currency: "USD",
+    currency: "usd",
   },
   {
     id: "t3",
     cardMasked: "********1077",
-    dateISO: "2024-11-30", // valid date (instead of nonexistent 31 Nov)
+    dateISO: "2024-11-30",
     category: "Salary",
     amount: 350.0,
-    currency: "USD",
+    currency: "usd",
   },
   {
     id: "t4",
@@ -114,7 +115,7 @@ const TXS: TxRow[] = [
     dateISO: "2024-12-05",
     category: "Utilities",
     amount: -85.0,
-    currency: "USD",
+    currency: "usd",
   },
   {
     id: "t5",
@@ -122,7 +123,7 @@ const TXS: TxRow[] = [
     dateISO: "2024-12-02",
     category: "Pharmacy",
     amount: -32.5,
-    currency: "USD",
+    currency: "usd",
   },
 ];
 
@@ -171,7 +172,7 @@ export function getDashboardMock(
   opts?: {
     topCategories?: number;
     includeLatest?: number;
-    currency?: "USD" | "EUR";
+    currency: CurrencyCode;
   }
 ): DashboardResponse {
   const effective: Period = {
@@ -181,7 +182,7 @@ export function getDashboardMock(
 
   return {
     period: effective,
-    currency: opts?.currency ?? "USD",
+    currency: opts?.currency ?? "usd",
     totalBalance: filterSeriesByPeriod(BALANCE, effective),
     incomeExpenses: filterSeriesByPeriod(INCOME_EXPENSES, effective),
     receiptsSplit: RECEIPTS,

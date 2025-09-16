@@ -37,6 +37,7 @@ type Props = {
 export function AreaBalanceChart({ data, currency = "usd" }: Props) {
   const onReady = React.useCallback(
     (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
+      Chart.getChart(canvas)?.destroy()
       const nowShort = new Date().toLocaleString(undefined, { month: "short" });
 
       const labels = data.map((d) => {
