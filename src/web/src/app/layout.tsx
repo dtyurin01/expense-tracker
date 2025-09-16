@@ -5,6 +5,7 @@ import { GeistMono } from "geist/font/mono";
 import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 
+
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   keywords: siteConfig.keywords,
   applicationName: siteConfig.name,
-  metadataBase: new URL(siteConfig.url),
+  metadataBase: siteConfig.url ? new URL(siteConfig.url) : undefined,
   alternates: {
     canonical: "/",
   },
