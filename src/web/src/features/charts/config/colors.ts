@@ -14,8 +14,8 @@ export const chartColors = {
     },
   },
   bar: {
-    income: "rgb(59,130,246)",
-    expenses: "rgb(99,102,241)",
+    income: "rgb(59,130,246, 0.5)",
+    expenses: "rgb(59,130,246)",
   },
   donut: {
     food: "rgb(34,197,94)",

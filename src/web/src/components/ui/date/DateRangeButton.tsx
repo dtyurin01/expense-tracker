@@ -43,6 +43,24 @@ export function DateRangeButton({
   ...buttonProps
 }: Props) {
   const [open, setOpen] = React.useState(false);
+
+  const initialRange: DateRange | undefined = React.useMemo(
+    () =>
+      period
+        ? {
+            from: fromLocalISO(period.from),
+            to: fromLocalISO(period.to),
+          }
+        : undefined,
+    [period]
+  );
+
+  const [draft, setDraft] = React.useState<DateRange | undefined>(initialRange);
+
+  React.useEffect(() => {
+    if (open) setDraft(initialRange);
+  }, [open, initialRange]);
+
   const { hiddenMatchers, classNames, formatters } = useDayPickerConfig({
     value: undefined,
     min,
@@ -51,12 +69,13 @@ export function DateRangeButton({
     locale,
   });
 
-  const selected: DateRange | undefined = period
-    ? {
-        from: fromLocalISO(period.from),
-        to: fromLocalISO(period.to),
-      }
-    : undefined;
+  const extendedClassNames = {
+    ...classNames,
+    nav: "flex items-center justify-between w-full px-2 cursor-pointer",
+    nav_button_previous: "absolutemb-2",
+    nav_button_next: "absolute ",
+    caption_label: "flex-1 text-center",
+  };
 
   const labelText =
     period?.from && period?.to
@@ -66,21 +85,33 @@ export function DateRangeButton({
         )}`
       : undefined;
 
-  function handleRangeSelection(selected?: DateRange) {
-    const period: Period = {
-      from: selected?.from ? toLocalISO(selected.from) : undefined,
-      to: selected?.to ? toLocalISO(selected.to) : undefined,
+  function asPeriod(range?: DateRange): Period {
+    return {
+      from: range?.from ? toLocalISO(range.from) : undefined,
+      to: range?.to ? toLocalISO(range.to) : undefined,
     };
-    const parsed = PeriodSchema.safeParse(period);
+  }
+
+  // TODO: Move handle save to parent component 
+
+  function handleSave() {
+    const parsed = PeriodSchema.safeParse(asPeriod(draft));
     if (!parsed.success) {
       const issues = parsed.error.issues;
-      const firstMessage =
-        issues[0]?.message ?? issues.map((i) => i.message).join(", ");
-      console.warn("Invalid period:", firstMessage, issues);
+      console.warn("Invalid period:", issues);
       return;
     }
     onChange?.(parsed.data);
+    setOpen(false);
   }
+
+  function handleReset() {
+    setDraft(undefined);
+  }
+
+  const isDraftComplete = draft?.from && draft?.to;
+
+  const isDirty = JSON.stringify(draft) !== JSON.stringify(initialRange);
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
@@ -91,8 +122,7 @@ export function DateRangeButton({
           size={"sm"}
           aria-label={label}
           disabled={disabled}
-          className="hover:bg-foreground/2 active:bg-foreground/2
-          "
+          className="hover:bg-foreground/2 active:bg-foreground/2"
           {...buttonProps}
         >
           <div className="flex items-center gap-2">
@@ -110,21 +140,42 @@ export function DateRangeButton({
       >
         <DayPicker
           mode="range"
-          selected={selected}
-          onSelect={handleRangeSelection}
+          selected={draft}
+          onSelect={setDraft}
           hidden={hiddenMatchers}
           locale={locale}
-          classNames={classNames}
+          classNames={extendedClassNames}
           formatters={formatters}
           components={{
             Chevron: ({ orientation }) =>
               orientation === "left" ? (
-                <FiChevronLeft className="size-4 text-muted-foreground group-hover:text-foreground" />
+                <FiChevronLeft className="size-5 rounded-lg text-muted-foreground hover:bg-foreground/2 active:bg-foreground/2 " />
               ) : (
-                <FiChevronRight className="size-4 text-muted-foreground group-hover:text-foreground" />
+                <FiChevronRight className="size-5 rounded-lg text-muted-foreground hover:bg-foreground/2 active:bg-foreground/2" />
               ),
           }}
         />
+
+        <div className="mt-2 flex items-center justify-end gap-2 px-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            radius="lg"
+            onClick={handleReset}
+            disabled={!draft?.from && !draft?.to}
+          >
+            Reset
+          </Button>
+          <Button
+            variant="primary"
+            size="sm"
+            radius="lg"
+            onClick={handleSave}
+            disabled={!isDraftComplete || !isDirty}
+          >
+            Save
+          </Button>
+        </div>
       </Popover.Content>
     </Popover.Root>
   );
