@@ -50,7 +50,7 @@ export function BarChartIE({
   const income = useChartData(incomeSeries, currency);
   const expenses = useChartData(expenseSeries, currency);
 
-  const labels = income.labels; 
+  const labels = income.labels;
   const incomeValues = income.values;
   const expenseValues = expenses.values;
   const suggestedMax = Math.max(income.suggestedMax, expenses.suggestedMax);
@@ -112,7 +112,7 @@ export function BarChartIE({
 
       return () => chart.destroy();
     },
-    [labels, income, expenses, currency, suggestedMax, showLegend]
+    [labels, currency, suggestedMax, showLegend, expenseValues, incomeValues]
   );
 
   return <ChartCanvas onReady={onReady} />;
