@@ -91,7 +91,7 @@ const TXS: TxRow[] = [
     dateISO: "2024-12-09",
     category: "Car",
     amount: -129.0,
-    currency: "usd",
+    currency: "usd", 
   },
   {
     id: "t2",
