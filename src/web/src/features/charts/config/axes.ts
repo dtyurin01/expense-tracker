@@ -22,7 +22,7 @@ export function createYAxis(options: {
         this: Scale<CoreScaleOptions>,
         tickValue: string | number
       ) {
-        return `${sym}${Number(tickValue) / 1000}k`;
+        return `${sym} ${Number(tickValue) / 1000}k`;
       },
     },
     suggestedMin: min,

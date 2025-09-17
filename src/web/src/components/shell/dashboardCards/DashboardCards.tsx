@@ -9,9 +9,9 @@ import {
   LatestTransactionsCard,
 } from "@/components/shell/dashboardCards";
 import { Period } from "@/schemas/period";
-import { AreaChart } from "@/features/charts/components/AreaChart";
 import { getDashboardMock } from "@/mocks/dashboard";
-// import { AreaChart } from "@/features/charts/AreaChart";
+import { AreaChart } from "@/features/charts/components/AreaChart";
+import { BarChartIE } from "@/features/charts/components/BarChartIE";
 // import { BarChart } from "@/features/charts/BarChart";
 // import { DonutChart } from "@/features/charts/DonutChart";
 // import { TxTable } from "@/features/transactions/TxTable";
@@ -54,7 +54,12 @@ export default function DashboardCards() {
         className="col-span-12 md:col-span-6 lg:col-span-4"
         period={period}
         onPeriodChange={setPeriod}
-        // chart={<BarChart data={...} />}
+        chart={
+          <BarChartIE
+            data={resp.incomeExpenses}
+            currency={resp.currency ? resp.currency : undefined}
+          />
+        }
       />
 
       <ReceiptsSplitSummaryCard
