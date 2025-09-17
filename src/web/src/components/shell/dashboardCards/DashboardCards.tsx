@@ -9,9 +9,8 @@ import {
   LatestTransactionsCard,
 } from "@/components/shell/dashboardCards";
 import { Period } from "@/schemas/period";
-import { AreaChart } from "@/features/charts/components/AreaChart";
 import { getDashboardMock } from "@/mocks/dashboard";
-// import { AreaChart } from "@/features/charts/AreaChart";
+import { AreaChart } from "@/features/charts/components/AreaChart";
 // import { BarChart } from "@/features/charts/BarChart";
 // import { DonutChart } from "@/features/charts/DonutChart";
 // import { TxTable } from "@/features/transactions/TxTable";

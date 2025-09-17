@@ -1,9 +1,10 @@
 import * as React from "react";
 import { getCurrency, monthLabel } from "@/lib/format";
 import type { CurrencyCode } from "@/lib/currencies";
+import { BalancePoint } from "@/mocks/dashboard";
 
-export function useChartData<T extends { month: string; value: number }>(
-  data: T[],
+export function useChartData(
+  data: BalancePoint[],
   currency: CurrencyCode = "usd"
 ) {
   return React.useMemo(() => {
