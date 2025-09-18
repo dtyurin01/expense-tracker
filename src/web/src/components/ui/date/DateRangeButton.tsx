@@ -12,6 +12,7 @@ import { toLocalISO, fromLocalISO } from "@/lib/date-io";
 import { PeriodSchema, type Period } from "@/schemas/period";
 import type { DayPickerStyleProps } from "@/components/ui/date/datePicker.variants";
 import { useDayPickerConfig } from "@/hooks/useDayPickerConfig";
+import { isSameRange } from "@/lib/dateObjCompare";
 
 type Props = {
   period?: Period;
@@ -59,7 +60,7 @@ export function DateRangeButton({
 
   React.useEffect(() => {
     if (open) setDraft(initialRange);
-  }, [open, initialRange]);
+  }, [initialRange, open]);
 
   const { hiddenMatchers, classNames, formatters } = useDayPickerConfig({
     value: undefined,
@@ -72,8 +73,8 @@ export function DateRangeButton({
   const extendedClassNames = {
     ...classNames,
     nav: "flex items-center justify-between w-full px-2 cursor-pointer",
-    nav_button_previous: "absolutemb-2",
-    nav_button_next: "absolute ",
+    nav_button_previous: "absolute mb-2",
+    nav_button_next: "absolute",
     caption_label: "flex-1 text-center",
   };
 
@@ -92,7 +93,7 @@ export function DateRangeButton({
     };
   }
 
-  // TODO: Move handle save to parent component 
+  // TODO: Move handle save to parent component
 
   function handleSave() {
     const parsed = PeriodSchema.safeParse(asPeriod(draft));
@@ -109,9 +110,8 @@ export function DateRangeButton({
     setDraft(undefined);
   }
 
-  const isDraftComplete = draft?.from && draft?.to;
-
-  const isDirty = JSON.stringify(draft) !== JSON.stringify(initialRange);
+  const isDraftComplete = !!(draft?.from && draft?.to);
+  const isDirty = !isSameRange(draft, initialRange);
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>

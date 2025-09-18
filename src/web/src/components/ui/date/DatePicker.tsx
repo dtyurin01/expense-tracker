@@ -67,7 +67,7 @@ export function DatePicker({
           disabled={disabled}
           value={value ?? ""}
           placeholder={placeholder}
-          className={`pr-10 cursor-pointer ${className ?? ""}`}
+          className={`pr-10 ${className ?? ""}`}
           rightIcon={<FiCalendar aria-hidden />}
           onClick={(e) => (e.currentTarget as HTMLInputElement).blur()}
         />
@@ -77,7 +77,7 @@ export function DatePicker({
             type="button"
             aria-label={label ?? "Open date picker"}
             disabled={disabled}
-            className={`absolute inset-0 z-10 bg-transparent`}
+            className={`absolute inset-0 z-10 bg-transparent cursor-pointer`}
           />
         </Popover.Trigger>
       </div>

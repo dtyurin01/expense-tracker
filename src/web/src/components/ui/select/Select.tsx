@@ -59,7 +59,7 @@ export function Select({
           className
         )}
       >
-        <div className="flex min-w-0 items-center gap-2">
+        <div className="flex min-w-0 items-center gap-2 cursor-pointer">
           {leftSlot && (
             <span
               aria-hidden
@@ -112,7 +112,7 @@ export function SelectItem({
       className={cn(
         "relative flex cursor-default select-none items-center gap-2 rounded-md px-3 py-2 text-sm outline-none",
         "data-[highlighted]:bg-brand/10 data-[highlighted]:text-foreground",
-        "data-[disabled]:opacity-50",
+        "data-[disabled]:opacity-50 cursor-pointer",
         className
       )}
       {...props}
