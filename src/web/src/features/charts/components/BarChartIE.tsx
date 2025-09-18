@@ -60,6 +60,7 @@ export function BarChartIE({
       Chart.getChart(canvas)?.destroy();
 
       const colors = chartColors.bar;
+      const labelColors = chartColors.donut;
 
       const chart = new Chart(ctx, {
         type: "bar",
@@ -91,7 +92,11 @@ export function BarChartIE({
             legend: {
               display: showLegend,
               position: "top",
-              labels: { usePointStyle: true, pointStyle: "rectRounded" },
+              labels: {
+                usePointStyle: true,
+                pointStyle: "rectRounded",
+                color: labelColors.text,
+              },
             },
             tooltip: {
               callbacks: {
