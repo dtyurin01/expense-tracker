@@ -13,8 +13,7 @@ import { getDashboardMock } from "@/mocks/dashboard";
 import { AreaChart } from "@/features/charts/components/AreaChart";
 import { BarChartIE } from "@/features/charts/components/BarChartIE";
 import { ReceiptsDonut } from "@/features/charts/components/ReceiptsDonut";
-// import { BarChart } from "@/features/charts/BarChart";
-// import { TxTable } from "@/features/transactions/TxTable";
+import { CategoriesDonut } from "@/features/charts/components/CategoriesDonut";
 
 export default function DashboardCards() {
   // single period state to sync all cards
@@ -75,7 +74,13 @@ export default function DashboardCards() {
         menuItems={[
           { label: "Manage", onSelect: () => console.log("Manage categories") },
         ]}
-        // chart={<DonutChart withLegend data={...} />}
+        chart={
+          <CategoriesDonut
+            data={resp.categories}
+            currency={resp.currency}
+            cutout="60%"
+          />
+        }
       />
 
       <LatestTransactionsCard
