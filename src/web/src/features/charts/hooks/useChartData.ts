@@ -20,7 +20,7 @@ export function useChartData(
     const min = Math.min(...values);
 
     const suggestedMax = Math.ceil(Math.max(max, 7000) / 1000) * 1000;
-    const suggestedMin = Math.floor(Math.min(min, 1000) / 1000) * 1000;
+    const suggestedMin = Math.max(0, Math.floor((min - 1000) / 1000) * 1000);
 
     const curr = getCurrency(currency);
     const currencySymbol = curr?.label ?? "";

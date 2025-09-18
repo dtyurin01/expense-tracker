@@ -36,7 +36,7 @@ Chart.register(
 
 type AreaChartProps = {
   data: BalancePoint[];
-  currency?: CurrencyCode;
+  currency: CurrencyCode;
   colorScheme?: keyof typeof chartColors.area;
   label?: string;
 };
