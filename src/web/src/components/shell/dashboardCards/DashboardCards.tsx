@@ -12,8 +12,8 @@ import { Period } from "@/schemas/period";
 import { getDashboardMock } from "@/mocks/dashboard";
 import { AreaChart } from "@/features/charts/components/AreaChart";
 import { BarChartIE } from "@/features/charts/components/BarChartIE";
+import { ReceiptsDonut } from "@/features/charts/components/ReceiptsDonut";
 // import { BarChart } from "@/features/charts/BarChart";
-// import { DonutChart } from "@/features/charts/DonutChart";
 // import { TxTable } from "@/features/transactions/TxTable";
 
 export default function DashboardCards() {
@@ -42,12 +42,7 @@ export default function DashboardCards() {
           { type: "separator" },
           { label: "Export", onSelect: () => console.log("Export TB") },
         ]}
-        chart={
-          <AreaChart
-            data={resp.totalBalance}
-            currency={resp.currency ? resp.currency : undefined}
-          />
-        }
+        chart={<AreaChart data={resp.totalBalance} currency={resp.currency} />}
       />
 
       <IncomeExpensesCard
@@ -55,10 +50,7 @@ export default function DashboardCards() {
         period={period}
         onPeriodChange={setPeriod}
         chart={
-          <BarChartIE
-            data={resp.incomeExpenses}
-            currency={resp.currency ? resp.currency : undefined}
-          />
+          <BarChartIE data={resp.incomeExpenses} currency={resp.currency} />
         }
       />
 
@@ -69,7 +61,9 @@ export default function DashboardCards() {
         summaryText="Food $1,600 · Non-food $1,400"
         onViewReport={() => console.log("View report: Receipts split")}
         menuItems={[{ label: "Open", onSelect: () => console.log("Open sum") }]}
-        // donut={<DonutChart data={...} />}
+        donut={
+          <ReceiptsDonut data={resp.receiptsSplit} currency={resp.currency} />
+        }
       />
 
       <SpendingCategoriesCard

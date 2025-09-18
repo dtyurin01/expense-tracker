@@ -14,12 +14,11 @@ export const chartColors = {
     },
   },
   bar: {
-    income: "rgb(59,130,246, 0.5)",
+    income: "rgba(59,130,246, 0.5)",
     expenses: "rgb(59,130,246)",
   },
   donut: {
-    food: "rgb(34,197,94)",
-    nonFood: "rgb(236,72,153)",
+    text: "rgb(148,163,184)",
   },
   categories: [
     "#3b82f6",

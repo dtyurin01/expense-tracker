@@ -29,7 +29,7 @@ Chart.register(
 
 type Props = {
   data: IEPoint[];
-  currency?: CurrencyCode;
+  currency: CurrencyCode;
   showLegend?: boolean;
 };
 
