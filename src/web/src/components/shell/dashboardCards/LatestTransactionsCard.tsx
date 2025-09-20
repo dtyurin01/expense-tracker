@@ -15,30 +15,56 @@ import type { MenuItem } from "@/components/ui/menu/menu.types";
 import { Period } from "@/schemas/period";
 import { DateRangeButton } from "@/components/ui/date/DateRangeButton";
 import Link from "next/link";
+import { TxFilter } from "@/types/transactionFilter";
+import { TxFilterButton } from "@/features/transactions/components/TxFilterButton";
 
 export type LatestTransactionsCardProps = {
   title?: string;
-  table?: React.ReactNode; // TODO: label component
+  table?: React.ReactNode | ((filter: TxFilter) => React.ReactNode); // TODO: label component
   updatedText?: string;
   onViewAll?: () => void;
   menuItems?: MenuItem[];
   className?: string;
+
+  // period selector
   period?: Period;
   onPeriodChange?: (v: Period) => void;
   periodLabel?: string;
+
+  // filter
+
+  filter: TxFilter;
+  onFilterChange: (f: TxFilter) => void;
 };
 
 export function LatestTransactionsCard({
   title = "Latest transactions",
   table,
   updatedText = "Updated just now",
-  onViewAll,
   menuItems = [{ label: "Open list", onSelect: () => {} }],
   className = "",
   period,
   onPeriodChange,
   periodLabel = "Period",
+  filter,
+  onFilterChange,
 }: LatestTransactionsCardProps) {
+  const renderedTable = React.useMemo(() => {
+    if (!table) {
+      return (
+        <div className="h-full min-h-48 grid place-items-center rounded-xl border border-border/70 bg-surface/40 text-xs text-muted-foreground">
+          Table
+        </div>
+      );
+    }
+    if (typeof table === "function") return table(filter);
+
+    if (React.isValidElement<{ filter?: TxFilter }>(table)) {
+      return React.cloneElement(table, { filter });
+    }
+    return table;
+  }, [table, filter]);
+
   return (
     <Card className={`h-full flex flex-col ${className}`}>
       <CardHeader>
@@ -49,29 +75,25 @@ export function LatestTransactionsCard({
             onChange={onPeriodChange}
             label={periodLabel}
           />
+          <TxFilterButton value={filter} onChange={onFilterChange} />
           <KebabMenu items={menuItems} />
         </div>
       </CardHeader>
 
-      <CardContent className="flex-1">
-        {table ?? (
-          <div className="h-full min-h-48 rounded-xl border border-border/70 bg-surface/40 grid place-items-center text-xs text-muted-foreground">
-            Table
-          </div>
-        )}
-      </CardContent>
+      <CardContent className="flex-1">{renderedTable}</CardContent>
 
       <CardFooter className="mt-auto">
         {updatedText && (
           <span className="text-sm text-muted-foreground">{updatedText}</span>
         )}
         <Button
+          className="gap-2"
+          size="sm"
           variant="outline"
           radius="lg"
           rightIcon={<FiArrowUpRight />}
-          onClick={onViewAll}
         >
-          <Link href="/transactions">View all</Link>
+          <Link href="/reports/income-expenses">View report</Link>
         </Button>
       </CardFooter>
     </Card>

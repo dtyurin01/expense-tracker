@@ -58,8 +58,8 @@ export function IncomeExpensesCard({
         )}
       </CardContent>
       <CardFooter className="mt-auto flex justify-end">
-        <Button variant="outline" radius="lg" rightIcon={<FiArrowUpRight />}>
-          <Link href="/reports/income-expenses">View all</Link>
+        <Button className="gap-2" size="sm" variant="outline" radius="lg" rightIcon={<FiArrowUpRight />}>
+          <Link href="/reports/income-expenses">View report</Link>
         </Button>
       </CardFooter>
     </Card>

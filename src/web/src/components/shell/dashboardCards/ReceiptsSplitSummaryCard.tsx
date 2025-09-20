@@ -33,7 +33,6 @@ export function ReceiptsSplitSummaryCard({
   title = "Receipts split summary",
   donut,
   summaryText = "Food $1,600 · Non-food $1,400",
-  onViewReport,
   menuItems = [{ label: "Open", onSelect: () => {} }],
   className = "",
   period,
@@ -67,12 +66,13 @@ export function ReceiptsSplitSummaryCard({
           <span className="text-sm text-muted-foreground">{summaryText}</span>
         )}
         <Button
+          className="gap-2"
+          size="sm"
           variant="outline"
           radius="lg"
           rightIcon={<FiArrowUpRight />}
-          onClick={onViewReport}
         >
-          <Link href="/reports/receipts">View all</Link>
+          <Link href="/reports/income-expenses">View report</Link>
         </Button>
       </CardFooter>
     </Card>

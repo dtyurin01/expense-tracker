@@ -26,3 +26,16 @@ export function monthLabel(yyyyMM: string) {
 
   return label;
 }
+
+export function dayMonthYearLabel(ddyyyyMM: string) {
+  const [dd, yyyy, mm] = ddyyyyMM.split("-");
+
+  const date = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+  const label = date.toLocaleString(undefined, {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  });
+
+  return label;
+}
