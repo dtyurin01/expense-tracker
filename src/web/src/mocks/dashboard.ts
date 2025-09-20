@@ -17,6 +17,7 @@ export type TxRow = {
   category: string; // "Car", "Groceries", "Salary"
   amount: number; // - expense, + income
   currency: CurrencyCode;
+  color: string;
 };
 
 export type DashboardResponse = {
@@ -91,7 +92,8 @@ const TXS: TxRow[] = [
     dateISO: "2024-12-09",
     category: "Car",
     amount: -129.0,
-    currency: "usd", 
+    currency: "usd",
+    color: "#f59e0b",
   },
   {
     id: "t2",
@@ -100,6 +102,7 @@ const TXS: TxRow[] = [
     category: "Groceries",
     amount: -150.0,
     currency: "usd",
+    color: "#22c55e",
   },
   {
     id: "t3",
@@ -108,6 +111,7 @@ const TXS: TxRow[] = [
     category: "Salary",
     amount: 350.0,
     currency: "usd",
+    color: "#3b82f6",
   },
   {
     id: "t4",
@@ -116,6 +120,7 @@ const TXS: TxRow[] = [
     category: "Utilities",
     amount: -85.0,
     currency: "usd",
+    color: "#60a5fa",
   },
   {
     id: "t5",
@@ -124,9 +129,9 @@ const TXS: TxRow[] = [
     category: "Pharmacy",
     amount: -32.5,
     currency: "usd",
+    color: "#a78bfa",   
   },
 ];
-
 // ===== Helpers =====
 function toDate(d: string) {
   // d: YYYY-MM or YYYY-MM-DD
