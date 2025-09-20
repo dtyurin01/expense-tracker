@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Badge } from "@radix-ui/themes";
 import { cn } from "@/lib/cn";
 import { Button } from "@/components/ui/index";
+import { Pill } from "@/components/ui/pill/Pill";
 
 type UpgradeCardProps = {
   variant?: "full" | "pill";
@@ -72,9 +73,7 @@ export function UpgradeCard({
     >
       <div className="flex items-center gap-2">
         <h3 className="text-base font-semibold text-foreground">{title}</h3>
-        <Badge variant="surface" color="cyan" className="!rounded-md !px-2">
-          pro
-        </Badge>
+        <Pill size="sm" color="#00ffff">{label}</Pill>
       </div>
 
       <p className="mt-2 text-sm text-muted-foreground">{text}</p>
