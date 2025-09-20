@@ -30,7 +30,7 @@ export default function DashboardCards() {
   );
 
   return (
-    <div className="h-full grid grid-cols-12 gap-4 auto-rows-[minmax(0,1fr)]">
+    <div className="h-full grid grid-cols-12 gap-3 auto-rows-[minmax(0,1fr)]">
       <TotalBalanceCard
         className="col-span-12 lg:col-span-4"
         period={period}
