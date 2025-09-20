@@ -43,7 +43,6 @@ export function TotalBalanceCard({
   periodMin,
   periodMax,
   periodLabel = "Period",
-  onViewReport,
   menuItems = [
     { label: "Refresh", onSelect: () => {} },
     { type: "separator" },
@@ -82,12 +81,13 @@ export function TotalBalanceCard({
       <CardFooter className="mt-auto">
         {description && <CardDescription>{description}</CardDescription>}
         <Button
+          className="gap-2"
+          size="sm"
           variant="outline"
           radius="lg"
           rightIcon={<FiArrowUpRight />}
-          onClick={onViewReport}
         >
-          <Link href="/reports/balance">View all</Link>
+          <Link href="/reports/income-expenses">View report</Link>
         </Button>
       </CardFooter>
     </Card>

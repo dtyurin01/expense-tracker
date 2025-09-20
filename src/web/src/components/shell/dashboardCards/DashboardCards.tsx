@@ -14,10 +14,13 @@ import { AreaChart } from "@/features/charts/components/AreaChart";
 import { BarChartIE } from "@/features/charts/components/BarChartIE";
 import { ReceiptsDonut } from "@/features/charts/components/ReceiptsDonut";
 import { CategoriesDonut } from "@/features/charts/components/CategoriesDonut";
+import { TxFilter } from "@/types/transactionFilter";
+import { TransactionsTable } from "@/features/transactions/components/TransactionsTable";
 
 export default function DashboardCards() {
   // single period state to sync all cards
   const [period, setPeriod] = React.useState<Period | undefined>(undefined);
+  const [filter, setFilter] = React.useState<TxFilter>("all");
 
   const resp = React.useMemo(
     () =>
@@ -30,7 +33,7 @@ export default function DashboardCards() {
   );
 
   return (
-    <div className="h-full grid grid-cols-12 gap-4 auto-rows-[minmax(0,1fr)]">
+    <div className="h-full grid grid-cols-12 gap-3 auto-rows-[minmax(0,1fr)]">
       <TotalBalanceCard
         className="col-span-12 lg:col-span-4"
         period={period}
@@ -92,7 +95,15 @@ export default function DashboardCards() {
         menuItems={[
           { label: "Open list", onSelect: () => console.log("Open list") },
         ]}
-        // table={<TxTable rows={...} />}
+        filter={filter}
+        onFilterChange={setFilter}
+        table={
+          <TransactionsTable
+            rows={resp.latestTransactions}
+            currency={resp.currency}
+            height={260}
+          />
+        }
       />
     </div>
   );
