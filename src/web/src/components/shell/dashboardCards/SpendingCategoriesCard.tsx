@@ -32,7 +32,6 @@ export function SpendingCategoriesCard({
   title = "Spending categories",
   chart,
   footnote = "Top: Groceries, Transport",
-  onViewReport,
   menuItems = [{ label: "Manage", onSelect: () => {} }],
   className = "",
   period,
