@@ -3,22 +3,9 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cn } from "@/lib/cn";
-import { cva, type VariantProps } from "class-variance-authority";
+import { type VariantProps } from "class-variance-authority";
 
-const pillVariants = cva("inline-flex items-center rounded-lg font-medium", {
-  variants: {
-    size: {
-      xs: "px-1.5 py-0.5 text-xs",
-      sm: "px-2.5 py-0.5 text-sm",
-      md: "px-2.5 py-1 text-sm",
-      lg: "px-3 py-1 text-base",
-      xl: "px-4 py-1.5 text-lg",
-    },
-  },
-  defaultVariants: {
-    size: "md",
-  },
-});
+import { pillVariants } from "@/components/ui/pill/pill.variants";
 
 export interface PillProps
   extends React.ComponentPropsWithoutRef<"span">,

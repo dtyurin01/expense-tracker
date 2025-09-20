@@ -129,7 +129,7 @@ const TXS: TxRow[] = [
     category: "Pharmacy",
     amount: -32.5,
     currency: "usd",
-    color: "#a78bfa",   
+    color: "#a78bfa",  
   },
 ];
 // ===== Helpers =====
