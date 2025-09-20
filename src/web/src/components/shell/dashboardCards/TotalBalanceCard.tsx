@@ -43,7 +43,6 @@ export function TotalBalanceCard({
   periodMin,
   periodMax,
   periodLabel = "Period",
-  onViewReport,
   menuItems = [
     { label: "Refresh", onSelect: () => {} },
     { type: "separator" },

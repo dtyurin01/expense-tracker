@@ -41,7 +41,6 @@ export function LatestTransactionsCard({
   title = "Latest transactions",
   table,
   updatedText = "Updated just now",
-  onViewAll,
   menuItems = [{ label: "Open list", onSelect: () => {} }],
   className = "",
   period,

@@ -33,7 +33,6 @@ export function ReceiptsSplitSummaryCard({
   title = "Receipts split summary",
   donut,
   summaryText = "Food $1,600 · Non-food $1,400",
-  onViewReport,
   menuItems = [{ label: "Open", onSelect: () => {} }],
   className = "",
   period,
