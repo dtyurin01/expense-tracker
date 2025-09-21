@@ -8,7 +8,7 @@ import AddExpenseDialog from "@/features/expenses/components/AddExpenseDialog";
 import type { ExpenseCreate } from "@/schemas/expense";
 import { useState } from "react";
 import { getBaseCategories } from "@/data/categories";
-import DashboardCardsDemo from "@/components/shell/dashboardCards/DashboardCards";
+import DashboardCards from "@/components/shell/dashboardCards/DashboardCards";
 
 export default function AppShell() {
   const [addOpen, setAddOpen] = useState(false);
@@ -37,8 +37,8 @@ export default function AppShell() {
             onSegmentChange={(v) => console.log("Segment:", v)}
             onCurrencyClick={() => console.log("Currency")}
           />
-          <div className="grow">
-            <DashboardCardsDemo />
+          <div className="grow flex flex-col min-h-0">
+            <DashboardCards />
           </div>
         </section>
       </main>
