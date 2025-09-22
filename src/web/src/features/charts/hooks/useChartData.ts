@@ -8,11 +8,14 @@ export function useChartData(
   currency: CurrencyCode = "usd"
 ) {
   return React.useMemo(() => {
-    const nowShort = new Date().toLocaleString(undefined, { month: "short" });
+    const now = new Date();
+    const nowYear = now.getFullYear();
+    const nowMonth = now.getMonth() + 1;
 
     const labels = data.map((d) => {
-      const m = monthLabel(d.month);
-      return m === nowShort ? "Now" : m;
+      const [y, m] = d.month.split("-").map(Number);
+      const isNow = y === nowYear && m === nowMonth;
+      return isNow ? "Now" : monthLabel(d.month);
     });
 
     const values = data.map((d) => d.value);
