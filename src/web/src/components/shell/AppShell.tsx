@@ -20,28 +20,30 @@ export default function AppShell() {
     // TODO: Notification When added
   };
   return (
-    <div className="bg-background text-foreground">
-      <AppSidebar />
+    <div className="bg-background text-foreground min-h-svh">
+      <div className="grid grid-cols-[5rem_1fr] lg:grid-cols-[318px_1fr] gap-3 p-2 min-h-svh">
+        <AppSidebar />
 
-      <main className="min-h-svh flex flex-col px-3 pt-5 pl-[6.5rem] md:pl-2 lg:pl-[calc(320px+1.2rem)]">
-        <section className="min-w-0 flex-1 flex flex-col gap-6  min-h-0">
-          <AppHeader
-            title="Dashboard"
-            subtitle="Hi Nicholas, here are your financial stats"
-            activeSegment="All family"
-            segmentOptions={["Personal", "All family"]}
-            currency="USD"
-            onAddClick={() => setAddOpen(true)}
-            onSearchClick={() => console.log("Search")}
-            onBellClick={() => console.log("Bell")}
-            onSegmentChange={(v) => console.log("Segment:", v)}
-            onCurrencyClick={() => console.log("Currency")}
-          />
-          <div className="grow flex flex-col min-h-0">
-            <DashboardCards />
-          </div>
-        </section>
-      </main>
+        <main className="h-full flex flex-col min-h-0 px-1 lg:pt-2">
+          <section className="min-w-0 flex-1 flex flex-col gap-6 min-h-0">
+            <AppHeader
+              title="Dashboard"
+              subtitle="Hi Nicholas, here are your financial stats"
+              activeSegment="All family"
+              segmentOptions={["Personal", "All family"]}
+              currency="USD"
+              onAddClick={() => setAddOpen(true)}
+              onSearchClick={() => console.log("Search")}
+              onBellClick={() => console.log("Bell")}
+              onSegmentChange={(v) => console.log("Segment:", v)}
+              onCurrencyClick={() => console.log("Currency")}
+            />
+            <div className="grow flex flex-col min-h-0">
+              <DashboardCards />
+            </div>
+          </section>
+        </main>
+      </div>
       <AddExpenseDialog
         open={addOpen}
         onOpenChange={setAddOpen}
