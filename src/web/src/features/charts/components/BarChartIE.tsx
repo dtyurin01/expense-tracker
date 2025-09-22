@@ -1,15 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  Chart,
-  BarController,
-  BarElement,
-  LinearScale,
-  CategoryScale,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Chart } from "chart.js/auto"; // только для типа в useRef
 import { ChartCanvas } from "@/features/charts/ChartCanvas";
 import { createXAxis, createYAxis } from "@/features/charts/config/axes";
 import { chartColors } from "@/features/charts/config/colors";
@@ -18,14 +10,11 @@ import type { CurrencyCode } from "@/lib/currencies";
 import type { IEPoint } from "@/mocks/dashboard";
 import { useChartData } from "../hooks/useChartData";
 
-Chart.register(
-  BarController,
-  BarElement,
-  LinearScale,
-  CategoryScale,
-  Tooltip,
-  Legend
-);
+// новая утилита
+import {
+  createOrUpdateChart,
+  destroyChart,
+} from "@/features/charts/utils/chartKit";
 
 type Props = {
   data: IEPoint[];
@@ -55,36 +44,34 @@ export function BarChartIE({
   const expenseValues = expenses.values;
   const suggestedMax = Math.max(income.suggestedMax, expenses.suggestedMax);
 
+  const chartRef = React.useRef<Chart<"bar"> | null>(null);
+
   const onReady = React.useCallback(
     (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
-      Chart.getChart(canvas)?.destroy();
-
       const colors = chartColors.bar;
       const labelColors = chartColors.donut;
 
-      const chart = new Chart(ctx, {
+      createOrUpdateChart(chartRef, canvas, {
         type: "bar",
-        data: {
-          labels,
-          datasets: [
-            {
-              label: "Income",
-              data: incomeValues,
-              backgroundColor: colors.income,
-              borderRadius: 2,
-              categoryPercentage: 0.6,
-              barPercentage: 0.9,
-            },
-            {
-              label: "Expenses",
-              data: expenseValues,
-              backgroundColor: colors.expenses,
-              borderRadius: 2,
-              categoryPercentage: 0.6,
-              barPercentage: 0.9,
-            },
-          ],
-        },
+        labels,
+        datasets: [
+          {
+            label: "Income",
+            data: incomeValues,
+            backgroundColor: colors.income,
+            borderRadius: 2,
+            categoryPercentage: 0.6,
+            barPercentage: 0.9,
+          },
+          {
+            label: "Expenses",
+            data: expenseValues,
+            backgroundColor: colors.expenses,
+            borderRadius: 2,
+            categoryPercentage: 0.6,
+            barPercentage: 0.9,
+          },
+        ],
         options: {
           responsive: true,
           maintainAspectRatio: false,
@@ -106,6 +93,7 @@ export function BarChartIE({
                     currency
                   )}`,
               },
+              displayColors: false,
             },
           },
           scales: {
@@ -115,9 +103,9 @@ export function BarChartIE({
         },
       });
 
-      return () => chart.destroy();
+      return () => destroyChart(chartRef);
     },
-    [labels, currency, suggestedMax, showLegend, expenseValues, incomeValues]
+    [labels, incomeValues, expenseValues, currency, suggestedMax, showLegend]
   );
 
   return <ChartCanvas onReady={onReady} />;

@@ -1,23 +1,17 @@
 "use client";
 
 import * as React from "react";
-import {
-  Chart,
-  DoughnutController,
-  ArcElement,
-  Tooltip,
-  Legend,
-  type ChartConfiguration,
-  type ChartDataset,
-  type ChartOptions,
-} from "chart.js";
+import { Chart } from "chart.js/auto"; 
+import type { Chart as ChartJS, ChartDataset, LegendItem } from "chart.js";
 import { ChartCanvas } from "@/features/charts/ChartCanvas";
 import { formatMoney } from "@/lib/format";
 import type { CurrencyCode } from "@/lib/currencies";
 import type { Slice } from "@/mocks/dashboard";
 import { chartColors } from "@/features/charts/config/colors";
-
-Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
+import {
+  createOrUpdateChart,
+  destroyChart,
+} from "@/features/charts/utils/chartKit";
 
 type Props = {
   data: Slice[];
@@ -33,6 +27,7 @@ export function CategoriesDonut({
   cutout = "60%",
 }: Props) {
   const areaColors = chartColors.donut;
+
   const labels = React.useMemo(() => data.map((g) => g.label), [data]);
   const values = React.useMemo(() => data.map((g) => g.value), [data]);
   const colors = React.useMemo(
@@ -40,27 +35,49 @@ export function CategoriesDonut({
     [data]
   );
 
-  const onReady = React.useCallback(
-    (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
-      Chart.getChart(canvas)?.destroy();
+  const chartRef = React.useRef<Chart<"doughnut"> | null>(null);
 
-      const cfg: ChartConfiguration<"doughnut", number[], string> = {
+  const onReady = React.useCallback(
+    (_ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
+      const generateLabels = (chart: ChartJS<"doughnut">): LegendItem[] => {
+        const ds = chart.data.datasets[0] as ChartDataset<"doughnut", number[]>;
+        const bg = ds.backgroundColor as
+          | Array<string | CanvasGradient | CanvasPattern>
+          | undefined;
+
+        return (chart.data.labels ?? []).map((lbl, i) => {
+          const text = `${String(lbl)} ${formatMoney(
+            Number(ds.data[i]),
+            currency
+          )}`;
+          const color = Array.isArray(bg) ? bg[i] ?? "#9ca3af" : bg;
+          return {
+            text,
+            fillStyle: color ?? "#9ca3af",
+            strokeStyle: color ?? "#9ca3af",
+            lineWidth: 0,
+            fontColor: areaColors.text,
+            hidden: !chart.getDataVisibility(i),
+            index: i,
+          } as LegendItem;
+        });
+      };
+
+      createOrUpdateChart(chartRef, canvas, {
         type: "doughnut",
-        data: {
-          labels,
-          datasets: [
-            {
-              data: values,
-              backgroundColor: colors, // string[]
-              borderWidth: 0,
-              borderAlign: "inner",
-              borderRadius: 4,
-              spacing: 1,
-              hoverOffset: 6,
-              hoverBorderWidth: 0,
-            } satisfies ChartDataset<"doughnut", number[]>,
-          ],
-        },
+        labels,
+        datasets: [
+          {
+            data: values,
+            backgroundColor: colors,
+            borderWidth: 0,
+            borderAlign: "inner",
+            borderRadius: 4,
+            spacing: 1,
+            hoverOffset: 6,
+            hoverBorderWidth: 0,
+          } satisfies ChartDataset<"doughnut", number[]>,
+        ],
         options: {
           responsive: true,
           maintainAspectRatio: false,
@@ -74,32 +91,7 @@ export function CategoriesDonut({
                 pointStyle: "rectRounded",
                 padding: 14,
                 color: "var(--color-foreground)",
-                generateLabels(chart) {
-                  const ds = chart.data.datasets[0] as ChartDataset<
-                    "doughnut",
-                    number[]
-                  >;
-                  const bg = (ds.backgroundColor ?? []) as Array<
-                    string | CanvasGradient | CanvasPattern
-                  >;
-
-                  return chart.data.labels!.map((lbl, i) => {
-                    const text = `${String(lbl)} ${formatMoney(
-                      Number(ds.data[i]),
-                      currency
-                    )}`;
-                    const color = Array.isArray(bg) ? bg[i] ?? "#9ca3af" : bg;
-                    return {
-                      text,
-                      fillStyle: color,
-                      fontColor: areaColors.text,
-                      strokeStyle: color,
-                      lineWidth: 0,
-                      hidden: !chart.getDataVisibility(i),
-                      index: i,
-                    };
-                  });
-                },
+                generateLabels,
               },
             },
             tooltip: {
@@ -111,11 +103,10 @@ export function CategoriesDonut({
             },
           },
           animation: { duration: 600 },
-        } satisfies ChartOptions<"doughnut">,
-      };
+        },
+      });
 
-      const chart = new Chart(ctx, cfg);
-      return () => chart.destroy();
+      return () => destroyChart(chartRef);
     },
     [labels, values, colors, cutout, showLegend, currency, areaColors.text]
   );
