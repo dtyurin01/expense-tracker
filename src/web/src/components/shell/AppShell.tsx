@@ -24,7 +24,7 @@ export default function AppShell() {
       <div className="grid grid-cols-[5rem_1fr] lg:grid-cols-[318px_1fr] gap-3 p-2 min-h-svh">
         <AppSidebar />
 
-        <main className="h-full flex flex-col min-h-0 px-1 lg:pt-2">
+        <main className="h-full flex flex-col min-h-0 px-1 lg:pt-3">
           <section className="min-w-0 flex-1 flex flex-col gap-6 min-h-0">
             <AppHeader
               title="Dashboard"
