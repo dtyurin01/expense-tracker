@@ -1,6 +1,9 @@
 "use client";
 
 import * as React from "react";
+import { initChartDefaultsFromCSS } from "@/features/charts/utils/chartKit";
+
+let __chartDefaultsInited = false;
 
 export function ChartCanvas({
   onReady,
@@ -16,6 +19,13 @@ export function ChartCanvas({
   const disposeRef = React.useRef<VoidFunction | null>(null);
 
   React.useEffect(() => {
+    if (!__chartDefaultsInited) {
+      initChartDefaultsFromCSS();
+      __chartDefaultsInited = true;
+    }
+  }, []);
+
+  React.useEffect(() => {
     const el = ref.current;
     if (!el || !onReady) return;
     const ctx = el.getContext("2d");
@@ -29,7 +39,7 @@ export function ChartCanvas({
       disposeRef.current?.();
       disposeRef.current = null;
     };
-  }, [onReady]); 
+  }, [onReady]);
 
   return <canvas ref={ref} className={className} />;
 }

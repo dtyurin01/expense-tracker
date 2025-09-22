@@ -16,8 +16,8 @@ type UpgradeCardProps = {
   href?: string;
   className?: string;
 
-  label?: string; 
-  pillSize?: "sm" | "md"; 
+  label?: string;
+  pillSize?: "sm" | "md";
 };
 
 export function UpgradeCard({
@@ -73,7 +73,9 @@ export function UpgradeCard({
     >
       <div className="flex items-center gap-2">
         <h3 className="text-base font-semibold text-foreground">{title}</h3>
-        <Pill size="sm" color="#00ffff">{label}</Pill>
+        <Pill size="sm" color="var( --color-brand)">
+          {label}
+        </Pill>
       </div>
 
       <p className="mt-2 text-sm text-muted-foreground">{text}</p>
