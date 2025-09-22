@@ -29,10 +29,12 @@ export function Pill({
     <Comp
       className={cn(pillVariants({ size }), className)}
       style={{
-        backgroundColor: color ? `${color}20` : "var(--color-surface)",
+        backgroundColor: color
+          ? `color-mix(in srgb, ${color} 12.5%, transparent)`
+          : "var(--color-surface)",
         color: color ?? "var(--color-foreground)",
         border: color
-          ? `1px solid ${color}60`
+          ? `1px solid color-mix(in srgb, ${color} 37.5%, transparent)`
           : "1px solid var(--color-border)",
         ...style,
       }}

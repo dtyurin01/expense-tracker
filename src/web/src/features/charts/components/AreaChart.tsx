@@ -1,17 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  Chart,
-  LineController,
-  LineElement,
-  PointElement,
-  LinearScale,
-  CategoryScale,
-  Filler,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Chart } from "chart.js/auto";
 import { ChartCanvas } from "@/features/charts/ChartCanvas";
 import { useChartData } from "@/features/charts/hooks/useChartData";
 import { createXAxis, createYAxis } from "@/features/charts/config/axes";
@@ -21,18 +11,12 @@ import {
 } from "@/features/charts/config/colors";
 import { formatMoney } from "@/lib/format";
 import type { CurrencyCode } from "@/lib/currencies";
-import { BalancePoint } from "@/mocks/dashboard";
+import type { BalancePoint } from "@/mocks/dashboard";
 
-Chart.register(
-  LineController,
-  LineElement,
-  PointElement,
-  LinearScale,
-  CategoryScale,
-  Filler,
-  Tooltip,
-  Legend
-);
+import {
+  createOrUpdateChart,
+  destroyChart,
+} from "@/features/charts/utils/chartKit";
 
 type AreaChartProps = {
   data: BalancePoint[];
@@ -52,11 +36,12 @@ export function AreaChart({
     currency
   );
 
+  const chartRef = React.useRef<Chart<"line"> | null>(null);
+
   const onReady = React.useCallback(
     (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
-      Chart.getChart(canvas)?.destroy();
-
       const colors = chartColors.area[colorScheme];
+
       const gradient = createAreaGradient(
         ctx,
         canvas,
@@ -64,27 +49,25 @@ export function AreaChart({
         colors.gradientEnd
       );
 
-      const chart = new Chart(ctx, {
+      createOrUpdateChart(chartRef, canvas, {
         type: "line",
-        data: {
-          labels,
-          datasets: [
-            {
-              label,
-              data: values,
-              fill: true,
-              backgroundColor: gradient,
-              borderColor: colors.border,
-              borderWidth: 3,
-              tension: 0.4,
-              pointBackgroundColor: "rgba(255,255,255,0.95)",
-              pointBorderColor: colors.point,
-              pointBorderWidth: 2,
-              pointRadius: 4.5,
-              pointHoverRadius: 5.5,
-            },
-          ],
-        },
+        labels,
+        datasets: [
+          {
+            label,
+            data: values,
+            fill: true,
+            backgroundColor: gradient,
+            borderColor: colors.border,
+            borderWidth: 3,
+            tension: 0.4,
+            pointBackgroundColor: "rgba(255,255,255,0.95)",
+            pointBorderColor: colors.point,
+            pointBorderWidth: 2,
+            pointRadius: 4.5,
+            pointHoverRadius: 5.5,
+          },
+        ],
         options: {
           responsive: true,
           maintainAspectRatio: false,
@@ -108,7 +91,8 @@ export function AreaChart({
           },
         },
       });
-      return () => chart.destroy();
+
+      return () => destroyChart(chartRef);
     },
     [currency, colorScheme, label, labels, values, suggestedMax, suggestedMin]
   );

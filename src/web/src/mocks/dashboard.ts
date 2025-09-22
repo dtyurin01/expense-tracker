@@ -39,7 +39,7 @@ const MONTHS = [
   "2024-11",
   "2024-12",
   "2025-01",
-  "2025-02",
+  "2025-09",
 ] as const;
 
 const BALANCE: BalancePoint[] = [
@@ -49,8 +49,7 @@ const BALANCE: BalancePoint[] = [
   { month: "2024-11", value: 6000 },
   { month: "2024-12", value: 5200 },
   { month: "2025-01", value: 5800 },
-  { month: "2025-02", value: 6100 },
-];
+  { month: "2025-09", value: 6100 },];
 
 const INCOME_EXPENSES: IEPoint[] = [
   { month: "2024-08", income: 4300, expense: 2500 },
@@ -60,6 +59,7 @@ const INCOME_EXPENSES: IEPoint[] = [
   { month: "2024-12", income: 5000, expense: 4200 },
   { month: "2025-01", income: 4500, expense: 3100 },
   { month: "2025-02", income: 5600, expense: 3300 },
+  { month: "2025-09", income: 6000, expense: 3500 },
 ];
 
 const RECEIPTS = {
