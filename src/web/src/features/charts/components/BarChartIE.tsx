@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Chart } from "chart.js/auto"; // только для типа в useRef
+import { Chart } from "chart.js/auto"; 
 import { ChartCanvas } from "@/features/charts/ChartCanvas";
 import { createXAxis, createYAxis } from "@/features/charts/config/axes";
 import { chartColors } from "@/features/charts/config/colors";
