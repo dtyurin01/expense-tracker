@@ -5,6 +5,7 @@ import Image from "next/image";
 import { cn } from "@/lib/cn";
 import { KebabMenu } from "@/components/ui/index";
 import type { MenuItem } from "@/components/ui/menu/menu.types";
+import { Skeleton } from "@radix-ui/themes";
 
 type CommonProps = {
   name: string;
@@ -14,6 +15,7 @@ type CommonProps = {
   disabled?: boolean;
   onClick?: () => void;
   size?: "sm" | "md" | "lg";
+  loading?: boolean;
 };
 
 type FullProps = CommonProps & {
@@ -40,6 +42,7 @@ export function UserCard(props: UserCardProps) {
     disabled,
     onClick,
     size = "md",
+    loading = false,
   } = props;
 
   const initials = React.useMemo(
@@ -66,25 +69,28 @@ export function UserCard(props: UserCardProps) {
       : "h-10 w-10";
 
   if (props.variant === "avatar") {
-    const Wrapper = onClick ? "button" : "div";
+    const Wrapper = onClick ? ("button" as const) : ("div" as const);
     return (
       <Wrapper
         type={onClick ? "button" : undefined}
-        onClick={disabled ? undefined : onClick}
+        onClick={disabled || loading ? undefined : onClick}
         aria-label={props["aria-label"] ?? name}
         className={cn(
           "inline-flex items-center justify-center",
-          disabled && "pointer-events-none opacity-60",
+          (disabled || loading) && "pointer-events-none opacity-60",
           className
         )}
+        aria-busy={loading}
       >
         <div
           className={cn(
-            "relative overflow-hidden rounded-full ring-1 ring-border/60 bg-surface/5 shadow-sm",
+            "relative rounded-full ring-1 ring-border/60 bg-surface/5 shadow-sm overflow-hidden",
             avatarSize
           )}
         >
-          {imgOk ? (
+          {loading ? (
+            <Skeleton width="100%" height="100%" />
+          ) : imgOk ? (
             <Image
               src={src}
               alt={`${name} avatar`}
@@ -108,22 +114,26 @@ export function UserCard(props: UserCardProps) {
 
   return (
     <div
-      onClick={disabled ? undefined : onClick}
+      onClick={disabled || loading ? undefined : onClick}
       className={cn(
         "group relative flex items-center gap-3 rounded-2xl border border-2 border-border bg-surface/5 px-4 py-3",
         "hover:bg-surface/10 transition-colors",
-        disabled && "pointer-events-none opacity-60",
+        (disabled || loading) && "pointer-events-none opacity-60",
         block && "w-full",
         className
       )}
+      aria-busy={loading}
+      aria-live="polite"
     >
       <div
         className={cn(
-          "relative overflow-hidden rounded-full ring-1 ring-border/60 bg-surface shadow-sm",
+          "relative rounded-full ring-1 ring-border/60 bg-surface shadow-sm overflow-hidden",
           avatarSize
         )}
       >
-        {imgOk ? (
+        {loading ? (
+          <Skeleton width="100%" height="100%" />
+        ) : imgOk ? (
           <Image
             src={src}
             alt={`${name} avatar`}
@@ -141,13 +151,39 @@ export function UserCard(props: UserCardProps) {
       </div>
 
       <div className="min-w-0">
-        <div className="truncate text-sm font-medium">{name}</div>
-        <div className="truncate text-xs text-muted-foreground">{subtitle}</div>
+        {loading ? (
+          <div className="space-y-1">
+            <div className="h-4 w-32 rounded-md overflow-hidden">
+              <Skeleton width="100%" height="100%" />
+            </div>
+            <div className="h-3 w-24 rounded-md overflow-hidden">
+              <Skeleton width="100%" height="100%" />
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="truncate text-sm font-medium">{name}</div>
+            <div className="truncate text-xs text-muted-foreground">
+              {subtitle}
+            </div>
+          </>
+        )}
       </div>
 
+      {/* Kebab */}
       {menuItems?.length ? (
         <div className="ml-auto">
-          <KebabMenu align="start" items={menuItems} onOpenChange={onMenuOpenChange} />
+          {loading ? (
+            <div className="size-8 rounded-full overflow-hidden">
+              <Skeleton width="100%" height="100%" />
+            </div>
+          ) : (
+            <KebabMenu
+              align="start"
+              items={menuItems}
+              onOpenChange={onMenuOpenChange}
+            />
+          )}
         </div>
       ) : null}
     </div>
