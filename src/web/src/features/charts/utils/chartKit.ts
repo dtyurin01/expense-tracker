@@ -1,5 +1,6 @@
+import { Chart } from "chart.js/auto";
+
 import {
-  Chart,
   ChartConfigurationCustomTypesPerDataset,
   ChartData,
   type ChartConfiguration,
@@ -7,7 +8,7 @@ import {
   type ChartOptions,
   type ChartType,
   type Plugin,
-} from "chart.js/auto";
+} from "chart.js";
 
 export function cssVar(name: string): string {
   if (typeof window === "undefined") return "";
@@ -80,7 +81,7 @@ export function createOrUpdateChart<TType extends ChartType>(
   data.datasets = cfg.datasets;
 
   if (cfg.options) {
-    chart.options = cfg.options;
+    chart.config.plugins = cfg.plugins;
   }
   chart.update();
   return chart;

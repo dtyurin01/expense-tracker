@@ -10,6 +10,8 @@ import SearchButton from "@/features/search/SearchButton";
 import { CurrencySelect } from "@/features/currencySelector/CurrencySelect";
 import { SegmentedControl } from "@/components/ui/segmentedControl/SegmentedControl";
 import SearchDialog from "@/features/search/SearchDialog";
+import { type CurrencyCode } from "@/lib/currencies";
+import { Skeleton } from "@radix-ui/themes";
 
 type DashboardHeaderProps = {
   title: string;
@@ -23,16 +25,16 @@ type DashboardHeaderProps = {
   showBellDot?: boolean;
 
   //  Row 2
-  segmentOptions?: string[]; // ["Personal", "All family"]
-  activeSegment?: string; // "All family"
+  segmentOptions?: string[];
+  activeSegment?: string;
   onSegmentChange?: (value: string) => void;
 
-  currency?: string; // "USD"
+  currency?: string;
   onCurrencyClick?: () => void;
+  loading?: boolean;
 };
 
 // GET NOTIFICATION DATA
-
 const initial: NotificationItem[] = [
   {
     id: "1",
@@ -57,10 +59,11 @@ export function AppHeader({
   onSearchClick,
   onAddClick,
   segmentOptions = ["Personal", "All family"],
+  loading = false,
 }: DashboardHeaderProps) {
   const [items, setItems] = React.useState<NotificationItem[]>(initial);
   const [openNotification, setOpenNotification] = React.useState(false);
-  const [currency, setCurrency] = React.useState("usd");
+  const [currency, setCurrency] = React.useState<CurrencyCode>("usd");
   const [value, setValue] = React.useState(segmentOptions[0]);
   const [searchOpen, setSearchOpen] = React.useState(false);
 
@@ -72,14 +75,18 @@ export function AppHeader({
       <div className="flex items-center">
         <div className="pl-2 min-w-0">
           <h1 className="text-2xl font-semibold leading-tight">{title}</h1>
-          {subtitle && (
+
+          {loading ? (
+            <div className="mt-1 h-5 w-[280px] rounded-md overflow-hidden">
+              <Skeleton width="100%" height="100%" />
+            </div>
+          ) : subtitle ? (
             <p className="mt-1 text-md text-muted-foreground">{subtitle}</p>
-          )}
+          ) : null}
         </div>
 
         <div className="ml-auto flex items-center gap-2">
           <SearchButton onClick={() => setSearchOpen(true)} />
-
           <SearchDialog
             open={searchOpen}
             onOpenChange={setSearchOpen}
@@ -88,7 +95,6 @@ export function AppHeader({
               console.log("search:", q);
             }}
           />
-
           <NotificationBell
             items={items}
             open={openNotification}
@@ -99,7 +105,6 @@ export function AppHeader({
             sideOffset={8}
             collisionPadding={8}
           />
-
           <Button
             onClick={onAddClick}
             variant="primary"
@@ -124,7 +129,6 @@ export function AppHeader({
             block
             equal
           />
-
           <CurrencySelect value={currency} onChange={setCurrency} />
         </div>
       </div>
