@@ -10,11 +10,11 @@ export const buttonVariants = cva(
         primary:
           "bg-brand text-brand-foreground hover:bg-brand-600 active:bg-brand-700",
         secondary:
-          "bg-surface text-foreground border border-border hover:bg-surface/80 active:bg-surface/70",
+          "bg-surface text-foreground border border-border hover:bg-foreground/2 active:bg-foreground/2",
         outline:
-          "bg-transparent text-foreground border border-border hover:bg-surface active:bg-surface/80",
+          "bg-transparent text-foreground border border-border hover:bg-foreground/2 active:bg-foreground/2",
         ghost:
-          "bg-transparent text-foreground hover:bg-surface active:bg-surface/80",
+          "bg-transparent text-foreground active:bg-surface/80",
         link: "bg-transparent text-brand underline underline-offset-4 hover:text-brand-600 active:text-brand-700",
         destructive: "bg-error text-white hover:bg-error/90 active:bg-error/95",
         success:
