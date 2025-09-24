@@ -100,7 +100,6 @@ export function LatestTransactionsCard({
           <span className="inline-flex rounded-lg overflow-hidden">
             <Skeleton loading={loading}>
               <TxFilterButton value={filter} onChange={onFilterChange} />
-              ёё
             </Skeleton>
           </span>
 

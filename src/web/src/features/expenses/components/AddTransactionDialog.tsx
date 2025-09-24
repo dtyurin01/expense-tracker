@@ -27,7 +27,7 @@ type Props = {
   categories: ReadonlyArray<Category> | (() => ReadonlyArray<Category>);
 };
 
-export default function AddExpenseDialog(props: Props) {
+export default function AddTransactionDialog(props: Props) {
   const { open, onOpenChange, onCreate, categories } = props;
 
   const categoriesRef = React.useRef<ReadonlyArray<Category>>(

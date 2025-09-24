@@ -1,11 +1,12 @@
-import { FiHome, FiPieChart, FiCreditCard, FiSettings } from "react-icons/fi";
+import { FiPieChart, FiCreditCard, FiSettings } from "react-icons/fi";
+import { RiDashboardHorizontalLine } from "react-icons/ri";
 import { NavItem } from "@/types/nav";
 
 export const navItems: NavItem[] = [
   {
     label: "Dashboard",
     href: "/dashboard",
-    icon: FiHome,
+    icon: RiDashboardHorizontalLine,
     section: "Main",
   },
   {
@@ -15,8 +16,8 @@ export const navItems: NavItem[] = [
     section: "Main",
   },
   {
-    label: "Payments",
-    href: "/payments",
+    label: "Accounts",
+    href: "/accounts",
     icon: FiCreditCard,
     section: "Main",
   },
@@ -27,5 +28,3 @@ export const navItems: NavItem[] = [
     section: "Other",
   },
 ];
-
-

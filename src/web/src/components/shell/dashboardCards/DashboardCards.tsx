@@ -9,20 +9,22 @@ import {
   LatestTransactionsCard,
 } from "@/components/shell/dashboardCards";
 import { Period } from "@/schemas/period";
-import { getDashboardMock } from "@/mocks/dashboard";
+import { DashboardResponse, getDashboardMock } from "@/mocks/dashboard";
 import { AreaChart } from "@/features/charts/components/AreaChart";
 import { BarChartIE } from "@/features/charts/components/BarChartIE";
 import { ReceiptsDonut } from "@/features/charts/components/ReceiptsDonut";
 import { CategoriesDonut } from "@/features/charts/components/CategoriesDonut";
 import { TxFilter } from "@/types/transactionFilter";
 import { TransactionsTable } from "@/features/transactions/components/TransactionsTable";
+import { hasAnyData } from "@/lib/hasAnyData";
+import DashboardEmpty from "@/components/empty/EmptyDashboard";
 
 export default function DashboardCards() {
   // single period state to sync all cards
   const [period, setPeriod] = React.useState<Period | undefined>(undefined);
   const [filter, setFilter] = React.useState<TxFilter>("all");
 
-  const resp = React.useMemo(
+  const resp = React.useMemo<DashboardResponse>(
     () =>
       getDashboardMock(period, {
         topCategories: 10,
@@ -31,6 +33,10 @@ export default function DashboardCards() {
       }),
     [period]
   );
+
+  if (!resp || !hasAnyData(resp)) {
+    return <DashboardEmpty />;
+  }
 
   return (
     <div className="h-full grid grid-cols-12 gap-3 auto-rows-[minmax(0,1fr)]">
