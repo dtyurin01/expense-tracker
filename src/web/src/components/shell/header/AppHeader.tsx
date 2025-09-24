@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { FiPlus } from "react-icons/fi";
+import { FiPlusCircle } from "react-icons/fi";
 import { cn } from "@/lib/cn";
 import { NotificationBell } from "@/features/notifications/NotificationBell";
 import { NotificationItem } from "@/types/notificationItem";
@@ -110,9 +110,9 @@ export function AppHeader({
             variant="primary"
             size="md"
             radius="lg"
-            leftIcon={<FiPlus aria-hidden />}
+            leftIcon={<FiPlusCircle aria-hidden />}
           >
-            Add expense
+            Add transaction
           </Button>
         </div>
       </div>
