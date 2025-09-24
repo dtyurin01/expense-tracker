@@ -76,7 +76,7 @@ export function NotificationBell({
           <span className="relative grid place-items-center">
             <FiBell className="size-5" aria-hidden />
 
-            {!unreadLoading && unreadCount === 0 ? (
+            {!unreadLoading && unreadCount !== 0 ? (
               <span
                 aria-hidden
                 className="absolute right-0 top-0 size-2 rounded-full bg-error"

@@ -12,9 +12,13 @@ import { UserCard } from "@/components/shell/cards/UserCard";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Button } from "@/components/ui";
 
-export default function AppSidebar() {
+interface Props {
+  mdOpen: boolean;
+  setMdOpen: (open: boolean) => void;
+}
+
+export default function AppSidebar({ mdOpen, setMdOpen }: Props) {
   const pathname = usePathname();
-  const [mdOpen, setMdOpen] = React.useState(true);
 
   return (
     <>
@@ -35,8 +39,8 @@ export default function AppSidebar() {
 
       <aside
         className={cn(
-          "sticky top-2 self-stretch w-20 lg:w-[318px] z-1",
-          "transition-transform duration-200 ease-out will-change-transform",
+          "sticky top-2 self-stretch w-20 lg:w-[318px] z-10",
+          "transition-transform duration-200 ease-out will-change-transform md:h-[calc(100vh-1rem)]",
           !mdOpen && "md:-translate-x-[calc(100%+0.5rem)] lg:translate-x-0"
         )}
       >
