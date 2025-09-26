@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Chart } from "chart.js/auto"; 
-import type { Chart as ChartJS, ChartDataset, LegendItem } from "chart.js";
+import type { Chart as ChartJS, LegendItem } from "chart.js";
 import { ChartCanvas } from "@/features/charts/ChartCanvas";
 import { formatMoney } from "@/lib/format";
 import type { CurrencyCode } from "@/lib/currencies";
@@ -40,10 +40,8 @@ export function CategoriesDonut({
   const onReady = React.useCallback(
     (_ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
       const generateLabels = (chart: ChartJS<"doughnut">): LegendItem[] => {
-        const ds = chart.data.datasets[0] as ChartDataset<"doughnut", number[]>;
-        const bg = ds.backgroundColor as
-          | Array<string | CanvasGradient | CanvasPattern>
-          | undefined;
+        const ds = chart.data.datasets[0];
+        const bg = ds.backgroundColor;
 
         return (chart.data.labels ?? []).map((lbl, i) => {
           const text = `${String(lbl)} ${formatMoney(
@@ -59,7 +57,7 @@ export function CategoriesDonut({
             fontColor: areaColors.text,
             hidden: !chart.getDataVisibility(i),
             index: i,
-          } as LegendItem;
+          } ;
         });
       };
 
@@ -76,7 +74,7 @@ export function CategoriesDonut({
             spacing: 1,
             hoverOffset: 6,
             hoverBorderWidth: 0,
-          } satisfies ChartDataset<"doughnut", number[]>,
+          },
         ],
         options: {
           responsive: true,
