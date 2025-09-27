@@ -17,6 +17,8 @@ export default function DashboardEmpty() {
         icon={<FiPieChart className="size-6" aria-hidden />}
         title="No data yet"
         description="Add your first transaction or connect a card — we’ll generate charts for income/expenses, categories, and receipts."
+        variant="hero"
+        align="center"
         actions={
           <>
             <Button
@@ -42,7 +44,7 @@ export default function DashboardEmpty() {
           return (
             <li
               key={i}
-              className="group rounded-xl border border-border bg-surface/50 p-4 transition-colors  hover:bg-foreground/1.5 active:bg-foreground/2focus-within:ring-2 focus-within:ring-brand/40"
+              className="group rounded-xl border border-border bg-surface/50 p-4 transition-colors  hover:bg-foreground/1.5 active:bg-foreground/2 focus-within:ring-2 focus-within:ring-brand/40"
             >
               <div className="flex items-start gap-3">
                 <span className="mt-0.5 inline-grid size-7 place-items-center rounded-lg bg-brand/15 text-brand">
