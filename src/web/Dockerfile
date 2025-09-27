@@ -11,7 +11,6 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
-# убрать dev зависимости после сборки
 RUN npm prune --omit=dev
 
 FROM node:20-alpine AS runner
@@ -21,10 +20,8 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
-# безопасный пользователь
 RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
 
-# только нужные артефакты
 COPY --from=build /app/public ./public
 COPY --from=build /app/package*.json ./
 COPY --from=build /app/node_modules ./node_modules
