@@ -15,6 +15,7 @@ import { FiArrowUpRight, FiPlusCircle, FiTrendingUp } from "react-icons/fi";
 import Link from "next/link";
 import { Skeleton } from "@radix-ui/themes";
 import { EmptyState } from "@/components/empty/EmptyState";
+import { useModal } from "@/features/expenses/hooks/useModal";
 
 export type IncomeExpensesCardProps = {
   title?: string;
@@ -45,6 +46,8 @@ export function IncomeExpensesCard({
   loading = false,
   hasSeries = false,
 }: IncomeExpensesCardProps) {
+  const { open } = useModal();
+
   if (!hasSeries && !loading) {
     return (
       <EmptyState
