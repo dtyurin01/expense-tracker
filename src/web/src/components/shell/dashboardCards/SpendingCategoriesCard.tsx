@@ -10,12 +10,14 @@ import {
 } from "@/components/ui/card/Card";
 import { Button } from "@/components/ui/button/Button";
 import { KebabMenu } from "@/components/ui/menu/KebabMenu";
-import { FiArrowUpRight } from "react-icons/fi";
+import { FiArrowUpRight, FiPlusCircle, FiTag } from "react-icons/fi";
 import type { MenuItem } from "@/components/ui/menu/menu.types";
 import { Period } from "@/schemas/period";
 import { DateRangeButton } from "@/components/ui/date/DateRangeButton";
 import Link from "next/link";
 import { Skeleton } from "@radix-ui/themes";
+import { useModal } from "@/features/expenses/hooks/useModal";
+import { EmptyState } from "@/components/empty/EmptyState";
 
 export type SpendingCategoriesCardProps = {
   title?: string;
@@ -28,6 +30,8 @@ export type SpendingCategoriesCardProps = {
   onPeriodChange?: (v: Period) => void;
   periodLabel?: string;
   loading?: boolean;
+  anyTx?: boolean;
+  hasCategories?: boolean;
 };
 
 export function SpendingCategoriesCard({
@@ -35,12 +39,53 @@ export function SpendingCategoriesCard({
   chart,
   footnote = "Top: Groceries, Transport",
   menuItems = [{ label: "Manage", onSelect: () => {} }],
-  className = "",
+  className,
   period,
   onPeriodChange,
   periodLabel = "Period",
   loading = false,
+  anyTx = false,
+  hasCategories = false,
 }: SpendingCategoriesCardProps) {
+  const { open } = useModal();
+
+  if (!hasCategories && !loading) {
+    return (
+      <EmptyState
+        icon={<FiTag className="size-5" aria-hidden />}
+        className="col-span-4"
+        title={anyTx ? "No categorized spending yet" : "No data yet"}
+        description={
+          anyTx
+            ? "Your transactions don’t have categories yet. Categorize them to see the breakdown."
+            : "Add your first transaction to see spending by categories."
+        }
+        actions={
+          anyTx ? (
+            <>
+              <Button
+                leftIcon={<FiPlusCircle />}
+                onClick={() => open("add-transaction")}
+              >
+                Add transaction
+              </Button>
+              <Button asChild size="md" variant="outline">
+                <Link href="/settings/categories">Manage categories</Link>
+              </Button>
+            </>
+          ) : (
+            <Button
+              leftIcon={<FiPlusCircle />}
+              onClick={() => open("add-transaction")}
+            >
+              Add transaction
+            </Button>
+          )
+        }
+      />
+    );
+  }
+
   return (
     <Card
       className={`h-full flex flex-col ${className}`}

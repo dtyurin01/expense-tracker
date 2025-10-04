@@ -11,9 +11,11 @@ import {
 import { DateRangeButton } from "@/components/ui/date/DateRangeButton";
 import type { Period } from "@/schemas/period";
 import { Button } from "@/components/ui";
-import { FiArrowUpRight } from "react-icons/fi";
+import { FiArrowUpRight, FiPlusCircle, FiTrendingUp } from "react-icons/fi";
 import Link from "next/link";
 import { Skeleton } from "@radix-ui/themes";
+import { EmptyState } from "@/components/empty/EmptyState";
+import { useModal } from "@/features/expenses/hooks/useModal";
 
 export type IncomeExpensesCardProps = {
   title?: string;
@@ -28,6 +30,8 @@ export type IncomeExpensesCardProps = {
   className?: string;
 
   loading?: boolean;
+
+  hasSeries?: boolean;
 };
 
 export function IncomeExpensesCard({
@@ -40,7 +44,29 @@ export function IncomeExpensesCard({
   periodLabel = "Period",
   className = "",
   loading = false,
+  hasSeries = false,
 }: IncomeExpensesCardProps) {
+  const { open } = useModal();
+
+  if (!hasSeries && !loading) {
+    return (
+      <EmptyState
+        icon={<FiTrendingUp className="size-5" aria-hidden />}
+        className="col-span-4"
+        title="No income & expense data yet"
+        description="Add your first transaction to start building your timeline."
+        actions={
+          <Button
+            leftIcon={<FiPlusCircle />}
+            onClick={() => open("add-transaction")}
+          >
+            Add transaction
+          </Button>
+        }
+      />
+    );
+  }
+
   return (
     <Card
       className={`h-full flex flex-col ${className}`}

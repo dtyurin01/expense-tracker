@@ -106,3 +106,8 @@ export function hasReceipts(resp: DashboardResponse): boolean {
     return false;
   }
 }
+
+export function hasSeries(resp: DashboardResponse): boolean {
+  return (resp.incomeExpenses?.length ?? 0) > 0;
+}
+

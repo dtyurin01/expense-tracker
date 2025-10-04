@@ -19,8 +19,14 @@ const checkboxVariants = cva(
         md: "size-5 rounded-[6px]",
         lg: "size-6 rounded-[6px]",
       },
+      variant: {
+        outline:
+          "border-border data-[state=checked]:border-brand data-[state=checked]:text-brand",
+        solid:
+          "border-border data-[state=checked]:border-brand data-[state=checked]:bg-brand data-[state=checked]:text-brand-foreground",
+      },
     },
-    defaultVariants: { size: "md" },
+    defaultVariants: { size: "md", variant: "outline" },
   }
 );
 
@@ -40,11 +46,11 @@ export interface CheckboxProps
 export const Checkbox = React.forwardRef<
   React.ComponentRef<typeof CheckboxPrimitive.Root>,
   CheckboxProps
->(({ className, size, ...props }, ref) => {
+>(({ className, size, variant = "outline", ...props }, ref) => {
   return (
     <CheckboxPrimitive.Root
       ref={ref}
-      className={cn(checkboxVariants({ size }), className)}
+      className={cn(checkboxVariants({ size, variant }), className)}
       {...props}
     >
       <CheckboxPrimitive.Indicator asChild>

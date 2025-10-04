@@ -16,7 +16,13 @@ import { ReceiptsDonut } from "@/features/charts/components/ReceiptsDonut";
 import { CategoriesDonut } from "@/features/charts/components/CategoriesDonut";
 import { TxFilter } from "@/types/transactionFilter";
 import { TransactionsTable } from "@/features/transactions/components/TransactionsTable";
-import { hasAnyData } from "@/lib/hasAnyData";
+import {
+  hasAnyData,
+  hasAnyTx,
+  hasCategories,
+  hasSeries,
+  hasTimeseries,
+} from "@/lib/hasAnyData";
 import DashboardEmpty from "@/components/empty/EmptyDashboard";
 
 export default function DashboardCards() {
@@ -51,6 +57,8 @@ export default function DashboardCards() {
           { label: "Export", onSelect: () => console.log("Export TB") },
         ]}
         chart={<AreaChart data={resp.totalBalance} currency={resp.currency} />}
+        anyTx={hasAnyTx(resp)}
+        hasTimeseries={hasTimeseries(resp)}
       />
 
       <IncomeExpensesCard
@@ -60,6 +68,7 @@ export default function DashboardCards() {
         chart={
           <BarChartIE data={resp.incomeExpenses} currency={resp.currency} />
         }
+        hasSeries={hasSeries(resp)}
       />
 
       <ReceiptsSplitSummaryCard
@@ -72,6 +81,8 @@ export default function DashboardCards() {
         donut={
           <ReceiptsDonut data={resp.receiptsSplit} currency={resp.currency} />
         }
+        anyTx={hasAnyTx(resp)}
+        hasReceipts={hasSeries(resp)}
       />
 
       <SpendingCategoriesCard
@@ -90,6 +101,8 @@ export default function DashboardCards() {
             cutout="60%"
           />
         }
+        anyTx={hasAnyTx(resp)}
+        hasCategories={hasCategories(resp)}
       />
 
       <LatestTransactionsCard

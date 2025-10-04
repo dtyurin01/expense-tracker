@@ -10,12 +10,14 @@ import {
 } from "@/components/ui/card/Card";
 import { Button } from "@/components/ui/button/Button";
 import { KebabMenu } from "@/components/ui/menu/KebabMenu";
-import { FiArrowUpRight } from "react-icons/fi";
+import { FiArrowUpRight, FiFileText, FiPlusCircle } from "react-icons/fi";
 import type { MenuItem } from "@/components/ui/menu/menu.types";
 import { Period } from "@/schemas/period";
 import { DateRangeButton } from "@/components/ui/date/DateRangeButton";
 import Link from "next/link";
 import { Skeleton } from "@radix-ui/themes";
+import { EmptyState } from "@/components/empty/EmptyState";
+import { useModal } from "@/features/expenses/hooks/useModal";
 
 export type ReceiptsSplitSummaryCardProps = {
   title?: string;
@@ -30,6 +32,9 @@ export type ReceiptsSplitSummaryCardProps = {
   periodLabel?: string;
 
   loading?: boolean;
+
+  hasReceipts?: boolean;
+  anyTx?: boolean;
 };
 
 export function ReceiptsSplitSummaryCard({
@@ -37,12 +42,39 @@ export function ReceiptsSplitSummaryCard({
   donut,
   summaryText = "Food $1,600 · Non-food $1,400",
   menuItems = [{ label: "Open", onSelect: () => {} }],
-  className = "",
+  className,
   period,
   onPeriodChange,
   periodLabel = "Period",
   loading = false,
+  anyTx = false,
+  hasReceipts = false,
 }: ReceiptsSplitSummaryCardProps) {
+  const { open } = useModal();
+
+  if (!hasReceipts && !loading) {
+    return (
+      <EmptyState
+        icon={<FiFileText className="size-5" aria-hidden />}
+        className="col-span-4"
+        title={anyTx ? "Not enough data for receipts" : "No data yet"}
+        description={
+          anyTx
+            ? "Attach/categorize items on receipts. You need at least two non-zero groups to see the split."
+            : "Add your first transaction to start building your receipts split."
+        }
+        actions={
+          <Button
+            leftIcon={<FiPlusCircle />}
+            onClick={() => open("add-transaction")}
+          >
+            Add transaction
+          </Button>
+        }
+      />
+    );
+  }
+
   return (
     <Card
       className={`h-full flex flex-col ${className}`}

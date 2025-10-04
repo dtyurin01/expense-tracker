@@ -12,12 +12,14 @@ import {
 } from "@/components/ui/card/Card";
 import { Button } from "@/components/ui/button/Button";
 import { KebabMenu } from "@/components/ui/menu/KebabMenu";
-import { FiArrowUpRight } from "react-icons/fi";
+import { FiArrowUpRight, FiPlusCircle, FiTrendingUp } from "react-icons/fi";
 import { DateRangeButton } from "@/components/ui/date/DateRangeButton";
 import type { Period } from "@/schemas/period";
 import type { MenuItem } from "@/components/ui/menu/menu.types";
 import Link from "next/link";
 import { Skeleton } from "@radix-ui/themes";
+import { EmptyState } from "@/components/empty/EmptyState";
+import { useModal } from "@/features/expenses/hooks/useModal";
 
 export type TotalBalanceCardProps = {
   title?: string;
@@ -35,6 +37,9 @@ export type TotalBalanceCardProps = {
   className?: string;
 
   loading?: boolean;
+
+  anyTx?: boolean;
+  hasTimeseries?: boolean;
 };
 
 export function TotalBalanceCard({
@@ -53,7 +58,33 @@ export function TotalBalanceCard({
   ],
   className = "",
   loading = false,
+  anyTx = false,
+  hasTimeseries = false,
 }: TotalBalanceCardProps) {
+  const { open } = useModal();
+
+  if (!hasTimeseries && !loading) {
+    return (
+      <EmptyState
+        icon={<FiTrendingUp className="size-5" aria-hidden />}
+        className="col-span-4"
+        title={anyTx ? "No data for selected period" : "No data yet"}
+        description={
+          anyTx
+            ? "Try expanding the date range or add more transactions to build your balance timeline."
+            : "Add your first transaction to start your balance timeline."
+        }
+        actions={
+          <Button
+            leftIcon={<FiPlusCircle />}
+            onClick={() => open("add-transaction")}
+          >
+            Add transaction
+          </Button>
+        }
+      />
+    );
+  }
   return (
     <Card className={`h-full flex flex-col ${className}`} aria-busy={loading}>
       <CardHeader>
