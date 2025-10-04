@@ -5,17 +5,22 @@ import { initChartDefaultsFromCSS } from "@/features/charts/utils/chartKit";
 
 let __chartDefaultsInited = false;
 
-export function ChartCanvas({
-  onReady,
-  className,
-}: {
+type ChartCanvasProps = {
   onReady?: (
     ctx: CanvasRenderingContext2D,
     el: HTMLCanvasElement
   ) => void | (() => void);
   className?: string;
-}) {
-  const ref = React.useRef<HTMLCanvasElement>(null);
+  height?: number | string;
+};
+
+export function ChartCanvas({
+  onReady,
+  className,
+  height = 310,
+}: ChartCanvasProps) {
+  const wrapRef = React.useRef<HTMLDivElement>(null);
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const disposeRef = React.useRef<VoidFunction | null>(null);
 
   React.useEffect(() => {
@@ -26,7 +31,7 @@ export function ChartCanvas({
   }, []);
 
   React.useEffect(() => {
-    const el = ref.current;
+    const el = canvasRef.current;
     if (!el || !onReady) return;
     const ctx = el.getContext("2d");
     if (!ctx) return;
@@ -35,11 +40,27 @@ export function ChartCanvas({
     const d = onReady(ctx, el);
     disposeRef.current = typeof d === "function" ? d : null;
 
+    const ro = new ResizeObserver(() => {
+      window.dispatchEvent(new Event("resize"));
+    });
+
+    if (wrapRef.current) ro.observe(wrapRef.current);
+
     return () => {
+      ro.disconnect();
       disposeRef.current?.();
       disposeRef.current = null;
     };
   }, [onReady]);
 
-  return <canvas ref={ref} className={className} />;
+  const style = {
+    width: "100%",
+    height: typeof height === "number" ? `${height}px` : height,
+  };
+
+  return (
+    <div ref={wrapRef} className={className} style={style}>
+      <canvas ref={canvasRef} className="block w-full h-full" />
+    </div>
+  );
 }

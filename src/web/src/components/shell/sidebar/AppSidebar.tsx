@@ -11,6 +11,7 @@ import { UpgradeCard } from "@/components/shell/cards/UpgradeCard";
 import { UserCard } from "@/components/shell/cards/UserCard";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Button } from "@/components/ui";
+import Image from "next/image";
 
 interface Props {
   mdOpen: boolean;
@@ -59,8 +60,15 @@ export default function AppSidebar({ mdOpen, setMdOpen }: Props) {
           </Button>
 
           <div className="mb-3 lg:mb-4 flex w-full items-center gap-2 justify-start md:justify-center px-2 lg:justify-start">
-            <div className="relative size-8 rounded-xl overflow-hidden shrink-0">
-              <div className="absolute inset-0 bg-gradient-to-br from-brand-300 to-brand-700" />
+            <div className="relative size-8 shrink-0">
+              <Image
+                src="/PocketPulseLogo.svg"
+                alt="PocketPulse"
+                width={40}
+                height={40}
+                className="rounded-xl"
+                priority
+              />
             </div>
             <span className="hidden lg:inline text-h5 font-semibold">
               PocketPulse

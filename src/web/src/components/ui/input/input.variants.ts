@@ -25,10 +25,11 @@ export const inputWrapper = cva(
 
 export const inputField = cva(
   // base
-  "bg-surface text-foreground placeholder:text-muted-foreground/70 " +
+  "bg-surface !text-foreground placeholder:text-muted-foreground/70 " +
     "border border-border focus:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 " +
     "transition-colors [&::-ms-reveal]:hidden " + // hide eye on Edge password
     "disabled:bg-surface disabled:opacity-70",
+    
   {
     variants: {
       size: {

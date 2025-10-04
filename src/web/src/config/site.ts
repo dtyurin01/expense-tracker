@@ -21,8 +21,8 @@ export const siteConfig: SiteConfig = {
 
   ogImage: "/og.png",
   icons: {
-    icon: "/favicon.ico", // can be .ico or .svg
-    shortcut: "/favicon-32x32.png",
+    icon: "/favicon.svg",
+    shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
 
