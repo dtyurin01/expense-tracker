@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { NotificationBell } from "./NotificationBell";
-import type { NotificationItem } from "@/types/notification";
+import type { NotificationItem } from "@/types/notificationItem";
 
 const demo: NotificationItem[] = [
   {
