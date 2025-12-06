@@ -4,7 +4,7 @@ namespace Api.Infrastucture.Web;
 
 public sealed class ValidateFilter<T> : IEndpointFilter where T : class
 {
-    public async ValueTask<object> InvokeAsync(EndpointFilterInvocationContext ctx, EndpointFilterDelegate next)
+    public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext ctx, EndpointFilterDelegate next)
     {
         var model = ctx.Arguments.FirstOrDefault(a => a is T) as T;
         if (model is not null)

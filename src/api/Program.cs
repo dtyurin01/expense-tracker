@@ -24,7 +24,7 @@ var app = builder.Build();
 await app.InitializeDatabaseAsync();
 
 // Middleware - Pipeline
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();

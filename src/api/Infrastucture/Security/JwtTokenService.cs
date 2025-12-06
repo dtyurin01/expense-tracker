@@ -1,8 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
 using Api.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Api.Infrastucture.Security;
 
@@ -23,9 +23,14 @@ public sealed class JwtTokenService
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new(ClaimTypes.Name, user.UserName ?? user.Email ?? user.Id.ToString()),
-            new("ss", securityStamp)
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // Unique ID for the token
+            new("ss", securityStamp),
         };
+
+        if (!string.IsNullOrWhiteSpace(user.UserName))
+        {
+            claims.Add(new Claim(JwtRegisteredClaimNames.Name, user.UserName));
+        }
 
         if (!string.IsNullOrWhiteSpace(user.Email))
         {
@@ -35,7 +40,8 @@ public sealed class JwtTokenService
         claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
         var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);
-        var expires = DateTime.UtcNow.AddMinutes(int.Parse(_cfg["Jwt:ExpireMinutes"] ?? "60"));
+        var expireMinutes = _cfg.GetValue<int>("Jwt:ExpireMinutes", 60);
+        var expires = DateTime.UtcNow.AddMinutes(expireMinutes);
 
         var token = new JwtSecurityToken(
             issuer: _cfg["Jwt:Issuer"],

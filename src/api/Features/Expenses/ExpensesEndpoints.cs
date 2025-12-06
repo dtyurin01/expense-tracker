@@ -3,6 +3,7 @@ using Api.Contracts;
 using Api.Data;
 using Api.Infrastucture.Web;
 using Api.Models;
+using Api.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;    
 
@@ -16,47 +17,52 @@ public static class ExpensesEndpoints
         var g = app.MapGroup("expenses").RequireAuthorization();
 
         // GET /api/expenses
-        g.MapGet("/", async (AppDbContext db, UserManager<ApplicationUser> users, HttpContext http) =>
+        g.MapGet("/", async (AppDbContext db, HttpContext http, CancellationToken ct) =>
         {
 
-            var me = await users.GetUserAsync(http.User);
-            if (me is null) return Results.Unauthorized();
+            var userId = http.User.GetUserId();
+
             var rows = await db.Expenses
-                .Where(e => e.UserId == me.Id)
+                .Where(e => e.UserId == userId)
                 .OrderByDescending(e => e.OccurredAt)
                 .Select(e => new ExpenseDto(e.Id, e.CategoryId, e.Category.Name, e.Amount, e.Note, e.OccurredAt))
-                .ToListAsync();
+                .ToListAsync(ct);
+
             return Results.Ok(rows);
         });
 
         // GET /api/expenses/{id}
 
-        g.MapGet("/{id:guid}", async (Guid id, AppDbContext db, UserManager<ApplicationUser> users, HttpContext http) =>
+        g.MapGet("/{id:guid}", async (Guid id, AppDbContext db, HttpContext http, CancellationToken ct) =>
             {
-                var me = await users.GetUserAsync(http.User);
-                if (me is null) return Results.Unauthorized();
+                var userId = http.User.GetUserId();
 
                 var dto = await db.Expenses
-                    .Where(x => x.Id == id && x.UserId == me.Id)
+                    .Where(x => x.Id == id && x.UserId == userId)
                     .Select(x => new ExpenseDto(x.Id, x.CategoryId, x.Category.Name, x.Amount, x.Note, x.OccurredAt))
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(ct);
 
                 return dto is null ? Results.NotFound() : Results.Ok(dto);
+
             }).WithName("GetExpenseById");
 
         // POST /api/expenses
-        g.MapPost("/", async (CreateExpenseDto dto, AppDbContext db, UserManager<ApplicationUser> users, HttpContext http) =>
-        {
-            var me = await users.GetUserAsync(http.User);
-            if (me is null) return Results.Unauthorized();
 
-            var catOk = await db.Categories.AnyAsync(c => c.Id == dto.CategoryId && c.UserId == me.Id);
-            if (!catOk) return Results.BadRequest(new { error = "Invalid category" });
+        g.MapPost("/", async (CreateExpenseDto dto, AppDbContext db, HttpContext http, CancellationToken ct) =>
+        {
+            var userId = http.User.GetUserId();
+
+            var catOk = await db.IsCategoryValidForUserAsync(dto.CategoryId, userId, ct);
+
+            if (!catOk)
+            {
+                return Results.BadRequest(new { error = "Invalid category" });
+            }
 
             var entity = new Expense
             {
                 Id = Guid.NewGuid(),
-                UserId = me.Id,
+                UserId = userId,
                 CategoryId = dto.CategoryId,
                 Amount = decimal.Round(dto.Amount, 2),
                 Note = string.IsNullOrWhiteSpace(dto.Note) ? null : dto.Note.Trim(),
@@ -64,48 +70,60 @@ public static class ExpensesEndpoints
             };
 
             db.Expenses.Add(entity);
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync(ct);
 
-            var catName = await db.Categories.Where(c => c.Id == entity.CategoryId).Select(c => c.Name).FirstAsync();
+            var catName = await db.Categories
+                .Where(c => c.Id == entity.CategoryId)
+                .Select(c => c.Name)
+                .FirstAsync(ct);
+
             var result = new ExpenseDto(entity.Id, entity.CategoryId, catName, entity.Amount, entity.Note, entity.OccurredAt);
             return Results.CreatedAtRoute("GetExpenseById", new { id = entity.Id }, result);
 
         }).AddEndpointFilter<ValidateFilter<CreateExpenseDto>>();
+
         // PUT /api/expenses/{id}
-        g.MapPut("/{id:guid}", async (Guid id, UpdateExpenseDto dto, AppDbContext db, UserManager<ApplicationUser> users, HttpContext http) =>
+        g.MapPut("/{id:guid}", async (Guid id, UpdateExpenseDto dto, AppDbContext db, HttpContext http, CancellationToken ct) =>
+        {
+            var userId = http.User.GetUserId();
+
+            var entity = await db.Expenses.FirstOrDefaultAsync(e => e.Id == id && e.UserId == userId, ct);
+            if (entity is null) 
+            { 
+                return Results.NotFound(); 
+            }
+
+            var catOk = await db.IsCategoryValidForUserAsync(dto.CategoryId, userId, ct);
+            if (!catOk)
             {
-                var me = await users.GetUserAsync(http.User);
-                if (me is null) return Results.Unauthorized();
+                return Results.BadRequest(new { error = "Invalid category" });
+            }   
 
-                var entity = await db.Expenses.FirstOrDefaultAsync(e => e.Id == id && e.UserId == me.Id);
-                if (entity is null) return Results.NotFound();
+            entity.CategoryId = dto.CategoryId;
+            entity.Amount = decimal.Round(dto.Amount, 2);
+            entity.Note = string.IsNullOrWhiteSpace(dto.Note) ? null : dto.Note.Trim();
+            entity.OccurredAt = DateTime.SpecifyKind(dto.OccurredAt, DateTimeKind.Utc);
 
-                var catOk = await db.Categories.AnyAsync(c => c.Id == dto.CategoryId && c.UserId == me.Id);
-                if (!catOk) return Results.BadRequest(new { error = "Invalid category" });
-
-                entity.CategoryId = dto.CategoryId;
-                entity.Amount = decimal.Round(dto.Amount, 2);
-                entity.Note = string.IsNullOrWhiteSpace(dto.Note) ? null : dto.Note.Trim();
-                entity.OccurredAt = DateTime.SpecifyKind(dto.OccurredAt, DateTimeKind.Utc);
-
-                await db.SaveChangesAsync();
-                return Results.NoContent();
-            })
-            .AddEndpointFilter<ValidateFilter<UpdateExpenseDto>>();
+            await db.SaveChangesAsync(ct);
+            return Results.NoContent();
+        }).AddEndpointFilter<ValidateFilter<UpdateExpenseDto>>();
 
         // DELETE /api/expenses/{id}
-        g.MapDelete("/{id:guid}", async (Guid id, AppDbContext db, UserManager<ApplicationUser> users, HttpContext http) =>
+        g.MapDelete("/{id:guid}", async (Guid id, AppDbContext db, HttpContext http, CancellationToken ct) =>
+        {
+            var userId = http.User.GetUserId();
+
+            var affectedRows = await db.Expenses
+                    .Where(e => e.Id == id && e.UserId == userId)
+                    .ExecuteDeleteAsync(ct);
+
+            if (affectedRows == 0)
             {
-                var me = await users.GetUserAsync(http.User);
-                if (me is null) return Results.Unauthorized();
+                return Results.NotFound();
+            }
 
-                var entity = await db.Expenses.FirstOrDefaultAsync(e => e.Id == id && e.UserId == me.Id);
-                if (entity is null) return Results.NotFound();
-
-                db.Expenses.Remove(entity);
-                await db.SaveChangesAsync();
-                return Results.NoContent();
-            });
+            return Results.NoContent();
+        });
 
         return app;
     }
