@@ -7,7 +7,7 @@ export default function LoginPage() {
       title="Welcome back"
       subtitleText="Don’t have an account?"
       subtitleLinkText="Sign up"
-      subtitleLinkHref="/signup"
+      subtitleLinkHref="/register"
     >
       <LoginForm />
     </AuthLayout>

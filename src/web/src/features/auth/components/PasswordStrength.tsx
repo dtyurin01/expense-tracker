@@ -50,9 +50,9 @@ export function PasswordStrength({ password = "" }: PasswordStrengthProps) {
               <div
                 className={cn(
                   "size-4 rounded-full grid place-items-center shrink-0",
-                  isMet ? "bg-success text-white" : "bg-muted-foreground/50 "
+                  isMet ? "bg-success text-white" : "bg-muted-foreground/50"
                 )}
-                aria-hidden
+                aria-hidden={true}
               >
                 {isMet ? (
                   <FiCheck className="size-3" strokeWidth={3} />
