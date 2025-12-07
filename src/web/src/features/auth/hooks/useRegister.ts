@@ -32,11 +32,19 @@ export function useRegister() {
       // Если всё ок (204) — отправляем юзера логиниться
       // Можно добавить тут "toast" уведомление: "Account created! Please login."
       router.push("/login");
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Registration error:", error);
 
+      let errorMessage = "Registration failed. Please try again.";
+      // Optionally use API error message if available
+      if (error && typeof error === "object" && "response" in error) {
+        const axiosError = error as { response?: { data?: { message?: string } } };
+        if (axiosError?.response?.data?.message) {
+          errorMessage = axiosError.response.data.message;
+        }
+      }
       form.setError("root", {
-        message: "Registration failed. Please check your credentials.",
+        message: errorMessage,
       });
     }
   };

@@ -25,10 +25,24 @@ export function useLogin() {
       });
 
       router.replace("/dashboard");
-    } catch {
-      // DELETE ON PROD
+    } catch (error: unknown) {
+      // Log error for debugging (remove or replace with proper logging in production)
+      if (process.env.NODE_ENV !== "production") {
+        console.error("Login error:", error);
+      }
+      let message = "Login failed. Please check your credentials.";
+      if (error && typeof error === "object" && "response" in error) {
+        const axiosError = error as { response?: { status?: number }; message?: string };
+        if (axiosError?.response?.status === 401) {
+          message = "Invalid credentials. Please try again.";
+        } else if (axiosError?.response?.status === 500) {
+          message = "Server error - please try again later.";
+        } else if (axiosError?.message) {
+          message = axiosError.message;
+        }
+      }
       form.setError("root", {
-        message: "Login failed. Please check your credentials.",
+        message,
       });
     }
   };
