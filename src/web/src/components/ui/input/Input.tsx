@@ -36,7 +36,7 @@ export const Input = React.forwardRef<HTMLInputElement, BaseInputProps>(
       rightIcon,
       status = "default",
       size = "md",
-      radius = "lg",
+      radius = "md",
       block,
       label,
       hint,
@@ -56,7 +56,7 @@ export const Input = React.forwardRef<HTMLInputElement, BaseInputProps>(
         {label && (
           <label
             htmlFor={fieldId}
-            className="mb-1.5 block text-sm font-medium text-foreground"
+            className="mb-2 block text-sm font-medium text-foreground"
           >
             {label}
           </label>

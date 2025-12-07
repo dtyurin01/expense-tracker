@@ -28,8 +28,8 @@ public class DbSeeder(
             }
         }
 
-        var adminEmail = _cfg["Seed:AdminEmail"] ?? "admin@local";
-        var adminPwd = _cfg["Seed:AdminPassword"] ?? "admin";
+        var adminEmail = _cfg["Seed:AdminEmail"] ?? "admin@example.com";
+        var adminPwd = _cfg["Seed:AdminPassword"] ?? "admin3212##";
 
         var admin = await _users.FindByEmailAsync(adminEmail);
         if (admin is null)

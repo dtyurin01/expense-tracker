@@ -1,12 +1,15 @@
-import type { Metadata } from "next";
-//import LoginForm from "@/components/auth/LoginForm";
-// import { redirectIfAuthed } from "@/features/auth/redirectIfAuthed"; // opt
+import { AuthLayout } from "@/features/auth/components/AuthLayout";
+import { LoginForm } from "@/features/auth/components/LoginForm";
 
-export const metadata: Metadata = {
-  title: "Login — PocketPulse",
-};
-
-export default async function Page() {
-  // await redirectIfAuthed(); //if there is an endpoint, who will say "already logged in" by cookie
-  return "Login Page";
+export default function LoginPage() {
+  return (
+    <AuthLayout
+      title="Welcome back"
+      subtitleText="Don’t have an account?"
+      subtitleLinkText="Sign up"
+      subtitleLinkHref="/register"
+    >
+      <LoginForm />
+    </AuthLayout>
+  );
 }
