@@ -155,11 +155,6 @@ export const Sizes: Story = {
         aria-label="Settings"
         leftIcon={<FiSettings className="w-full h-full" />}
       />
-      <div style={{ ["--brand" as any]: "198 81% 67%" }}>
-        <Button>
-          <FiSettings className="w-full h-full" />
-        </Button>
-      </div>
     </div>
   ),
 };
