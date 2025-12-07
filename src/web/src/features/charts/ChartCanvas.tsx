@@ -17,7 +17,7 @@ type ChartCanvasProps = {
 export function ChartCanvas({
   onReady,
   className,
-  height = 310,
+  height = "95%",
 }: ChartCanvasProps) {
   const wrapRef = React.useRef<HTMLDivElement>(null);
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
