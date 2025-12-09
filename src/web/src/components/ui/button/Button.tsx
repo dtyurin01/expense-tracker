@@ -25,7 +25,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProps>(
       className,
       variant = "primary",
       size = "md",
-      radius = "lg",
+      radius = "md",
       block,
       asChild = false,
       isLoading = false,
@@ -98,7 +98,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProps>(
         ) : (
           <>
             {leftIcon && (
-              <span className={cn(iconSize, "inline-flex items-center")}>
+              <span className={cn(iconSize, "inline-flex items-center mr-1")}>
                 {leftIcon}
               </span>
             )}
