@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { api } from "@/lib/api";
+import { HTTPError } from "ky";
+import { api } from "@/lib/client";
 import { registerSchema, RegisterFormValues } from "../schemas/register.schema";
 
 export function useRegister() {
@@ -23,10 +24,12 @@ export function useRegister() {
 
   const onSubmit = async (values: RegisterFormValues) => {
     try {
-      await api.post("/auth/register", {
-        fullName: values.fullName,
-        email: values.email,
-        password: values.password,
+      await api.post("auth/register", {
+        json: {
+          fullName: values.fullName,
+          email: values.email,
+          password: values.password,
+        },
       });
 
       router.push("/login");
@@ -34,12 +37,21 @@ export function useRegister() {
       console.error("Registration error:", error);
 
       let errorMessage = "Registration failed. Please try again.";
-      if (error && typeof error === "object" && "response" in error) {
-        const axiosError = error as { response?: { data?: { message?: string } } };
-        if (axiosError?.response?.data?.message) {
-          errorMessage = axiosError.response.data.message;
+
+      if (error instanceof HTTPError) {
+        try {
+          const errorData = await error.response.json();
+
+          if (errorData.message) {
+            errorMessage = errorData.message;
+          } else if (Array.isArray(errorData) && errorData[0]?.description) {
+            errorMessage = errorData[0].description;
+          }
+        } catch {
+          errorMessage = error.message;
         }
       }
+
       form.setError("root", {
         message: errorMessage,
       });

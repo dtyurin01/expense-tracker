@@ -1,17 +1,12 @@
 "use client";
 
 import { FcGoogle } from "react-icons/fc";
-import { PiMicrosoftOutlookLogo } from "react-icons/pi";
 import { Button } from "@/components/ui/button/Button";
 
 export function SocialAuth() {
   const handleGoogleLogin = () => {
     // todo: implement Google OAuth flow
     console.log("Login with Google");
-  };
-
-  const handleOutlookLogin = () => {
-    console.log("Login with GitHub");
   };
 
   return (

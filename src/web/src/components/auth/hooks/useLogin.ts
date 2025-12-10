@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { api } from "@/lib/api";
+import { HTTPError } from "ky";
+import { api } from "@/lib/client";
 import { loginSchema, LoginFormValues } from "../schemas/login.schema";
 
 export function useLogin() {
@@ -18,29 +19,46 @@ export function useLogin() {
 
   const onSubmit = async (values: LoginFormValues) => {
     try {
-      await api.post("/auth/login", {
-        email: values.email,
-        password: values.password,
-        rememberMe: !!values.remember,
+      await api.post("auth/login", {
+        json: {
+          email: values.email,
+          password: values.password,
+          rememberMe: !!values.remember,
+        },
       });
 
       router.replace("/dashboard");
     } catch (error: unknown) {
-      // Log error for debugging (remove or replace with proper logging in production)
       if (process.env.NODE_ENV !== "production") {
         console.error("Login error:", error);
       }
+
       let message = "Login failed. Please check your credentials.";
-      if (error && typeof error === "object" && "response" in error) {
-        const axiosError = error as { response?: { status?: number }; message?: string };
-        if (axiosError?.response?.status === 401) {
+
+      if (error instanceof HTTPError) {
+        const status = error.response.status;
+
+        if (status === 401) {
           message = "Invalid credentials. Please try again.";
-        } else if (axiosError?.response?.status === 500) {
+        } else if (status === 500) {
           message = "Server error - please try again later.";
-        } else if (axiosError?.message) {
-          message = axiosError.message;
+        } else {
+          try {
+            type ErrorResponse = { message?: string; [key: string]: unknown };
+
+            const errorData =
+              (await error.response.json()) as ErrorResponse | null;
+            if (
+              errorData &&
+              typeof errorData.message === "string" &&
+              errorData.message
+            ) {
+              message = errorData.message;
+            }
+          } catch {}
         }
       }
+
       form.setError("root", {
         message,
       });

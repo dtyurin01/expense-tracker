@@ -59,7 +59,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProps>(
         </Slot>
       );
     }
-
+    
     const iconSize = iconSizeByButton[size!];
 
     return (
