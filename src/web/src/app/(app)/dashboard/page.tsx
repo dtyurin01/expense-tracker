@@ -1,5 +1,5 @@
-import AppShell from "@/components/shell/AppShell";
+import DashboardCards from "@/components/shell/dashboardCards/DashboardCards";
 
 export default function DashboardPage() {
-  return <AppShell />;
+  return <DashboardCards />;
 }

@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { HTTPError } from "ky";
 import { api } from "@/lib/client";
 import { registerSchema, RegisterFormValues } from "../schemas/register.schema";
+import { getErrorMessage } from "@/lib/getErrorMessage";
 
 export function useRegister() {
   const router = useRouter();
@@ -33,28 +33,12 @@ export function useRegister() {
       });
 
       router.push("/login");
-    } catch (error: unknown) {
-      console.error("Registration error:", error);
+    } catch (error) {
+      const message = await getErrorMessage(error);
 
-      let errorMessage = "Registration failed. Please try again.";
+      if (process.env.NODE_ENV !== "production") console.error(error);
 
-      if (error instanceof HTTPError) {
-        try {
-          const errorData = await error.response.json();
-
-          if (errorData.message) {
-            errorMessage = errorData.message;
-          } else if (Array.isArray(errorData) && errorData[0]?.description) {
-            errorMessage = errorData[0].description;
-          }
-        } catch {
-          errorMessage = error.message;
-        }
-      }
-
-      form.setError("root", {
-        message: errorMessage,
-      });
+      form.setError("root", { message });
     }
   };
 

@@ -2,19 +2,23 @@
 
 import { AppHeader } from "@/components/shell/header/AppHeader";
 import AppSidebar from "@/components/shell/sidebar/AppSidebar";
-
+import { usePathname } from "next/navigation";
 import AddTransactionDialog from "@/features/expenses/components/AddTransactionDialog";
 
 import type { ExpenseCreate } from "@/schemas/expense";
 import { useState } from "react";
 import { getBaseCategories } from "@/data/categories";
-import DashboardCards from "@/components/shell/dashboardCards/DashboardCards";
 import { cn } from "@/lib/cn";
 import { useModal } from "@/features/expenses/hooks/useModal";
 
-export default function AppShell() {
+interface AppShellProps {
+  children?: React.ReactNode;
+}
+
+export default function AppShell({ children }: AppShellProps) {
   const [mdOpen, setMdOpen] = useState(true);
   const { modal, open, close } = useModal();
+  const pathname = usePathname();
 
   const handleCreate = (dto: ExpenseCreate) => {
     // TODO: call API / mutation
@@ -22,6 +26,13 @@ export default function AppShell() {
 
     // TODO: Notification When added
   };
+
+  const getPageTitle = () => {
+    if (pathname.includes("/settings")) return "Settings";
+    if (pathname.includes("/transactions")) return "Transactions";
+    return "Dashboard";
+  };
+
   return (
     <div className="bg-background text-foreground min-h-svh">
       <div
@@ -37,7 +48,7 @@ export default function AppShell() {
         <main className="h-full flex flex-col min-h-0 px-1 lg:pt-3">
           <section className="min-w-0 flex-1 flex flex-col gap-6 min-h-0">
             <AppHeader
-              title="Dashboard"
+              title={getPageTitle()}
               subtitle="Hi Nicholas, here are your financial stats"
               activeSegment="All family"
               segmentOptions={["Personal", "All family"]}
@@ -48,8 +59,8 @@ export default function AppShell() {
               onSegmentChange={(v) => console.log("Segment:", v)}
               onCurrencyClick={() => console.log("Currency")}
             />
-            <div className="grow flex flex-col min-h-0">
-              <DashboardCards />
+            <div className="grow flex flex-col min-h-0 overflow-y-auto">
+              {children}
             </div>
           </section>
         </main>

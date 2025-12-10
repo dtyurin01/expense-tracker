@@ -21,7 +21,7 @@ export function AuthLayout({
     <div className="min-h-svh grid place-items-center bg-background relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 [background:radial-gradient(600px_circle_at_20%_20%,hsl(198_81%_67%/.06),transparent_60%),radial-gradient(600px_circle_at_80%_80%,hsl(198_81%_67%/.06),transparent_60%)]" />
 
-      <div className="w-[92%] max-w-md rounded-2xl border border-border bg-surface/95 shadow-2xl backdrop-blur p-6 sm:p-7 z-10">
+      <div className="w-[92%] max-w-md rounded-2xl border border-border bg-surface/95 backdrop-blur p-6 sm:p-7 z-10">
         <div className="mb-6 flex flex-col items-center text-center">
           <div className="mb-3 grid size-12 place-items-center rounded-full bg-brand/15 text-brand ring-1 ring-brand/30">
             <Image

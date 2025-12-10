@@ -6,4 +6,24 @@ export const api = ky.create({
     "Content-Type": "application/json",
   },
   credentials: "include",
+
+  hooks: {
+    beforeError: [
+      async (error) => {
+        const { response } = error;
+
+        if (typeof window !== "undefined") {
+          if (
+            response &&
+            response.status === 401 &&
+            !window.location.pathname.includes("/login")
+          ) {
+            window.location.href = "/login?expired=true";
+          }
+        }
+
+        return error;
+      },
+    ],
+  },
 });

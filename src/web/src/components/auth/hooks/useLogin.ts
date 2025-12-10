@@ -1,19 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { HTTPError } from "ky";
 import { api } from "@/lib/client";
 import { loginSchema, LoginFormValues } from "../schemas/login.schema";
+import { getErrorMessage } from "@/lib/getErrorMessage";
+import { useSearchParams } from "next/navigation";
 
 export function useLogin() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const searchParams = useSearchParams();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "", remember: true },
   });
+
+  useEffect(() => {
+    if (searchParams.get("expired") === "true") {
+      setTimeout(() => {
+        form.setError("root", {
+          message: "Session expired. Please log in again.",
+        });
+      }, 0);
+    }
+  }, [searchParams, form]);
 
   const togglePassword = () => setShowPassword((prev) => !prev);
 
@@ -28,40 +40,12 @@ export function useLogin() {
       });
 
       router.replace("/dashboard");
-    } catch (error: unknown) {
-      if (process.env.NODE_ENV !== "production") {
-        console.error("Login error:", error);
-      }
+    } catch (error) {
+      const message = await getErrorMessage(error);
 
-      let message = "Login failed. Please check your credentials.";
+      if (process.env.NODE_ENV !== "production") console.error(error);
 
-      if (error instanceof HTTPError) {
-        const status = error.response.status;
-
-        if (status === 401) {
-          message = "Invalid credentials. Please try again.";
-        } else if (status === 500) {
-          message = "Server error - please try again later.";
-        } else {
-          try {
-            type ErrorResponse = { message?: string; [key: string]: unknown };
-
-            const errorData =
-              (await error.response.json()) as ErrorResponse | null;
-            if (
-              errorData &&
-              typeof errorData.message === "string" &&
-              errorData.message
-            ) {
-              message = errorData.message;
-            }
-          } catch {}
-        }
-      }
-
-      form.setError("root", {
-        message,
-      });
+      form.setError("root", { message });
     }
   };
 

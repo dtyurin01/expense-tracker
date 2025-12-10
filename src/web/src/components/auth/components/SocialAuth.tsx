@@ -26,7 +26,7 @@ export function SocialAuth() {
           className="w-full"
           leftIcon={<FcGoogle className="size-5" />}
         >
-          Google
+          Continue with Google
         </Button>
       </div>
     </div>
