@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
+import AppShell from "@/components/shell/AppShell"; 
 
-export default function DashboardLayout({ children }: { children: ReactNode }) {
-  return <section className="min-h-dvh">{children}</section>;
+export default function AppLayout({ children }: { children: React.ReactNode }) {
+  return <AppShell>{children}</AppShell>;
 }
