@@ -28,3 +28,16 @@ export const navItems: NavItem[] = [
     section: "Other",
   },
 ];
+
+export function getPageTitle(pathname: string): string {
+  const activeItem = navItems.find(
+    (item) => pathname === item.href || pathname.startsWith(`${item.href}/`)
+  );
+
+  return activeItem ? activeItem.label : "Dashboard";
+}
+
+export function isDashboardPath(pathname: string): boolean {
+  const isDashboard = pathname === "/dashboard" || pathname === "/";
+  return isDashboard;
+}

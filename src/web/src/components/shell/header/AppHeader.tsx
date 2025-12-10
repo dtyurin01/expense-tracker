@@ -32,9 +32,10 @@ type DashboardHeaderProps = {
   currency?: string;
   onCurrencyClick?: () => void;
   loading?: boolean;
+  showFilters?: boolean;
 };
 
-// GET NOTIFICATION DATA
+// TODO: GET NOTIFICATION DATA
 const initial: NotificationItem[] = [
   {
     id: "1",
@@ -60,6 +61,7 @@ export function AppHeader({
   onAddClick,
   segmentOptions = ["Personal", "All family"],
   loading = false,
+  showFilters = false,
 }: DashboardHeaderProps) {
   const [items, setItems] = React.useState<NotificationItem[]>(initial);
   const [openNotification, setOpenNotification] = React.useState(false);
@@ -80,7 +82,7 @@ export function AppHeader({
             <div className="mt-1 h-5 w-[280px] rounded-md overflow-hidden">
               <Skeleton width="100%" height="100%" />
             </div>
-          ) : subtitle ? (
+          ) : showFilters && subtitle ? (
             <p className="mt-1 text-md text-muted-foreground">{subtitle}</p>
           ) : null}
         </div>
@@ -116,22 +118,23 @@ export function AppHeader({
           </Button>
         </div>
       </div>
-
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="ml-auto flex items-center gap-2">
-          <SegmentedControl
-            options={segmentOptions}
-            value={value}
-            onChange={setValue}
-            size="sm"
-            radius="lg"
-            className="bg-surface/60 w-70"
-            block
-            equal
-          />
-          <CurrencySelect value={currency} onChange={setCurrency} />
+      {showFilters && (
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="ml-auto flex items-center gap-2">
+            <SegmentedControl
+              options={segmentOptions}
+              value={value}
+              onChange={setValue}
+              size="sm"
+              radius="lg"
+              className="bg-surface/60 w-70"
+              block
+              equal
+            />
+            <CurrencySelect value={currency} onChange={setCurrency} />
+          </div>
         </div>
-      </div>
+      )}
     </header>
   );
 }
