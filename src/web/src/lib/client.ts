@@ -1,11 +1,11 @@
 import ky from "ky";
 
 export const api = ky.create({
-  prefixUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000",
+  prefixUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5072",
   headers: {
     "Content-Type": "application/json",
   },
-  credentials: "include",
+  credentials: "include", // send cookies with requests()
 
   hooks: {
     beforeError: [
@@ -18,7 +18,13 @@ export const api = ky.create({
             response.status === 401 &&
             !window.location.pathname.includes("/login")
           ) {
-            window.location.href = "/login?expired=true";
+            const currentPath = window.location.pathname;
+
+            const targetUrl = `/login?expired=true&callbackUrl=${encodeURIComponent(
+              currentPath
+            )}`;
+
+            window.location.href = targetUrl;
           }
         }
 

@@ -120,7 +120,8 @@ export function KebabMenu({
             const classes = cn(
               menuItem({ density, tone: isDanger ? "danger" : "default" }),
               itemClassName,
-              item.className
+              item.className,
+              "cursor-pointer select-none",
             );
 
             if ("href" in item && item.href) {

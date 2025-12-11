@@ -89,7 +89,7 @@ export function TotalBalanceCard({
     <Card className={`h-full flex flex-col ${className}`} aria-busy={loading}>
       <CardHeader>
         <div>
-          <span className="inline-block rounded-md overflow-hidden">
+          <span className="inline-block">
             <Skeleton loading={loading}>
               <CardTitle>{title}</CardTitle>
             </Skeleton>
