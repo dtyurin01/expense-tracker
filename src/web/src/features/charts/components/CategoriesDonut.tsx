@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Chart } from "chart.js/auto"; 
+import { Chart } from "chart.js/auto";
 import type { Chart as ChartJS, LegendItem } from "chart.js";
 import { ChartCanvas } from "@/features/charts/ChartCanvas";
 import { formatMoney } from "@/lib/format";
@@ -37,18 +37,31 @@ export function CategoriesDonut({
 
   const chartRef = React.useRef<Chart<"doughnut"> | null>(null);
 
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1600);
+
+    checkMobile();
+
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const onReady = React.useCallback(
     (_ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
       const generateLabels = (chart: ChartJS<"doughnut">): LegendItem[] => {
         const ds = chart.data.datasets[0];
         const bg = ds.backgroundColor;
+        const chartLabels = chart.data.labels ?? [];
 
-        return (chart.data.labels ?? []).map((lbl, i) => {
+        const allItems = chartLabels.map((lbl, i) => {
           const text = `${String(lbl)} ${formatMoney(
             Number(ds.data[i]),
             currency
           )}`;
           const color = Array.isArray(bg) ? bg[i] ?? "#9ca3af" : bg;
+
           return {
             text,
             fillStyle: color ?? "#9ca3af",
@@ -57,8 +70,14 @@ export function CategoriesDonut({
             fontColor: areaColors.text,
             hidden: !chart.getDataVisibility(i),
             index: i,
-          } ;
+          };
         });
+
+        if (isMobile) {
+          return allItems.slice(0, 4);
+        }
+
+        return allItems;
       };
 
       createOrUpdateChart(chartRef, canvas, {
@@ -80,10 +99,12 @@ export function CategoriesDonut({
           responsive: true,
           maintainAspectRatio: false,
           cutout,
+
           plugins: {
             legend: {
               display: showLegend,
-              position: "left",
+              position: isMobile ? "bottom" : "left",
+              align: "center",
               labels: {
                 usePointStyle: true,
                 pointStyle: "rectRounded",
@@ -106,7 +127,16 @@ export function CategoriesDonut({
 
       return () => destroyChart(chartRef);
     },
-    [labels, values, colors, cutout, showLegend, currency, areaColors.text]
+    [
+      labels,
+      values,
+      colors,
+      cutout,
+      showLegend,
+      currency,
+      areaColors.text,
+      isMobile,
+    ]
   );
 
   return <ChartCanvas onReady={onReady} />;

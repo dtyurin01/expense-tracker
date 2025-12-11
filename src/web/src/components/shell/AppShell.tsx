@@ -11,6 +11,7 @@ import { getBaseCategories } from "@/data/categories";
 import { cn } from "@/lib/cn";
 import { useModal } from "@/features/expenses/hooks/useModal";
 import { getPageTitle, isDashboardPath } from "@/config/nav";
+import { useShellChrome } from "@/components/shell/hooks/useShellChrome";
 
 interface AppShellProps {
   children?: React.ReactNode;
@@ -20,6 +21,7 @@ export default function AppShell({ children }: AppShellProps) {
   const [mdOpen, setMdOpen] = useState(true);
   const { modal, open, close } = useModal();
   const pathname = usePathname();
+  const showFiltersOverride = useShellChrome((s) => s.showFiltersOverride);
 
   const handleCreate = (dto: ExpenseCreate) => {
     // TODO: call API / mutation
@@ -53,7 +55,7 @@ export default function AppShell({ children }: AppShellProps) {
               onBellClick={() => console.log("Bell")}
               onSegmentChange={(v) => console.log("Segment:", v)}
               onCurrencyClick={() => console.log("Currency")}
-              showFilters={isDashboardPath(pathname)}
+              showFilters={showFiltersOverride ?? isDashboardPath(pathname)}
             />
             <div className="grow flex flex-col min-h-0 overflow-y-auto">
               {children}

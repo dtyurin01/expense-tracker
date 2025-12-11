@@ -18,25 +18,30 @@ const toneMap = {
   brand: {
     daySelected: "bg-brand text-brand-foreground hover:bg-brand focus:bg-brand",
     ring: "ring-brand",
+    softBg: "bg-brand/10",
   },
   success: {
     daySelected:
       "bg-success text-success-foreground hover:bg-success focus:bg-success",
     ring: "ring-success",
+    softBg: "bg-success/10",
   },
   warning: {
     daySelected:
       "bg-warning text-warning-foreground hover:bg-warning focus:bg-warning",
     ring: "ring-warning",
+    softBg: "bg-warning/10",
   },
   info: {
     daySelected: "bg-info text-info-foreground hover:bg-info focus:bg-info",
     ring: "ring-info",
+    softBg: "bg-info/10",
   },
   destructive: {
     daySelected:
       "bg-destructive text-destructive-foreground hover:bg-destructive focus:bg-destructive",
     ring: "ring-destructive",
+    softBg: "bg-destructive/10",
   },
 } as const;
 
@@ -86,6 +91,23 @@ export const dpDaySelected = cva("", {
   },
   defaultVariants: { tone: "brand" },
 });
+
+export const dpDayRangeMiddle = cva(
+  "ring-1 !bg-transparent hover:!bg-transparent text-foreground focus:!bg-transparent",
+  {
+    variants: {
+      tone: {
+        brand: toneMap.brand.ring,
+        success: toneMap.success.ring,
+        warning: toneMap.warning.ring,
+        info: toneMap.info.ring,
+        destructive: toneMap.destructive.ring,
+      },
+    },
+    defaultVariants: { tone: "brand" },
+  }
+);
+
 
 export const dpDayToday = cva("ring-1", {
   variants: {
@@ -137,5 +159,16 @@ export const makeDayPickerClassNames = (opts?: DayPickerStyleProps) => {
     today: dpDayToday({ tone }),
     outside: dpDayOutside(),
     disabled: dpDayDisabled(),
+
+    // Range selection (react-day-picker mode="range")
+    range_start: cn(
+      dpDaySelected({ tone }),
+      "relative after:content-[''] after:absolute after:bottom-1 after:left-1 after:h-1 after:w-1 after:rounded-full after:bg-current"
+    ),
+    range_end: cn(
+      dpDaySelected({ tone }),
+      "relative after:content-[''] after:absolute after:bottom-1 after:right-1 after:h-1 after:w-1 after:rounded-full after:bg-current"
+    ),
+    range_middle: dpDayRangeMiddle({ tone }),
   } as const;
 };

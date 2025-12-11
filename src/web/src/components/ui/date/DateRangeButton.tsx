@@ -10,7 +10,7 @@ import { de } from "date-fns/locale";
 import { Button } from "@/components/ui/button/Button";
 import { toLocalISO, fromLocalISO } from "@/lib/date-io";
 import { PeriodSchema, type Period } from "@/schemas/period";
-import type { DayPickerStyleProps } from "@/components/ui/date/datePicker.variants";
+import { type DayPickerStyleProps } from "@/components/ui/date/datePicker.variants";
 import { useDayPickerConfig } from "@/hooks/useDayPickerConfig";
 import { isSameRange } from "@/lib/dateObjCompare";
 
@@ -72,7 +72,7 @@ export function DateRangeButton({
 
   const extendedClassNames = {
     ...classNames,
-    nav: "flex items-center justify-between w-full px-2 cursor-pointer",
+    nav: "flex items-center justify-between w-full px-2",
     nav_button_previous: "absolute mb-2",
     nav_button_next: "absolute",
     caption_label: "flex-1 text-center",
@@ -122,7 +122,7 @@ export function DateRangeButton({
           size={"sm"}
           aria-label={label}
           disabled={disabled}
-          className="hover:bg-foreground/2 active:bg-foreground/2"
+          className="hover:bg-foreground/2 active:bg-foreground/2 cursor-pointer"
           {...buttonProps}
         >
           <div className="flex items-center gap-2">
@@ -149,9 +149,9 @@ export function DateRangeButton({
           components={{
             Chevron: ({ orientation }) =>
               orientation === "left" ? (
-                <FiChevronLeft className="size-5 rounded-lg text-muted-foreground hover:bg-foreground/2 active:bg-foreground/2 " />
+                <FiChevronLeft className="size-5 rounded-lg text-muted-foreground hover:bg-foreground/2 active:bg-foreground/2 cursor-pointer" />
               ) : (
-                <FiChevronRight className="size-5 rounded-lg text-muted-foreground hover:bg-foreground/2 active:bg-foreground/2" />
+                <FiChevronRight className="size-5 rounded-lg text-muted-foreground hover:bg-foreground/2 active:bg-foreground/2 cursor-pointer" />
               ),
           }}
         />
