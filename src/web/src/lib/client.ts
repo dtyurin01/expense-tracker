@@ -5,7 +5,7 @@ export const api = ky.create({
   headers: {
     "Content-Type": "application/json",
   },
-  credentials: "include", // send cookies with requests()
+  credentials: "include", // send cookies with requests
 
   hooks: {
     beforeError: [

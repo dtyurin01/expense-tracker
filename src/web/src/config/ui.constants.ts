@@ -1,0 +1,3 @@
+export const MAX_VIEWPORT_LEGEND_ITEMS = 4;
+
+export const DONUT_COMPACT_VIEWPORT_MAX_WIDTH = 1440;

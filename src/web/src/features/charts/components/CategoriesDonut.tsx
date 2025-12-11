@@ -12,6 +12,10 @@ import {
   createOrUpdateChart,
   destroyChart,
 } from "@/features/charts/utils/chartKit";
+import {
+  DONUT_COMPACT_VIEWPORT_MAX_WIDTH,
+  MAX_VIEWPORT_LEGEND_ITEMS,
+} from "@/config/ui.constants";
 
 type Props = {
   data: Slice[];
@@ -37,15 +41,18 @@ export function CategoriesDonut({
 
   const chartRef = React.useRef<Chart<"doughnut"> | null>(null);
 
-  const [isMobile, setIsMobile] = React.useState(false);
+  const [isCompactViewport, setIsCompactViewport] = React.useState(false);
 
   React.useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1600);
+    const updateViewportMode = () =>
+      setIsCompactViewport(
+        window.innerWidth < DONUT_COMPACT_VIEWPORT_MAX_WIDTH
+      );
 
-    checkMobile();
+    updateViewportMode();
 
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    window.addEventListener("resize", updateViewportMode);
+    return () => window.removeEventListener("resize", updateViewportMode);
   }, []);
 
   const onReady = React.useCallback(
@@ -73,8 +80,8 @@ export function CategoriesDonut({
           };
         });
 
-        if (isMobile) {
-          return allItems.slice(0, 4);
+        if (isCompactViewport) {
+          return allItems.slice(0, MAX_VIEWPORT_LEGEND_ITEMS);
         }
 
         return allItems;
@@ -103,7 +110,7 @@ export function CategoriesDonut({
           plugins: {
             legend: {
               display: showLegend,
-              position: isMobile ? "bottom" : "left",
+              position: isCompactViewport ? "bottom" : "left",
               align: "center",
               labels: {
                 usePointStyle: true,
@@ -135,7 +142,7 @@ export function CategoriesDonut({
       showLegend,
       currency,
       areaColors.text,
-      isMobile,
+      isCompactViewport,
     ]
   );
 
