@@ -10,12 +10,12 @@ export function SocialAuth() {
   };
 
   return (
-    <div className="flex flex-col gap-3 mt-4">
+    <div className="flex flex-col gap-3 mt-3">
       <div className="relative flex items-center py-2">
         <div className="flex-grow border-t border-border"></div>
-        <span className="flex-shrink-0 mx-4 text-xs text-muted-foreground uppercase">
-          Or
-        </span>
+          <span className="flex-shrink-0 mx-3 text-xs text-muted-foreground uppercase">
+            Or
+          </span>
         <div className="flex-grow border-t border-border"></div>
       </div>
 

@@ -78,7 +78,7 @@ export function LatestTransactionsCard({
     >
       <CardHeader>
         {/* Title with clipping */}
-        <span className="inline-block rounded-md overflow-hidden">
+        <span className="inline-block">
           <Skeleton loading={loading}>
             <CardTitle>{title}</CardTitle>
           </Skeleton>

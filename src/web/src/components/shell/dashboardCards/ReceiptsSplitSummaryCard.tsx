@@ -82,7 +82,7 @@ export function ReceiptsSplitSummaryCard({
       aria-live="polite"
     >
       <CardHeader>
-        <span className="inline-block rounded-md overflow-hidden">
+        <span className="inline-block">
           <Skeleton loading={loading}>
             <CardTitle>{title}</CardTitle>
           </Skeleton>

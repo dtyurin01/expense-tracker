@@ -24,11 +24,15 @@ import {
   hasTimeseries,
 } from "@/lib/hasAnyData";
 import DashboardEmpty from "@/components/empty/EmptyDashboard";
+import { useShellChrome } from "@/components/shell/hooks/useShellChrome";
 
 export default function DashboardCards() {
   // single period state to sync all cards
   const [period, setPeriod] = React.useState<Period | undefined>(undefined);
   const [filter, setFilter] = React.useState<TxFilter>("all");
+  const setShowFiltersOverride = useShellChrome(
+    (s) => s.setShowFiltersOverride
+  );
 
   const resp = React.useMemo<DashboardResponse>(
     () =>
@@ -40,7 +44,14 @@ export default function DashboardCards() {
     [period]
   );
 
-  if (!resp || !hasAnyData(resp)) {
+  const isEmpty = !resp || !hasAnyData(resp);
+
+  React.useEffect(() => {
+    setShowFiltersOverride(isEmpty ? false : null);
+    return () => setShowFiltersOverride(null);
+  }, [isEmpty, setShowFiltersOverride]);
+
+  if (isEmpty) {
     return <DashboardEmpty />;
   }
 

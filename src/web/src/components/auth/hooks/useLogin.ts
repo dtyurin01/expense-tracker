@@ -11,6 +11,7 @@ export function useLogin() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -39,7 +40,7 @@ export function useLogin() {
         },
       });
 
-      router.replace("/dashboard");
+      router.replace(callbackUrl);
     } catch (error) {
       const message = await getErrorMessage(error);
 

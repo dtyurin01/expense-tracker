@@ -150,7 +150,7 @@ export default function AddTransactionDialog(props: Props) {
 
               {/* Currency */}
               <div className="">
-                <label className="mb-1 block text-sm">Currency</label>
+                <label className="mb-2 block text-sm">Currency</label>
                 <Controller
                   name="currency"
                   control={control}
@@ -190,7 +190,7 @@ export default function AddTransactionDialog(props: Props) {
 
               {/* Category */}
               <div className="col-span-full">
-                <label className="mb-1 block text-sm">Category</label>
+                <label className="mb-2 block text-sm">Category</label>
                 <Controller
                   name="categoryId"
                   control={control}
