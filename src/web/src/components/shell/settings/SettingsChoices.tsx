@@ -20,7 +20,6 @@ export default function SettingsChoices() {
               nameSize="lg"
               onEditClick={() => console.log("edit")}
               name="Nicholas Brown"
-              className="lg"
               aria-label="Open profile"
             />
           ),

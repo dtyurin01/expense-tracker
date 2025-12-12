@@ -76,7 +76,7 @@ export function UserCard(props: UserCardProps) {
       ? "h-14 w-14 text-xl"
       : "h-10 w-10";
 
-  const namSizeVar =
+  const nameSizeVar =
     nameSize === "sm"
       ? "text-sm"
       : nameSize === "lg"
@@ -179,7 +179,7 @@ export function UserCard(props: UserCardProps) {
           </div>
         ) : (
           <>
-            <div className={`truncate font-medium ${namSizeVar}`}>{name}</div>
+            <div className={`truncate font-medium ${nameSizeVar}`}>{name}</div>
             <div className={`truncate text-xs ${subtitleStyle}`}>
               {subtitle}
             </div>
