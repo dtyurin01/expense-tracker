@@ -13,8 +13,7 @@ export const buttonVariants = cva(
           "bg-surface text-foreground border border-border hover:bg-foreground/2 active:bg-foreground/2",
         outline:
           "bg-transparent text-foreground border border-border hover:bg-foreground/2 active:bg-foreground/2",
-        ghost:
-          "bg-transparent text-foreground active:bg-surface/80",
+        ghost: "bg-transparent text-foreground active:bg-surface/80",
         link: "bg-transparent text-brand underline underline-offset-4 hover:text-brand-600 active:text-brand-700",
         destructive: "bg-error text-white hover:bg-error/90 active:bg-error/95",
         success:
@@ -29,6 +28,8 @@ export const buttonVariants = cva(
           "bg-transparent text-foreground border border-border " +
           "hover:bg-surface hover:border-border/80 " +
           "active:bg-foreground/15",
+        muted:
+          "bg-gray-800 text-white rounded-xl hover:bg-gray-700 transition-colors",
       },
       size: {
         xs: "h-7  px-2  text-xs",

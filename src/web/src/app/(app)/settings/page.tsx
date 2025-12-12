@@ -1,6 +1,5 @@
-
-
+import SettingsChoices from "@/components/shell/settings/SettingsChoices";
 
 export default function SettingsPage() {
-  return <div>Settings Page</div>;
+  return <SettingsChoices />;
 }
