@@ -1,6 +1,10 @@
 import { HTTPError } from "ky";
 
 export async function getErrorMessage(error: unknown): Promise<string> {
+  const shouldLog = process.env.NODE_ENV !== "production";
+  if (shouldLog) console.error(error);
+
+  
   if (error instanceof HTTPError) {
     const status = error.response.status;
 
@@ -22,6 +26,16 @@ export async function getErrorMessage(error: unknown): Promise<string> {
     } catch {
       return error.response.statusText || "Request failed";
     }
+  }
+
+  if (error instanceof Error) {
+    if (
+      error.message === "Failed to fetch" ||
+      error.message.includes("NetworkError")
+    ) {
+      return "Cannot connect to server";
+    }
+    return error.message;
   }
 
   if (error instanceof Error) {

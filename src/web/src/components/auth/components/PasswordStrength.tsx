@@ -3,7 +3,7 @@
 import * as Progress from "@radix-ui/react-progress";
 import { cn } from "@/lib/cn";
 import { FiCheck, FiX } from "react-icons/fi";
-import { PASSWORD_REQUIREMENTS } from "@/components/auth/schemas/register.schema";
+import { PASSWORD_REQUIREMENTS } from "@/features/auth/schemas/register.schema";
 
 interface PasswordStrengthProps {
   password?: string;

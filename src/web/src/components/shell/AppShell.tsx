@@ -6,12 +6,13 @@ import { usePathname } from "next/navigation";
 import AddTransactionDialog from "@/features/expenses/components/AddTransactionDialog";
 
 import type { ExpenseCreate } from "@/schemas/expense";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getBaseCategories } from "@/data/categories";
 import { cn } from "@/lib/cn";
 import { useModal } from "@/features/expenses/hooks/useModal";
 import { getPageTitle, isDashboardPath } from "@/config/nav";
 import { useShellChrome } from "@/components/shell/hooks/useShellChrome";
+import { useUser } from "@/features/user/hooks/useUser";
 
 interface AppShellProps {
   children?: React.ReactNode;
@@ -22,6 +23,13 @@ export default function AppShell({ children }: AppShellProps) {
   const { modal, open, close } = useModal();
   const pathname = usePathname();
   const showFiltersOverride = useShellChrome((s) => s.showFiltersOverride);
+  const { fetchUser, user } = useUser();
+
+  useEffect(() => {
+    if (!user) {
+      fetchUser();
+    }
+  }, [fetchUser, user]);
 
   const handleCreate = (dto: ExpenseCreate) => {
     // TODO: call API / mutation

@@ -2,8 +2,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { api } from "@/lib/client";
-import { registerSchema, RegisterFormValues } from "../schemas/register.schema";
+
+import { register } from "@/features/auth/api/authApi";
+import {
+  registerSchema,
+  type RegisterFormValues,
+} from "@/features/auth/schemas/register.schema";
 import { getErrorMessage } from "@/lib/getErrorMessage";
 
 export function useRegister() {
@@ -24,20 +28,15 @@ export function useRegister() {
 
   const onSubmit = async (values: RegisterFormValues) => {
     try {
-      await api.post("auth/register", {
-        json: {
-          fullName: values.fullName,
-          email: values.email,
-          password: values.password,
-        },
+      await register({
+        fullName: values.fullName,
+        email: values.email,
+        password: values.password,
       });
 
       router.push("/login");
     } catch (error) {
       const message = await getErrorMessage(error);
-
-      if (process.env.NODE_ENV !== "production") console.error(error);
-
       form.setError("root", { message });
     }
   };

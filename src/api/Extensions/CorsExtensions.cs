@@ -2,10 +2,15 @@
 
 public static class CorsExtensions
 {
-    public static IServiceCollection AddAppCors(this IServiceCollection services, IConfiguration cfg)
+    public static IServiceCollection AddAppCors(
+        this IServiceCollection services,
+        IConfiguration cfg
+    )
     {
-        var allowed = (cfg["AllowedOrigins"] ?? "")
-            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        var allowed = (cfg["AllowedOrigins"] ?? "").Split(
+            ',',
+            StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries
+        );
 
         services.AddCors(opt =>
         {

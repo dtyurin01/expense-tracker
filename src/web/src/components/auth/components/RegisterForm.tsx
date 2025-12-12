@@ -3,7 +3,7 @@
 import { FiUser, FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 import { Input } from "@/components/ui/input/Input";
 import { Button } from "@/components/ui/button/Button";
-import { useRegister } from "../hooks/useRegister";
+import { useRegister } from "@/features/auth/hooks/useRegister";
 import { PasswordStrength } from "./PasswordStrength";
 import { SocialAuth } from "./SocialAuth";
 

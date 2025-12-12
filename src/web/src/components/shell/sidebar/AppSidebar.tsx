@@ -5,13 +5,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/cn";
 import { navItems } from "@/config/nav";
-import { menuItems, isActivePath } from "@/config/menu";
+import { isActivePath } from "@/config/menu";
+import type { MenuItem } from "@/components/ui/menu/menu.types";
 
 import { UpgradeCard } from "@/components/shell/cards/UpgradeCard";
 import { UserCard } from "@/components/shell/cards/UserCard";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Button } from "@/components/ui";
 import Image from "next/image";
+import { useUserSnapshot } from "@/features/user/hooks/useUserSnapshot";
+import { useLogout } from "@/features/auth/hooks/useLogout";
 
 interface Props {
   mdOpen: boolean;
@@ -20,6 +23,25 @@ interface Props {
 
 export default function AppSidebar({ mdOpen, setMdOpen }: Props) {
   const pathname = usePathname();
+  const { user, isLoading: isUserLoading } = useUserSnapshot();
+  const { logout } = useLogout({ redirectTo: "/login" });
+
+  const userMenuItems = React.useMemo<MenuItem[]>(
+    () => [
+      {
+        label: "Logout",
+        danger: true,
+        onSelect: () => {
+          void logout();
+        },
+      },
+    ],
+    [logout]
+  );
+
+  const userName = user?.userName || user?.email || "User";
+  const userSubtitle = user?.email || "Member";
+  const userAvatarUrl = user?.avatarUrl ?? undefined;
 
   return (
     <>
@@ -133,7 +155,9 @@ export default function AppSidebar({ mdOpen, setMdOpen }: Props) {
               <UserCard
                 variant="avatar"
                 size="md"
-                name="Nicholas Brown"
+                name={userName}
+                avatarUrl={userAvatarUrl}
+                loading={isUserLoading}
                 className="lg:hidden"
                 aria-label="Open profile"
               />
@@ -142,10 +166,12 @@ export default function AppSidebar({ mdOpen, setMdOpen }: Props) {
             <UserCard
               variant="full"
               size="md"
-              name="Nicholas Brown"
-              subtitle="Member"
+              name={userName}
+              subtitle={userSubtitle}
+              avatarUrl={userAvatarUrl}
+              loading={isUserLoading}
               className="hidden lg:flex"
-              menuItems={menuItems}
+              menuItems={userMenuItems}
             />
           </div>
         </div>
