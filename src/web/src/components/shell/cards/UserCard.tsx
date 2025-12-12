@@ -31,7 +31,7 @@ type FullProps = CommonProps & {
 
 type AvatarOnlyProps = CommonProps & {
   variant: "avatar";
-  href?: "string";
+  href?: string;
   "aria-label"?: string;
 };
 

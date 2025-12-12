@@ -24,7 +24,6 @@ export const useUser = create<UserState>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const data = await getMe();
-      console.log("Fetched user:", data);
       set({ user: data, isLoading: false, error: null });
     } catch (error) {
       const message = await getErrorMessage(error);
