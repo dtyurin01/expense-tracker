@@ -25,6 +25,16 @@ export async function getErrorMessage(error: unknown): Promise<string> {
   }
 
   if (error instanceof Error) {
+    if (
+      error.message === "Failed to fetch" ||
+      error.message.includes("NetworkError")
+    ) {
+      return "Cannot connect to server";
+    }
+    return error.message;
+  }
+
+  if (error instanceof Error) {
     return error.message;
   }
 
