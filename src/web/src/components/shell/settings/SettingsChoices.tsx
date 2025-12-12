@@ -7,7 +7,7 @@ import { UserCard } from "@/components/shell/cards/UserCard";
 export default function SettingsChoices() {
   return (
     <Tabs
-      defaultValue="sync"
+      defaultValue="users"
       items={[
         {
           value: "users",
