@@ -23,13 +23,11 @@ export default function AppShell({ children }: AppShellProps) {
   const { modal, open, close } = useModal();
   const pathname = usePathname();
   const showFiltersOverride = useShellChrome((s) => s.showFiltersOverride);
-  const { fetchUser, user } = useUser();
+  const { fetchUser } = useUser();
 
   useEffect(() => {
-    if (!user) {
-      fetchUser();
-    }
-  }, [fetchUser, user]);
+    fetchUser();
+  }, [fetchUser]);
 
   const handleCreate = (dto: ExpenseCreate) => {
     // TODO: call API / mutation

@@ -1,6 +1,9 @@
 import { api } from "@/lib/client";
-import { LoginPayload, AuthAccessPayload, RegisterPayload } from "../types/types";
-
+import {
+  LoginPayload,
+  AuthAccessPayload,
+  RegisterPayload,
+} from "../types/types";
 
 export async function login(payload: LoginPayload) {
   return api.post("auth/login", { json: payload }).json<AuthAccessPayload>();

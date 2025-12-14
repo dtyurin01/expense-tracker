@@ -21,6 +21,12 @@ export const useUser = create<UserState>((set, get) => ({
   error: null,
 
   fetchUser: async () => {
+    const current = get();
+
+    if (current.isUploading || current.user) {
+      return;
+    }
+
     set({ isLoading: true, error: null });
     try {
       const data = await getMe();

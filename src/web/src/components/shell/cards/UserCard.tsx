@@ -187,23 +187,6 @@ export function UserCard(props: UserCardProps) {
         )}
       </div>
 
-      {/* Kebab */}
-      {/* {menuItems?.length ? (
-        <div className="ml-auto">
-          {loading ? (
-            <div className="size-8 rounded-full overflow-hidden">
-              <Skeleton width="100%" height="100%" />
-            </div>
-          ) : (
-            
-            <KebabMenu
-              align="start"
-              items={menuItems}
-              onOpenChange={onMenuOpenChange}
-            />
-          )}
-        </div>
-      ) : null} */}
       {(menuItems?.length || props.onEditClick) && (
         <div className="ml-auto flex items-center gap-2">
           {loading ? (

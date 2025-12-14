@@ -2,6 +2,8 @@
 using Api.Contracts;
 using Api.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using SixLabors.ImageSharp;
 
 namespace Api.Features.Users;
 
@@ -45,12 +47,13 @@ public static class UsersEndpoints
                     ClaimsPrincipal userPrincipal,
                     UserManager<ApplicationUser> userManager,
                     IWebHostEnvironment env,
-                    HttpRequest request
+                    HttpRequest request,
+                    ILogger<Program> logger
                 ) =>
                 {
                     if (file is null || file.Length == 0)
                     {
-                        return Results.BadRequest("No file uploaded.");
+                        return Results.BadRequest("No file uploaded. Please try again");
                     }
 
                     if (file.Length > 5 * 1024 * 1024)
@@ -58,13 +61,31 @@ public static class UsersEndpoints
                         return Results.BadRequest("File size exceeds 5MB.");
                     }
 
-                    var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
-
-                    var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-
-                    if (!allowedExtensions.Contains(ext))
+                    // 2. ВАЛИДАЦИЯ ФОРМАТА ЧЕРЕЗ IMAGESHARP (Security check)
+                    try
                     {
-                        return Results.BadRequest("Invalid file type.");
+                        using var stream = file.OpenReadStream();
+
+                        var format = await Image.DetectFormatAsync(stream);
+
+                        if (format == null)
+                        {
+                            return Results.BadRequest(
+                                "Invalid image format. Please upload a valid image."
+                            );
+                        }
+
+                        var allowedMimeTypes = new[] { "image/jpeg", "image/png", "image/webp" };
+                        if (!allowedMimeTypes.Contains(format.DefaultMimeType))
+                        {
+                            return Results.BadRequest(
+                                $"Format {format.Name} is not supported. Use JPG, PNG or WebP."
+                            );
+                        }
+                    }
+                    catch
+                    {
+                        return Results.BadRequest("File is not a valid image or is corrupted.");
                     }
 
                     var userId = userPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -80,21 +101,39 @@ public static class UsersEndpoints
                         Directory.CreateDirectory(uploadsFolder);
                     }
 
-                    var fileName = $"{userId}_{Guid.NewGuid()}{ext}";
-                    var filePath = Path.Combine(uploadsFolder, fileName);
+                    var userFolder = Path.Combine(uploadsFolder, userId!);
 
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    if (!Directory.Exists(userFolder))
                     {
-                        await file.CopyToAsync(stream);
+                        Directory.CreateDirectory(userFolder);
                     }
+
+                    var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+                    var fileName = $"{Guid.NewGuid()}{ext}";
+                    var filePath = Path.Combine(userFolder, fileName);
+
+                    using var fileStream = new FileStream(filePath, FileMode.Create);
+                    await file.CopyToAsync(fileStream);
 
                     if (!string.IsNullOrEmpty(user.AvatarUrl))
                     {
-                        var oldFileName = Path.GetFileName(user.AvatarUrl);
-                        var oldFilePath = Path.Combine(uploadsFolder, oldFileName);
-                        if (File.Exists(oldFilePath))
+                        try
                         {
-                            File.Delete(oldFilePath);
+                            var uri = new Uri(user.AvatarUrl);
+                            var oldFileName = Path.GetFileName(uri.LocalPath);
+                            var oldFilePath = Path.Combine(userFolder, oldFileName);
+                            if (File.Exists(oldFilePath))
+                            {
+                                File.Delete(oldFilePath);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.LogWarning(
+                                ex,
+                                "Failed to delete old avatar for user {UserId}",
+                                userId
+                            );
                         }
                     }
 
@@ -104,7 +143,7 @@ public static class UsersEndpoints
                         baseUrl += request.PathBase.Value;
                     }
 
-                    var fullUrl = $"{baseUrl}/uploads/{fileName}";
+                    var fullUrl = $"{baseUrl}/uploads/{userId}/{fileName}";
 
                     user.AvatarUrl = fullUrl;
                     await userManager.UpdateAsync(user);

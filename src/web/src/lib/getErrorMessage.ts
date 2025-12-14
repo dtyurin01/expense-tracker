@@ -4,7 +4,6 @@ export async function getErrorMessage(error: unknown): Promise<string> {
   const shouldLog = process.env.NODE_ENV !== "production";
   if (shouldLog) console.error(error);
 
-  
   if (error instanceof HTTPError) {
     const status = error.response.status;
 
@@ -31,14 +30,12 @@ export async function getErrorMessage(error: unknown): Promise<string> {
   if (error instanceof Error) {
     if (
       error.message === "Failed to fetch" ||
-      error.message.includes("NetworkError")
+      error.message.includes("NetworkError") ||
+      error.message.includes("connection refused")
     ) {
-      return "Cannot connect to server";
+      return "Cannot connect to server. Is the API running?";
     }
-    return error.message;
-  }
 
-  if (error instanceof Error) {
     return error.message;
   }
 
