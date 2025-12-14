@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { api } from "@/lib/client";
-import { loginSchema, LoginFormValues } from "../schemas/login.schema";
+
+import { login } from "@/features/auth/api/authApi";
+import {
+  loginSchema,
+  type LoginFormValues,
+} from "@/features/auth/schemas/login.schema";
 import { getErrorMessage } from "@/lib/getErrorMessage";
-import { useSearchParams } from "next/navigation";
 
 export function useLogin() {
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
   const searchParams = useSearchParams();
+
+  const [showPassword, setShowPassword] = useState(false);
   const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
 
   const form = useForm<LoginFormValues>({
@@ -32,20 +36,15 @@ export function useLogin() {
 
   const onSubmit = async (values: LoginFormValues) => {
     try {
-      await api.post("auth/login", {
-        json: {
-          email: values.email,
-          password: values.password,
-          rememberMe: !!values.remember,
-        },
+      await login({
+        email: values.email,
+        password: values.password,
+        rememberMe: !!values.remember,
       });
 
       router.replace(callbackUrl);
     } catch (error) {
       const message = await getErrorMessage(error);
-
-      if (process.env.NODE_ENV !== "production") console.error(error);
-
       form.setError("root", { message });
     }
   };

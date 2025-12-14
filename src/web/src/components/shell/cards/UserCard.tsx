@@ -6,15 +6,18 @@ import { cn } from "@/lib/cn";
 import { KebabMenu } from "@/components/ui/index";
 import type { MenuItem } from "@/components/ui/menu/menu.types";
 import { Skeleton } from "@radix-ui/themes";
+import { Button } from "@/components/ui/button/Button";
 
 type CommonProps = {
   name: string;
   subtitle?: string;
   avatarUrl?: string;
   className?: string;
+  subtitleStyle?: string;
   disabled?: boolean;
   onClick?: () => void;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
+  nameSize?: "sm" | "md" | "lg" | "xl";
   loading?: boolean;
 };
 
@@ -23,11 +26,12 @@ type FullProps = CommonProps & {
   block?: boolean;
   menuItems?: MenuItem[];
   onMenuOpenChange?: (open: boolean) => void;
+  onEditClick?: () => void;
 };
 
 type AvatarOnlyProps = CommonProps & {
   variant: "avatar";
-  href?: "string";
+  href?: string;
   "aria-label"?: string;
 };
 
@@ -37,11 +41,13 @@ export function UserCard(props: UserCardProps) {
   const {
     name,
     subtitle = "Member",
+    subtitleStyle = "text-muted-foreground",
     avatarUrl,
     className,
     disabled,
     onClick,
     size = "md",
+    nameSize = "sm",
     loading = false,
   } = props;
 
@@ -66,7 +72,18 @@ export function UserCard(props: UserCardProps) {
       ? "h-8 w-8 text-xs"
       : size === "lg"
       ? "h-12 w-12"
+      : size === "xl"
+      ? "h-14 w-14 text-xl"
       : "h-10 w-10";
+
+  const nameSizeVar =
+    nameSize === "sm"
+      ? "text-sm"
+      : nameSize === "lg"
+      ? "text-lg"
+      : nameSize === "xl"
+      ? "text-xl"
+      : "text-md";
 
   if (props.variant === "avatar") {
     const Wrapper = onClick ? ("button" as const) : ("div" as const);
@@ -162,30 +179,50 @@ export function UserCard(props: UserCardProps) {
           </div>
         ) : (
           <>
-            <div className="truncate text-sm font-medium">{name}</div>
-            <div className="truncate text-xs text-muted-foreground">
+            <div className={`truncate font-medium ${nameSizeVar}`}>{name}</div>
+            <div className={`truncate text-xs ${subtitleStyle}`}>
               {subtitle}
             </div>
           </>
         )}
       </div>
 
-      {/* Kebab */}
-      {menuItems?.length ? (
-        <div className="ml-auto">
+      {(menuItems?.length || props.onEditClick) && (
+        <div className="ml-auto flex items-center gap-2">
           {loading ? (
             <div className="size-8 rounded-full overflow-hidden">
               <Skeleton width="100%" height="100%" />
             </div>
           ) : (
-            <KebabMenu
-              align="start"
-              items={menuItems}
-              onOpenChange={onMenuOpenChange}
-            />
+            <>
+              {/* Edit button */}
+              {props.onEditClick && (
+                <Button
+                  type="button"
+                  variant="muted"
+                  size="md"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    props.onEditClick?.();
+                  }}
+                  className="p-1"
+                >
+                  Edit profile
+                </Button>
+              )}
+
+              {/* Kebab menu */}
+              {menuItems?.length ? (
+                <KebabMenu
+                  align="start"
+                  items={menuItems}
+                  onOpenChange={onMenuOpenChange}
+                />
+              ) : null}
+            </>
           )}
         </div>
-      ) : null}
+      )}
     </div>
   );
 }

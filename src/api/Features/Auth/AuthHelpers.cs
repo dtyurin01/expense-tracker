@@ -24,25 +24,34 @@ internal static class AuthHelpers
         IWebHostEnvironment env,
         string access,
         string refresh,
-        JwtOptions jwt)
+        JwtOptions jwt
+    )
     {
-        http.Cookies.Append(CookieNames.Auth, access, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = !env.IsDevelopment(),
-            SameSite = SameSiteMode.Lax,
-            Path = "/",
-            Expires = DateTimeOffset.UtcNow.AddMinutes(jwt.ExpireMinutes)
-        });
+        http.Cookies.Append(
+            CookieNames.Auth,
+            access,
+            new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = !env.IsDevelopment(),
+                SameSite = SameSiteMode.Lax,
+                Path = "/",
+                Expires = DateTimeOffset.UtcNow.AddMinutes(jwt.ExpireMinutes),
+            }
+        );
 
-        http.Cookies.Append(CookieNames.Refresh, refresh, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = !env.IsDevelopment(),
-            SameSite = SameSiteMode.Strict,
-            Path = "/auth/refresh",
-            Expires = DateTimeOffset.UtcNow.AddDays(jwt.RefreshExpireDays)
-        });
+        http.Cookies.Append(
+            CookieNames.Refresh,
+            refresh,
+            new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = !env.IsDevelopment(),
+                SameSite = SameSiteMode.Strict,
+                Path = "/auth/refresh",
+                Expires = DateTimeOffset.UtcNow.AddDays(jwt.RefreshExpireDays),
+            }
+        );
     }
 
     public static void ClearRefreshCookie(HttpResponse http)
@@ -50,11 +59,11 @@ internal static class AuthHelpers
         http.Cookies.Delete(CookieNames.Refresh, new CookieOptions { Path = "/auth/refresh" });
     }
 
-
     public static async Task<string> CreateAccessForLoginAsync(
         JwtTokenService tokens,
         UserManager<ApplicationUser> users,
-        ApplicationUser user)
+        ApplicationUser user
+    )
     {
         await users.UpdateSecurityStampAsync(user);
         var stamp = await users.GetSecurityStampAsync(user);
@@ -65,13 +74,14 @@ internal static class AuthHelpers
     public static async Task<string> CreateAccessForRefreshAsync(
         JwtTokenService tokens,
         UserManager<ApplicationUser> users,
-        ApplicationUser user)
+        ApplicationUser user
+    )
     {
         var stamp = await users.GetSecurityStampAsync(user);
         var roles = await users.GetRolesAsync(user);
         return tokens.Create(user, roles, stamp);
     }
 
-    public static object AccessPayload(string access, JwtOptions jwt)
-        => new { access_token = access, expires_in = jwt.ExpireMinutes * 60 };
+    public static object AccessPayload(string access, JwtOptions jwt) =>
+        new { access_token = access, expires_in = jwt.ExpireMinutes * 60 };
 }

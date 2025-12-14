@@ -7,7 +7,7 @@ import { Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input/Input";
 import { Button } from "@/components/ui/button/Button";
 import { Checkbox } from "@/components/ui";
-import { useLogin } from "../hooks/useLogin";
+import { useLogin } from "@/features/auth/hooks/useLogin";
 import { SocialAuth } from "./SocialAuth";
 
 export function LoginForm() {
