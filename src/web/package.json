@@ -10,7 +10,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "dev:all": "npm-run-all --parallel dev storybook",
-    "analyze": "cross-env ANALYZE=true next build"
+    "analyze": "cross-env ANALYZE=true next build",
+    "sync-postman": "powershell -ExecutionPolicy Bypass -File ../../scripts/run-sync-postman.ps1"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

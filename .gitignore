@@ -41,3 +41,7 @@ Desktop.ini
 .env.*
 
 .vs/
+
+src/api/wwwroot/uploads/**
+!src/api/wwwroot/uploads/.gitkeep
+
