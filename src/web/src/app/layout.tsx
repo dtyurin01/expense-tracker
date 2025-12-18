@@ -4,6 +4,7 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
+import { FeedbackToaster } from "@/components/ui/callout/FeedbackToaster";
 
 
 export const metadata: Metadata = {
@@ -51,7 +52,10 @@ export default function RootLayout({
       lang="uk"
       className={`dark ${GeistMono.variable} ${GeistSans.variable}`}
     >
-      <body className={GeistSans.className}>{children}</body>
+      <body className={GeistSans.className}>
+        {children}
+        <FeedbackToaster />
+      </body>
     </html>
   );
 }
