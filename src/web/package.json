@@ -10,10 +10,12 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "dev:all": "npm-run-all --parallel dev storybook",
-    "analyze": "cross-env ANALYZE=true next build"
+    "analyze": "cross-env ANALYZE=true next build",
+    "sync-postman": "powershell -ExecutionPolicy Bypass -File ../../scripts/run-sync-postman.ps1"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@radix-ui/react-context-menu": "^2.2.16",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/themes": "^3.2.1",
     "autoprefixer": "^10.4.21",

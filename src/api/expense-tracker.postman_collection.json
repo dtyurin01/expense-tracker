@@ -22,9 +22,11 @@
                   "",
                   "var jsonData = pm.response.json();",
                   "",
-                  "if (jsonData.accessToken) {",
+                  "var token = jsonData.access_token || jsonData.accessToken;",
+                  "",
+                  "if (token) {",
                   "    // Save token specifically for Admin requests",
-                  "    pm.collectionVariables.set(\"adminToken\", jsonData.accessToken);",
+                  "    pm.collectionVariables.set(\"adminToken\", token);",
                   "    console.log(\"Admin Token Saved\");",
                   "}"
                 ],
@@ -114,12 +116,13 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/auth/me",
+              "raw": "{{baseUrl}}/api/users/me",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
-                "auth",
+                "api",
+                "users",
                 "me"
               ]
             }
@@ -215,9 +218,11 @@
                   "",
                   "var jsonData = pm.response.json();",
                   "",
-                  "if (jsonData.accessToken) {",
+                  "var token = jsonData.access_token || jsonData.accessToken;",
+                  "",
+                  "if (token) {",
                   "    // Save token specifically for User requests",
-                  "    pm.collectionVariables.set(\"userToken\", jsonData.accessToken);",
+                  "    pm.collectionVariables.set(\"userToken\", token);",
                   "    console.log(\"User Token Saved\");",
                   "}"
                 ],
@@ -252,6 +257,32 @@
         },
         {
           "name": "Get User Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.test(\"Profile has email and roles\", function () {",
+                  "    pm.expect(jsonData.email).to.be.a('string');",
+                  "    pm.expect(jsonData.roles).to.be.an('array');",
+                  "});",
+                  "",
+                  "var expectedAvatarUrl = pm.collectionVariables.get('uploadedAvatarUrl');",
+                  "if (expectedAvatarUrl) {",
+                  "  pm.test(\"AvatarUrl updated\", function () {",
+                  "      pm.expect(jsonData.avatarUrl).to.eql(expectedAvatarUrl);",
+                  "  });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "bearer",
@@ -266,13 +297,75 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/auth/me",
+              "raw": "{{baseUrl}}/api/users/me",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
-                "auth",
+                "api",
+                "users",
                 "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Avatar (users/avatar)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Avatar upload successful (200 OK)\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.test(\"Response has avatarUrl\", function () {",
+                  "    pm.expect(jsonData).to.have.property('avatarUrl');",
+                  "    pm.expect(jsonData.avatarUrl).to.be.a('string').and.not.empty;",
+                  "});",
+                  "",
+                  "pm.collectionVariables.set('uploadedAvatarUrl', jsonData.avatarUrl);",
+                  "console.log('Uploaded avatarUrl:', jsonData.avatarUrl);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{userToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/avatar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "avatar"
               ]
             }
           },
@@ -447,6 +540,11 @@
     },
     {
       "key": "categoryId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "uploadedAvatarUrl",
       "value": "",
       "type": "string"
     }

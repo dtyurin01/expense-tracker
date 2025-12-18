@@ -8,7 +8,15 @@ const withBundleAnalyzer = bundleAnalyzer({
 const nextConfig: NextConfig = {
   transpilePackages: ["geist"],
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "i.pravatar.cc" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "i.pravatar.cc" },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "5072",
+        pathname: "/uploads/**",
+      },
+    ],
   },
 };
 

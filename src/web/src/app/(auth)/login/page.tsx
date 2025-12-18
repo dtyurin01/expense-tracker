@@ -10,7 +10,7 @@ export default function LoginPage() {
       subtitleLinkText="Sign up"
       subtitleLinkHref="/register"
     >
-      <LoginForm />
+        <LoginForm />
     </AuthLayout>
   );
 }

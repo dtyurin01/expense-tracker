@@ -2,26 +2,19 @@
 
 import React from "react";
 import Tabs from "@/components/ui/tabs/Tabs";
-import { UserCard } from "@/components/shell/cards/UserCard";
+import UserSettings from "@/components/shell/settings/UserSettings";
 
 export default function SettingsChoices() {
   return (
     <Tabs
       defaultValue="users"
+      className="pl-2"
       items={[
         {
           value: "users",
           label: "Users",
           content: (
-            <UserCard
-              variant="full"
-              subtitle=""
-              size="lg"
-              nameSize="lg"
-              onEditClick={() => console.log("edit")}
-              name="Nicholas Brown"
-              aria-label="Open profile"
-            />
+            <UserSettings />
           ),
         },
         {

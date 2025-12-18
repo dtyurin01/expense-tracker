@@ -2,7 +2,6 @@
 using Api.Contracts;
 using Api.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
 
 namespace Api.Features.Users;
@@ -61,7 +60,6 @@ public static class UsersEndpoints
                         return Results.BadRequest("File size exceeds 5MB.");
                     }
 
-                    // 2. ВАЛИДАЦИЯ ФОРМАТА ЧЕРЕЗ IMAGESHARP (Security check)
                     try
                     {
                         using var stream = file.OpenReadStream();
