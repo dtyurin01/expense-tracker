@@ -14,7 +14,7 @@ export default function SettingsChoices() {
           value: "users",
           label: "Users",
           content: (
-            <UserSettings />
+            <UserSettings/>
           ),
         },
         {
