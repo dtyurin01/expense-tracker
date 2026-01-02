@@ -1,7 +1,11 @@
-﻿using Api.Contracts;
+﻿using System.Text;
+using Api.Contracts;
+using Api.Infrastructure.Email;
 using Api.Infrastucture.Security;
 using Api.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 
 namespace Api.Features.Auth;
@@ -42,16 +46,49 @@ public static class AuthEndpoints
                 ) =>
                 {
                     var user = await users.FindByEmailAsync(dto.Email);
+
                     if (user is null)
+                    {
+                        if (env.IsDevelopment())
+                        {
+                            return Results.BadRequest(
+                                $"[DEBUG] User with email '{dto.Email}' not found."
+                            );
+                        }
+
                         return Results.BadRequest("Invalid credentials");
+                    }
 
                     var ok = await signIn.CheckPasswordSignInAsync(
                         user,
                         dto.Password,
                         lockoutOnFailure: false
                     );
+
                     if (!ok.Succeeded)
+                    {
+                        if (env.IsDevelopment())
+                        {
+                            if (ok.IsLockedOut)
+                                return Results.BadRequest(
+                                    "[DEBUG] Account is locked out (Too many attempts)."
+                                );
+
+                            if (ok.IsNotAllowed)
+                                return Results.BadRequest(
+                                    "[DEBUG] Account is not allowed (Check EmailConfirmed column in DB)."
+                                );
+
+                            if (ok.RequiresTwoFactor)
+                                return Results.BadRequest("[DEBUG] 2FA required.");
+
+                            return Results.BadRequest(
+                                $"[DEBUG] Invalid password. Input was: '{dto.Password}'"
+                            );
+                        }
+
                         return Results.BadRequest("Invalid credentials");
+                    }
 
                     // access
                     var access = await AuthHelpers.CreateAccessForLoginAsync(tokens, users, user);
@@ -117,6 +154,98 @@ public static class AuthEndpoints
                 }
             )
             .AllowAnonymous();
+
+        g.MapPost(
+            "/forgot-password",
+            async (
+                [FromBody] ForgotPasswordRequest request,
+                UserManager<ApplicationUser> userManager,
+                IEmailService emailService,
+                IWebHostEnvironment env
+            ) =>
+            {
+                var user = await userManager.FindByEmailAsync(request.Email);
+
+                if (user is null)
+                {
+                    return Results.Ok(
+                        new { message = "If the email exists, a link has been sent." }
+                    );
+                }
+
+                var token = await userManager.GeneratePasswordResetTokenAsync(user);
+
+                var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+                var resetLink =
+                    $"http://localhost:3000/reset-password?token={encodedToken}&email={request.Email}";
+
+                var message =
+                    $@"
+                    <h1>Reset Password</h1>
+                    <p>Someone requested a password reset for your account.</p>
+                    <p>Click the link below to set a new password:</p>
+                    <a href='{resetLink}'>Reset Password</a>
+                    <br/> 
+                    <p>If you didn't ask for this, just ignore this email.</p>";
+
+                await emailService.SendEmailAsync(request.Email, "Reset Password Request", message);
+
+                if (env.IsDevelopment())
+                {
+                    return Results.Ok(
+                        new { message = "Verification link sent", debugToken = encodedToken }
+                    );
+                }
+                else
+                {
+                    return Results.Ok(new { message = "Verification link sent" });
+                }
+            }
+        );
+
+        g.MapPost(
+            "/reset-password",
+            async (
+                [FromBody] ResetPasswordRequest request,
+                UserManager<ApplicationUser> userManager,
+                Data.AppDbContext dbContext
+            ) =>
+            {
+                var user = await userManager.FindByEmailAsync(request.Email);
+
+                if (user is null)
+                {
+                    return Results.BadRequest("Invalid Request");
+                }
+
+                string decodedToken;
+                try
+                {
+                    var decodedBytes = WebEncoders.Base64UrlDecode(request.Token);
+                    decodedToken = Encoding.UTF8.GetString(decodedBytes);
+                }
+                catch
+                {
+                    return Results.BadRequest("Invalid token");
+                }
+
+                var result = await userManager.ResetPasswordAsync(
+                    user,
+                    decodedToken,
+                    request.NewPassword
+                );
+
+                if (!result.Succeeded)
+                {
+                    return Results.BadRequest(result.Errors);
+                }
+
+                await dbContext.SaveChangesAsync();
+
+                return Results.Ok(new { message = "Password has been reset successfully." });
+            }
+        );
 
         g.MapPost(
                 "/logout",

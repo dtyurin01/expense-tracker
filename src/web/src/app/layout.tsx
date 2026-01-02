@@ -4,8 +4,8 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
-import { FeedbackToaster } from "@/components/ui/callout/FeedbackToaster";
-
+import { toastConfig } from "@/config/toast";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: {
@@ -54,7 +54,20 @@ export default function RootLayout({
     >
       <body className={GeistSans.className}>
         {children}
-        <FeedbackToaster />
+        <Toaster
+          position={toastConfig.position}
+          toastOptions={{
+            duration: toastConfig.durations.default,
+            className: toastConfig.classNames.base,
+            success: {
+              duration: toastConfig.durations.success,
+              className: `${toastConfig.classNames.base} ${toastConfig.classNames.success}`,
+            },
+            error: {
+              className: `${toastConfig.classNames.base} ${toastConfig.classNames.error}`,
+            },
+          }}
+        />
       </body>
     </html>
   );
