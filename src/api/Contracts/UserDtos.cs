@@ -4,6 +4,7 @@
         Guid Id,
         string Email,
         string UserName,
+        string FullName,
         string? AvatarUrl,
         string Currency,
         IList<string> Roles

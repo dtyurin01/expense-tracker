@@ -40,9 +40,7 @@ function trackToast(id: string) {
 }
 
 function untrackToast(id?: string) {
-  if (!id) {
-    return;
-  }
+  if (!id) return;
   const index = activeToastIds.indexOf(id);
   if (index !== -1) {
     activeToastIds.splice(index, 1);
@@ -85,26 +83,20 @@ function getToastClassName(variant: FeedbackToastVariant): string {
 }
 
 export function useFeedbackToast() {
-  const requestDismiss = React.useCallback((id: string) => {
-    hotToast.dismiss(id);
-    untrackToast(id);
-  }, []);
-
-  function clearAll() {
+  const clearAll = React.useCallback(() => {
     hotToast.dismiss();
     activeToastIds.length = 0;
-  }
+  }, []);
 
-  function dismiss(id?: string) {
+  const dismiss = React.useCallback((id?: string) => {
     if (id) {
       hotToast.dismiss(id);
       untrackToast(id);
       return;
     }
-
     hotToast.dismiss();
     activeToastIds.length = 0;
-  }
+  }, []);
 
   const info = React.useCallback((data: FeedbackToastInput) => {
     const id = hotToast(renderToastContent(data), {
@@ -147,9 +139,6 @@ export function useFeedbackToast() {
   }, []);
 
   return {
-    toasts: [] as const,
-    closingIds: new Set<string>(),
-    requestDismiss,
     info,
     success,
     warning,

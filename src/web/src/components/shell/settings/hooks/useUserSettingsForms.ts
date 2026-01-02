@@ -84,7 +84,6 @@ export function useUserSettingsForms(params: {
         "UI is ready. Backend endpoint for password change will be added next.",
     });
   };
-  
 
   return {
     nicknameForm,

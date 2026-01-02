@@ -1,7 +1,10 @@
 ﻿using System.Security.Claims;
 using Api.Contracts;
+using Api.Infrastructure.Email;
 using Api.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
 using SixLabors.ImageSharp;
 
 namespace Api.Features.Users;
@@ -31,6 +34,7 @@ public static class UsersEndpoints
                         user.Id,
                         user.Email!,
                         user.UserName!,
+                        user.FullName!,
                         user.AvatarUrl,
                         user.Currency ?? "EUR",
                         roles
@@ -167,6 +171,7 @@ public static class UsersEndpoints
                         new UserProfileDto(
                             user.Id,
                             user.Email!,
+                            user.FullName!,
                             user.UserName!,
                             user.AvatarUrl,
                             user.Currency ?? "EUR",
@@ -176,5 +181,104 @@ public static class UsersEndpoints
                 }
             )
             .RequireAuthorization("AdminOnly");
+
+        g.MapPatch(
+            "/change-nickname",
+            async (
+                [FromBody] UpdateProfileRequest request,
+                ClaimsPrincipal userPrincipal,
+                UserManager<ApplicationUser> userManager
+            ) =>
+            {
+                var userId = userPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = await userManager.FindByIdAsync(userId!);
+                if (user is null)
+                {
+                    return Results.Unauthorized();
+                }
+
+                user.FullName = request.Nickname;
+
+                var result = await userManager.UpdateAsync(user);
+
+                return result.Succeeded ? Results.Ok() : Results.BadRequest(result.Errors);
+            }
+        );
+        g.MapPost(
+            "/change-email/start",
+            async (
+                [FromBody] StartEmailChangeRequest request,
+                ClaimsPrincipal userPrincipal,
+                UserManager<ApplicationUser> userManager,
+                IEmailService emailService
+            ) =>
+            {
+                var userId = userPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = await userManager.FindByIdAsync(userId!);
+                if (user is null)
+                {
+                    return Results.Unauthorized();
+                }
+                var isPasswordCorrect = await userManager.CheckPasswordAsync(
+                    user,
+                    request.CurrentPassword
+                );
+
+                if (!isPasswordCorrect)
+                {
+                    return Results.BadRequest("Current password is incorrect.");
+                }
+
+                var emailOwner = await userManager.FindByEmailAsync(request.NewEmail);
+
+                if (emailOwner is not null)
+                {
+                    return Results.BadRequest("Email is already in use.");
+                }
+
+                var token = await userManager.GenerateChangeEmailTokenAsync(user, request.NewEmail);
+
+                // in real project
+                var link =
+                    $"http://localhost:3000/settings?emailChangeToken={token}&newEmail={request.NewEmail}";
+                await emailService.SendEmailAsync(
+                    request.NewEmail,
+                    "Confirm Email Change",
+                    $"Click here: {link}"
+                );
+
+                return Results.Ok(new { message = "Verification link sent", debugToken = token });
+            }
+        );
+        g.MapPost(
+            "/change-email/confirm",
+            async (
+                [FromBody] ConfirmEmailChangeRequest request,
+                ClaimsPrincipal userPrincipal,
+                UserManager<ApplicationUser> userManager
+            ) =>
+            {
+                var userId = userPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = await userManager.FindByIdAsync(userId!);
+                if (user is null)
+                {
+                    return Results.Unauthorized();
+                }
+                var result = await userManager.ChangeEmailAsync(
+                    user,
+                    request.NewEmail,
+                    request.Token
+                );
+
+                if (!result.Succeeded)
+                {
+                    return Results.BadRequest("Email change failed. Token may be invalid.");
+                }
+
+                await userManager.SetUserNameAsync(user, request.NewEmail);
+
+                return Results.Ok();
+            }
+        );
     }
 }

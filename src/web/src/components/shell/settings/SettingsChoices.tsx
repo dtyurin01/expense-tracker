@@ -13,9 +13,7 @@ export default function SettingsChoices() {
         {
           value: "users",
           label: "Users",
-          content: (
-            <UserSettings/>
-          ),
+          content: <UserSettings />,
         },
         {
           value: "categories",
